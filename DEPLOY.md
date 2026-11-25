@@ -72,7 +72,10 @@ npx wrangler pages deploy dist --project-name toolnest --branch main
 | `CLOUDFLARE_ACCOUNT_ID` | Secret | Cloudflare Account ID |
 | `SITE_URL` | Variable | 正式域名，例如 `https://toolnest.example.com` |
 
-工作流会自动执行：安装依赖 → 单元测试 → 完整性自检 → 构建 → 部署到 Cloudflare Pages。
+工作流会自动执行：安装依赖 → 单元测试 → 完整性自检 → 构建 → 产物校验。
+仅在配置了 `CLOUDFLARE_API_TOKEN` 与 `CLOUDFLARE_ACCOUNT_ID` 后才继续部署到 Cloudflare Pages；
+未配置时工作流仍完成全部构建验证并标记成功，不会留下失败记录。
+
 若使用方式 A 的 Git 集成，请勿同时启用此工作流，避免重复部署。
 
 ---
