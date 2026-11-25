@@ -103,6 +103,8 @@ button { cursor: pointer; }
 ::selection { background: var(--blue); color: #fff; }
 
 .container { width: min(100% - 40px, var(--maxw)); margin-inline: auto; }
+/* 头部容器单独放宽：英文导航 9 项完整显示约需 1380px，正文 1200px 上限容纳不下 */
+.container-wide { width: min(100% - 40px, 1440px); margin-inline: auto; }
 .section { padding: 48px 0; }
 .section-sm { padding: 28px 0; }
 .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 22px; flex-wrap: wrap; }
@@ -145,7 +147,7 @@ button { cursor: pointer; }
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }
-.header-inner { height: 100%; display: flex; align-items: center; gap: 18px; }
+.header-inner { height: 100%; display: flex; align-items: center; gap: 14px; }
 .brand { display: inline-flex; align-items: center; gap: 9px; flex-shrink: 0; color: var(--text); font-weight: 800; font-size: 1.12rem; letter-spacing: -.03em; }
 .brand:hover { text-decoration: none; }
 .brand-mark {
@@ -156,10 +158,11 @@ button { cursor: pointer; }
 .brand-tag { font-size: .68rem; font-weight: 600; color: var(--text-muted); letter-spacing: 0; margin-left: 2px; }
 @media (max-width: 1080px) { .brand-tag { display: none; } }
 
-.main-nav { display: flex; align-items: center; gap: 2px; flex: 1; min-width: 0; }
+.main-nav { display: flex; align-items: center; gap: 2px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.main-nav::-webkit-scrollbar { display: none; }
 .main-nav > a {
-  padding: 7px 10px; border-radius: var(--radius-sm); color: var(--text-soft);
-  font-size: .87rem; font-weight: 600; white-space: nowrap;
+  padding: 7px 8px; border-radius: var(--radius-sm); color: var(--text-soft);
+  font-size: .84rem; font-weight: 600; white-space: nowrap;
 }
 .main-nav > a:hover { background: var(--bg-subtle); color: var(--blue); text-decoration: none; }
 .main-nav > a.active { color: var(--blue); background: var(--blue-soft); }
@@ -178,7 +181,10 @@ html[data-theme="dark"] [data-action="theme-toggle"] [data-icon="moon"] { displa
 .lang-switch a:hover { background: var(--bg-subtle); text-decoration: none; }
 .lang-switch a.active { background: var(--blue); color: #fff; }
 .nav-toggle { display: none; }
-@media (min-width: 1021px) { .main-nav .only-mobile { display: none; } }
+/* 英文导航 9 项压缩后仍约需 1290px：≥1440px（容器内宽 1400px）才显示完整导航；
+   中文导航较短，≥1021px 即完整显示。only-mobile 链接（About/Suggest/Data）仅在汉堡菜单出现 */
+@media (min-width: 1440px) { .main-nav .only-mobile { display: none; } }
+@media (min-width: 1021px) and (max-width: 1439px) { html:lang(zh) .main-nav .only-mobile { display: none; } }
 @media (max-width: 1020px) {
   .main-nav {
     position: absolute; top: var(--header-h); left: 0; right: 0; display: none;
@@ -191,6 +197,21 @@ html[data-theme="dark"] [data-action="theme-toggle"] [data-icon="moon"] { displa
   .brand { margin-right: auto; }
   .nav-toggle { display: grid; }
   .header-actions { margin-left: 0; gap: 2px; }
+}
+
+/* 英文页面 1021–1439px：与移动端相同的汉堡菜单，避免导航尾项被裁剪或与操作区重叠 */
+@media (min-width: 1021px) and (max-width: 1439px) {
+  html:lang(en) .main-nav {
+    position: absolute; top: var(--header-h); left: 0; right: 0; display: none;
+    flex-direction: column; align-items: stretch; gap: 2px; padding: 12px 20px 18px;
+    background: var(--bg-elevated); border-bottom: 1px solid var(--border); box-shadow: var(--shadow-lg);
+    max-height: calc(100vh - var(--header-h)); overflow-y: auto;
+  }
+  html:lang(en) .main-nav.open { display: flex; }
+  html:lang(en) .main-nav > a { padding: 10px 12px; font-size: .95rem; }
+  html:lang(en) .brand { margin-right: auto; }
+  html:lang(en) .nav-toggle { display: grid; }
+  html:lang(en) .header-actions { margin-left: 0; gap: 2px; }
 }
 
 /* ---------- Hero / 首页 ---------- */
@@ -486,6 +507,7 @@ html[data-theme="dark"] .tool-icon.accent-orange { background: #2e1d10; color: #
 /* ---------- 移动端微调 ---------- */
 @media (max-width: 560px) {
   .container { width: min(100% - 28px, var(--maxw)); }
+  .container-wide { width: min(100% - 28px, 1440px); }
   .section { padding: 36px 0; }
   .hero { padding: 42px 0 20px; }
   .tool-header { padding: 18px 0 20px; }
