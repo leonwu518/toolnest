@@ -1,0 +1,38 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+---
+<div class="tool-ui">
+  <div class="color-preview" data-role="color-preview" style="background:#2563eb;color:#fff">#2563EB</div>
+  <div class="field-grid three">
+    <div class="field">
+      <label for="color-hex">{ui.hexLabel}</label>
+      <input class="input" id="color-hex" data-role="hex" value="#2563EB" spellcheck="false" />
+    </div>
+    <div class="field">
+      <label for="color-rgb">{ui.rgbLabel}</label>
+      <input class="input" id="color-rgb" data-role="rgb" value="rgb(37, 99, 235)" spellcheck="false" />
+    </div>
+    <div class="field">
+      <label for="color-hsl">{ui.hslLabel}</label>
+      <input class="input" id="color-hsl" data-role="hsl" value="hsl(221, 83%, 53%)" spellcheck="false" />
+    </div>
+  </div>
+  <div class="option-row" style="margin-top:14px">
+    <label class="check" style="gap:10px"><input type="color" data-role="picker" value="#2563eb" /> {ui.pickerLabel}</label>
+    <span class="field-hint" style="margin-left:auto">{ui.copyHint}</span>
+  </div>
+  <div class="btn-row" style="margin-top:14px">
+    <button type="button" class="btn btn-outline btn-sm" data-action="lighten"><Icon name="sun" size={15} /> {ui.lighten}</button>
+    <button type="button" class="btn btn-outline btn-sm" data-action="darken"><Icon name="moon" size={15} /> {ui.darken}</button>
+    <button type="button" class="btn btn-outline btn-sm" data-action="complementary"><Icon name="palette" size={15} /> {ui.complementary}</button>
+  </div>
+  <h3 class="tool-section-title" style="margin-top:20px"><Icon name="droplet" /> {ui.previewLabel}</h3>
+  <div class="color-swatches" data-role="swatches"></div>
+  <div class="tool-actions">
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="rotate-ccw" size={16} /> {a.reset}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <p class="field-hint" style="margin-top:10px">{ui.hint}</p>
+</div>

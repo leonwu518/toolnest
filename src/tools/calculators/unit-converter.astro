@@ -1,0 +1,39 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+---
+<div class="tool-ui">
+  <div class="field-grid two">
+    <div class="field">
+      <label for="uc-group">{ui.categoryLabel}</label>
+      <select class="select" id="uc-group" data-role="unit-group"></select>
+    </div>
+    <div class="field">
+      <label for="uc-value">{ui.valueLabel}</label>
+      <input class="input" type="number" step="any" id="uc-value" data-role="value" value="1" />
+    </div>
+  </div>
+
+  <div class="field-grid three" style="margin-top:16px;align-items:end">
+    <div class="field">
+      <label for="uc-from">{ui.fromLabel}</label>
+      <select class="select" id="uc-from" data-role="from"></select>
+    </div>
+    <div class="field" style="align-items:center">
+      <button type="button" class="btn btn-outline" data-role="swap"><Icon name="arrow-left-right" size={16} /> {ui.swapLabel}</button>
+    </div>
+    <div class="field">
+      <label for="uc-to">{ui.toLabel}</label>
+      <select class="select" id="uc-to" data-role="to"></select>
+    </div>
+  </div>
+
+  <h3 class="tool-section-title" style="margin-top:22px"><Icon name="ruler" /> {ui.resultLabel}</h3>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-label"><Icon name="hash" size={14} /> {ui.resultLabel}</div><div class="stat-value" data-role="result">—</div></div>
+    <div class="stat-card" style="grid-column:span 2"><div class="stat-label"><Icon name="book-open" size={14} /> {ui.formulaLabel}</div><div class="stat-value" style="font-size:1rem;font-family:var(--mono)" data-role="formula">—</div></div>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <p class="field-hint" style="margin-top:10px">{ui.hint}</p>
+</div>

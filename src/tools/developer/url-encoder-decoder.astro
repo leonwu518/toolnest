@@ -1,0 +1,31 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+---
+<div class="tool-ui">
+  <div class="tool-columns">
+    <div class="field">
+      <label for="url-input">{ui.inputLabel}</label>
+      <textarea id="url-input" class="textarea" data-role="input" placeholder={ui.inputPlaceholder} spellcheck="false"></textarea>
+    </div>
+    <div class="field">
+      <div class="output-head">
+        <label for="url-output" class="field-label">{ui.outputLabel}</label>
+        <button type="button" class="btn btn-ghost btn-sm" data-role="copy"><Icon name="copy" size={14} /> {a.copy}</button>
+      </div>
+      <textarea id="url-output" class="textarea" data-role="output" readonly placeholder={ui.outputPlaceholder}></textarea>
+    </div>
+  </div>
+  <div class="option-row" style="margin-top:14px">
+    <label class="check"><input type="checkbox" data-role="component" checked /> {ui.componentOnly}</label>
+  </div>
+  <div class="tool-actions">
+    <button type="button" class="btn btn-primary" data-action="encode"><Icon name="lock" size={16} /> {ui.encode}</button>
+    <button type="button" class="btn btn-outline" data-action="decode"><Icon name="link" size={16} /> {ui.decode}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {a.clear}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <div class="status-line" data-role="status"></div>
+  <p class="field-hint">{ui.hint}</p>
+</div>

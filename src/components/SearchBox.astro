@@ -1,0 +1,22 @@
+---
+import Icon from './Icon.astro';
+const { dict, compact = false } = Astro.props;
+---
+<div class="search-wrap" data-search-wrap>
+  <div class="search-box">
+    <Icon name="search" size={20} />
+    <input
+      type="search"
+      data-role="site-search"
+      placeholder={compact ? dict.search.placeholderShort : dict.search.placeholder}
+      aria-label={dict.search.ariaLabel}
+      autocomplete="off"
+      spellcheck="false"
+    />
+    <button type="button" class="icon-btn search-clear" data-role="search-clear" aria-label={dict.actions.clear}>
+      <Icon name="x" size={16} />
+    </button>
+  </div>
+  <div class="search-results" data-role="search-results" hidden></div>
+  <p class="search-hint">{dict.search.hint}</p>
+</div>

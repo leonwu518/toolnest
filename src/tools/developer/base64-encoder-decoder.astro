@@ -1,0 +1,47 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+---
+<div class="tool-ui">
+  <div class="option-row">
+    <div class="radio-row">
+      <label class="radio-chip"><input type="radio" name="b64-mode" data-role="mode" value="text" checked /><span>{ui.modeText}</span></label>
+      <label class="radio-chip"><input type="radio" name="b64-mode" data-role="mode" value="file" /><span>{ui.modeFile}</span></label>
+    </div>
+  </div>
+
+  <div class="field" style="margin-top:14px" data-role="file-field" hidden>
+    <label class="file-drop" style="min-height:110px">
+      <Icon name="upload" size={26} />
+      <strong>{ui.fileLabel}</strong>
+      <small>{ui.fileHint}</small>
+      <input type="file" data-role="file" />
+    </label>
+    <div class="status-line" data-role="file-info"></div>
+  </div>
+
+  <div class="tool-columns" data-role="text-fields" style="margin-top:14px">
+    <div class="field">
+      <label for="b64-input">{ui.inputLabel}</label>
+      <textarea id="b64-input" class="textarea" data-role="input" placeholder={ui.inputPlaceholder} spellcheck="false"></textarea>
+    </div>
+    <div class="field">
+      <div class="output-head">
+        <label for="b64-output" class="field-label">{ui.outputLabel}</label>
+        <button type="button" class="btn btn-ghost btn-sm" data-role="copy"><Icon name="copy" size={14} /> {a.copy}</button>
+      </div>
+      <textarea id="b64-output" class="textarea" data-role="output" readonly placeholder={ui.outputPlaceholder}></textarea>
+    </div>
+  </div>
+
+  <div class="tool-actions">
+    <button type="button" class="btn btn-primary" data-action="encode"><Icon name="binary" size={16} /> {ui.encode}</button>
+    <button type="button" class="btn btn-outline" data-action="decode"><Icon name="file-down" size={16} /> {ui.decode}</button>
+    <button type="button" class="btn btn-outline" data-role="download" disabled><Icon name="download" size={16} /> {ui.downloadLabel}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {a.clear}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <div class="status-line" data-role="status"></div>
+  <p class="field-hint">{ui.hint}</p>
+</div>

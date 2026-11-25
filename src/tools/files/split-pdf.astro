@@ -1,0 +1,34 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+---
+<div class="tool-ui">
+  <label class="file-drop" data-role="file-drop">
+    <Icon name="upload" size={28} />
+    <strong>{ui.selectLabel}</strong>
+    <small>{ui.hint}</small>
+    <input type="file" data-role="file-input" accept="application/pdf,.pdf" />
+  </label>
+  <div class="status-line" data-role="file-info"></div>
+
+  <div class="field" style="margin-top:16px">
+    <span class="field-label">{ui.modeRange}</span>
+    <div class="radio-row" style="margin-top:8px">
+      <label class="radio-chip"><input type="radio" name="split-mode" value="range" data-role="mode" checked /><span>{ui.modeRange}</span></label>
+      <label class="radio-chip"><input type="radio" name="split-mode" value="each" data-role="mode" /><span>{ui.modeEach}</span></label>
+    </div>
+  </div>
+  <div class="field" style="margin-top:14px" data-role="range-field">
+    <label for="split-range">{ui.rangeLabel}</label>
+    <input class="input" id="split-range" data-role="range" placeholder={ui.rangePlaceholder} />
+    <span class="field-hint">{ui.rangeHint}</span>
+  </div>
+
+  <div class="tool-actions">
+    <button type="button" class="btn btn-primary" data-role="run"><Icon name="scissors" size={16} /> {ui.runLabel}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {a.clear}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <div class="status-line" data-role="status"></div>
+</div>

@@ -1,0 +1,36 @@
+---
+import Icon from './Icon.astro';
+import LanguageSwitch from './LanguageSwitch.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import { categories } from '../data/categories.js';
+import { langPath, categoryUrl, pageUrl } from '../lib/site.js';
+
+const { lang, dict, path, active = '' } = Astro.props;
+---
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href={langPath(lang)} aria-label={`ToolNest · ${dict.tagline}`}>
+      <span class="brand-mark"><Icon name="wrench" size={19} /></span>
+      <span>ToolNest</span>
+      <span class="brand-tag">{dict.tagline}</span>
+    </a>
+
+    <nav class="main-nav" id="main-nav" aria-label={dict.nav.more}>
+      <a href={langPath(lang)} class:list={[active === 'home' && 'active']}>{dict.nav.home}</a>
+      {categories.map((c) => (
+        <a href={categoryUrl(lang, c.id)} class:list={[active === c.id && 'active']}>{dict.nav[c.id]}</a>
+      ))}
+      <a class:list={['only-mobile', active === 'about' && 'active']} href={pageUrl(lang, 'about')}>{dict.footer.links.about}</a>
+      <a class:list={['only-mobile', active === 'suggest' && 'active']} href={pageUrl(lang, 'suggest')}>{dict.footer.links.suggest}</a>
+      <a class="only-mobile" href={pageUrl(lang, 'data')}>{dict.footer.links.data}</a>
+    </nav>
+
+    <div class="header-actions">
+      <LanguageSwitch lang={lang} path={path} dict={dict} />
+      <ThemeToggle dict={dict} />
+      <button type="button" class="icon-btn nav-toggle" data-action="nav-toggle" aria-label={dict.nav.more} aria-expanded="false">
+        <Icon name="menu" size={20} />
+      </button>
+    </div>
+  </div>
+</header>

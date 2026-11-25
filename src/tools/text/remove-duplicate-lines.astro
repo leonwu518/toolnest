@@ -1,0 +1,33 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+---
+<div class="tool-ui">
+  <div class="tool-columns">
+    <div class="field">
+      <label for="dup-input">{ui.inputLabel}</label>
+      <textarea id="dup-input" class="textarea" data-role="input" placeholder={ui.inputPlaceholder} spellcheck="false"></textarea>
+    </div>
+    <div class="field">
+      <div class="output-head">
+        <label for="dup-output" class="field-label">{ui.outputLabel}</label>
+        <button type="button" class="btn btn-ghost btn-sm" data-role="copy"><Icon name="copy" size={14} /> {a.copy}</button>
+      </div>
+      <textarea id="dup-output" class="textarea" data-role="output" readonly placeholder={ui.outputPlaceholder}></textarea>
+    </div>
+  </div>
+  <div class="option-row" style="margin-top:14px">
+    <label class="check"><input type="checkbox" data-opt="ignoreCase" /> {ui.ignoreCase}</label>
+    <label class="check"><input type="checkbox" data-opt="trimWhitespace" checked /> {ui.trimWhitespace}</label>
+    <label class="check"><input type="checkbox" data-opt="sortOutput" /> {ui.sortOutput}</label>
+    <label class="check"><input type="checkbox" data-opt="removeEmpty" checked /> {ui.removeEmpty}</label>
+  </div>
+  <div class="tool-actions">
+    <button type="button" class="btn btn-primary" data-role="run"><Icon name="list-filter" size={16} /> {ui.runLabel}</button>
+    <button type="button" class="btn btn-outline" data-role="download" disabled><Icon name="download" size={16} /> {a.download}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {a.clear}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <div class="status-line" data-role="status"></div>
+</div>

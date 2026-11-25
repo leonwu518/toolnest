@@ -1,0 +1,129 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Icon from '../../components/Icon.astro';
+import ToolCard from '../../components/ToolCard.astro';
+import SearchBox from '../../components/SearchBox.astro';
+import { getDict, getToolI18n, isLang } from '../../i18n/index.js';
+import { tools, popularTools, recommendedTools, newTools } from '../../data/tools.js';
+import { categories, categoryById } from '../../data/categories.js';
+import { langPath, categoryUrl, pageUrl } from '../../lib/site.js';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'zh' } }, { params: { lang: 'en' } }];
+}
+
+const { lang } = Astro.params;
+if (!isLang(lang)) return Astro.redirect('/');
+const dict = getDict(lang);
+const path = langPath(lang);
+const cardData = (m) => ({
+  meta: m,
+  t: getToolI18n(lang, m.slug),
+  catName: dict.categories[m.category].name,
+  catIcon: categoryById[m.category].icon,
+  accent: categoryById[m.category].accent,
+});
+const popular = popularTools().map(cardData);
+const recommended = recommendedTools().map(cardData);
+const newest = newTools().map((m) => ({ ...cardData(m), badge: 'new', badgeLabel: dict.common.newBadge }));
+const cats = categories.map((c) => ({ ...c, ...dict.categories[c.id] }));
+---
+<MainLayout lang={lang} title={`ToolNest · ${dict.tagline} | ${lang === 'zh' ? '免费在线工具平台' : 'Free Online Tools'}`} description={dict.siteDescription} path={path} active="home">
+
+  <section class="hero">
+    <span class="hero-badge"><Icon name="sparkles" size={14} /> {dict.home.heroBadge}</span>
+    <h1>{dict.home.heroTitle}<br /><span>{dict.home.heroTitleHighlight}</span></h1>
+    <p class="hero-desc">{dict.home.heroDesc}</p>
+    <SearchBox dict={dict} />
+    <div class="hero-stats">
+      <span class="hero-stat"><Icon name="wrench" /> 20 {dict.home.statTools}</span>
+      <span class="hero-stat"><Icon name="shield-check" /> {dict.home.statLocal}</span>
+      <span class="hero-stat"><Icon name="zap" /> {dict.home.statFree}</span>
+    </div>
+    <div class="hero-cta">
+      <a class="btn btn-primary btn-lg" href="#popular"><Icon name="arrow-right" size={17} /> {dict.home.ctaPrimary}</a>
+      <a class="btn btn-outline btn-lg" href="#categories">{dict.home.ctaSecondary}</a>
+    </div>
+  </section>
+
+  <section class="section" id="popular">
+    <div class="section-head">
+      <div><h2>{dict.home.popularTitle}</h2><p>{dict.home.popularDesc}</p></div>
+      <a class="btn btn-ghost btn-sm" href="#categories">{dict.common.allTools} <Icon name="arrow-right" size={14} /></a>
+    </div>
+    <div class="tool-grid">
+      {popular.map((c) => <ToolCard lang={lang} {...c} />)}
+    </div>
+  </section>
+
+  <section class="section" id="categories">
+    <div class="section-head">
+      <div><h2>{dict.home.categoriesTitle}</h2><p>{dict.home.categoriesDesc}</p></div>
+    </div>
+    <div class="category-grid">
+      {cats.map((c) => (
+        <a class="category-card" href={categoryUrl(lang, c.id)}>
+          <span class:list={['tool-icon', `accent-${c.accent}`]}><Icon name={c.icon} size={20} /></span>
+          <span>
+            <h3>{c.name}</h3>
+            <p>{c.desc}</p>
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><div><h2>{dict.home.newTitle}</h2><p>{dict.home.newDesc}</p></div></div>
+    <div class="tool-grid">
+      {newest.map((c) => <ToolCard lang={lang} {...c} />)}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><div><h2>{dict.home.recommendedTitle}</h2><p>{dict.home.recommendedDesc}</p></div></div>
+    <div class="tool-grid">
+      {recommended.map((c) => <ToolCard lang={lang} {...c} />)}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div><h2>{dict.home.favoritesTitle} / {dict.home.recentTitle}</h2><p>{dict.toolPage.favoriteHint}</p></div>
+      <a class="btn btn-ghost btn-sm" href={pageUrl(lang, 'data')}><Icon name="database" size={14} /> {dict.footer.links.data}</a>
+    </div>
+    <h3 style="font-size:.95rem;margin-bottom:12px">{dict.home.favoritesTitle}</h3>
+    <div class="tool-grid" data-role="favorites-grid"></div>
+    <p class="muted" data-role="favorites-empty" style="font-size:.88rem">{dict.home.favoritesEmpty}</p>
+    <h3 style="font-size:.95rem;margin:26px 0 12px">{dict.home.recentTitle}</h3>
+    <div class="tool-grid" data-role="recent-grid"></div>
+    <p class="muted" data-role="recent-empty" style="font-size:.88rem">{dict.home.recentEmpty}</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><div><h2>{dict.home.featuresTitle}</h2><p>{dict.home.featuresDesc}</p></div></div>
+    <div class="feature-grid">
+      {dict.home.features.map((f) => (
+        <div class="feature-card">
+          <span class="tool-icon"><Icon name={f.icon} size={21} /></span>
+          <h3>{f.title}</h3>
+          <p>{f.desc}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="about-block">
+      <h2>{dict.home.aboutTitle}</h2>
+      <p style="margin-top:12px">{dict.home.aboutBody}</p>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="cta-band">
+      <div><h2>{dict.home.footerCtaTitle}</h2><p>{dict.home.footerCtaDesc}</p></div>
+      <a class="btn btn-primary btn-lg" href={pageUrl(lang, 'suggest')}><Icon name="lightbulb" size={17} /> {dict.home.footerCtaButton}</a>
+    </div>
+  </section>
+</MainLayout>

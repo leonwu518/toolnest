@@ -1,0 +1,8 @@
+---
+import { switchLangPath } from '../lib/site.js';
+const { lang, path, dict } = Astro.props;
+---
+<div class="lang-switch" role="group" aria-label={dict.langSwitch.title}>
+  <a href={switchLangPath(path, 'zh')} data-lang-link="zh" hreflang="zh-CN" lang="zh" title={dict.langSwitch.zh} class:list={['lang-btn', lang === 'zh' && 'active']}>中</a>
+  <a href={switchLangPath(path, 'en')} data-lang-link="en" hreflang="en" lang="en" title={dict.langSwitch.en} class:list={['lang-btn', lang === 'en' && 'active']}>EN</a>
+</div>

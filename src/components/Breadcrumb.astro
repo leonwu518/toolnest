@@ -1,0 +1,14 @@
+---
+import Icon from './Icon.astro';
+const { items = [], dict } = Astro.props;
+---
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  {items.map((item, i) => (
+    <>
+      {i > 0 && <Icon name="chevron-right" size={13} />}
+      {item.href
+        ? <a href={item.href}>{item.label}</a>
+        : <span aria-current="page">{item.label}</span>}
+    </>
+  ))}
+</nav>

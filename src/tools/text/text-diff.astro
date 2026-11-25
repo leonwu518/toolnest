@@ -1,0 +1,30 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+---
+<div class="tool-ui">
+  <div class="tool-columns">
+    <div class="field">
+      <label for="diff-a">{ui.labelA}</label>
+      <textarea id="diff-a" class="textarea" data-role="input-a" placeholder={ui.placeholderA} spellcheck="false"></textarea>
+    </div>
+    <div class="field">
+      <label for="diff-b">{ui.labelB}</label>
+      <textarea id="diff-b" class="textarea" data-role="input-b" placeholder={ui.placeholderB} spellcheck="false"></textarea>
+    </div>
+  </div>
+  <div class="option-row" style="margin-top:14px">
+    <label class="check"><input type="checkbox" data-opt="ignoreCase" /> {ui.ignoreCase}</label>
+    <label class="check"><input type="checkbox" data-opt="ignoreWhitespace" /> {ui.ignoreWhitespace}</label>
+  </div>
+  <div class="tool-actions">
+    <button type="button" class="btn btn-primary" data-role="run"><Icon name="git-compare" size={16} /> {ui.runLabel}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {a.clear}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <div class="status-line" data-role="status"></div>
+  <h3 class="tool-section-title" style="margin-top:20px"><Icon name="list" /> {ui.resultLabel}</h3>
+  <div data-role="diff-output"></div>
+  <p class="field-hint" style="margin-top:10px">{ui.hint}</p>
+</div>

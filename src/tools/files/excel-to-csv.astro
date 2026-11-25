@@ -1,0 +1,45 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+---
+<div class="tool-ui">
+  <label class="file-drop" data-role="file-drop">
+    <Icon name="upload" size={28} />
+    <strong>{ui.selectLabel}</strong>
+    <small>{ui.hint}</small>
+    <input type="file" data-role="file-input" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" />
+  </label>
+  <div class="status-line" data-role="file-info"></div>
+
+  <div class="field-grid three" style="margin-top:16px">
+    <div class="field">
+      <label for="csv-sheet">{ui.sheetLabel}</label>
+      <select class="select" id="csv-sheet" data-role="sheet"></select>
+    </div>
+    <div class="field">
+      <label for="csv-delimiter">{ui.delimiter}</label>
+      <select class="select" id="csv-delimiter" data-role="delimiter">
+        <option value=",">{ui.comma}</option>
+        <option value=";">{ui.semicolon}</option>
+        <option value="\t">{ui.tab}</option>
+        <option value="|">{ui.pipe}</option>
+      </select>
+    </div>
+    <div class="field" style="justify-content:flex-end">
+      <label class="check"><input type="checkbox" data-role="bom" checked /> {ui.bomLabel}</label>
+    </div>
+  </div>
+
+  <div class="tool-actions">
+    <button type="button" class="btn btn-primary" data-role="run"><Icon name="table" size={16} /> {ui.runLabel}</button>
+    <button type="button" class="btn btn-outline" data-role="download" disabled><Icon name="download" size={16} /> {ui.downloadLabel}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {a.clear}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <div class="status-line" data-role="status"></div>
+  <p class="field-hint">{ui.encodingHint}</p>
+
+  <h3 class="tool-section-title" style="margin-top:20px"><Icon name="eye" /> {ui.previewLabel}</h3>
+  <div class="data-table-wrap" data-role="preview"><div class="preview-placeholder" style="padding:24px;text-align:center">{ui.previewLabel}</div></div>
+</div>

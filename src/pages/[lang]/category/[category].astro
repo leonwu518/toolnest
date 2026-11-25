@@ -1,0 +1,98 @@
+---
+import MainLayout from '../../../layouts/MainLayout.astro';
+import Icon from '../../../components/Icon.astro';
+import ToolCard from '../../../components/ToolCard.astro';
+import Breadcrumb from '../../../components/Breadcrumb.astro';
+import SearchBox from '../../../components/SearchBox.astro';
+import { getDict, getToolI18n, isLang } from '../../../i18n/index.js';
+import { categories, categoryById } from '../../../data/categories.js';
+import { toolsByCategory, roadmap } from '../../../data/tools.js';
+import { langPath, categoryUrl } from '../../../lib/site.js';
+
+export function getStaticPaths() {
+  return ['zh', 'en'].flatMap((lang) => categories.map((c) => ({ params: { lang, category: c.id } })));
+}
+
+const { lang, category } = Astro.params;
+if (!isLang(lang)) return Astro.redirect('/');
+const cat = categoryById[category];
+if (!cat) return Astro.redirect('/');
+
+const dict = getDict(lang);
+const info = dict.categories[category];
+const path = categoryUrl(lang, category);
+const list = toolsByCategory(category);
+const cards = list.map((m) => ({
+  meta: m,
+  t: getToolI18n(lang, m.slug),
+  catName: info.name,
+  catIcon: cat.icon,
+  accent: cat.accent,
+}));
+const planned = roadmap[category] || [];
+const plannedNames = dict.roadmap[category] || [];
+---
+<MainLayout lang={lang} title={info.seoTitle} description={info.seoDesc} path={path} active={category}>
+  <Breadcrumb dict={dict} items={[
+    { label: dict.toolPage.breadcrumbHome, href: langPath(lang) },
+    { label: info.name },
+  ]} />
+
+  <div style="padding:24px 0 22px;max-width:820px">
+    <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:14px">
+      <span class:list={['tool-icon', `accent-${cat.accent}`]} style="width:52px;height:52px;border-radius:13px"><Icon name={cat.icon} size={27} /></span>
+      <div>
+        <h1 style="font-size:clamp(1.7rem,3vw,2.2rem)">{info.name}</h1>
+        <p class="muted" style="margin:6px 0 0">{info.desc}</p>
+      </div>
+    </div>
+    <p class="muted" style="margin:0">{info.intro}</p>
+  </div>
+
+  <div style="max-width:680px;margin-bottom:34px"><SearchBox dict={dict} compact={true} /></div>
+
+  {list.length > 0 && (
+    <section class="section-sm" style="padding-top:0">
+      <div class="section-head">
+        <div><h2>{dict.categoryPage.availableTitle}</h2><p>{dict.categoryPage.countLabel.replace('{n}', String(list.length))}</p></div>
+      </div>
+      <div class="tool-grid">
+        {cards.map((c) => <ToolCard lang={lang} {...c} />)}
+      </div>
+    </section>
+  )}
+
+  {list.length === 0 && (
+    <section class="section-sm" style="padding-top:0">
+      <div class="card card-pad">
+        <h2 style="font-size:1.15rem;margin-bottom:8px">{dict.categoryPage.emptyTitle}</h2>
+        <p class="muted" style="font-size:.9rem">{dict.categoryPage.emptyDesc}</p>
+      </div>
+    </section>
+  )}
+
+  {planned.length > 0 && (
+    <section class="section-sm">
+      <div class="section-head">
+        <div><h2>{dict.categoryPage.roadmapTitle}</h2><p>{dict.categoryPage.roadmapNote}</p></div>
+      </div>
+      <div class="roadmap-list">
+        {planned.map((_, i) => (
+          <div class="roadmap-item"><Icon name="clock" /> {plannedNames[i] || planned[i]}</div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="section-sm">
+    <div class="section-head"><div><h2>{dict.home.categoriesTitle}</h2></div></div>
+    <div class="category-grid">
+      {categories.filter((c) => c.id !== category).map((c) => (
+        <a class="category-card" href={categoryUrl(lang, c.id)}>
+          <span class:list={['tool-icon', `accent-${c.accent}`]}><Icon name={c.icon} size={20} /></span>
+          <span><h3>{dict.categories[c.id].name}</h3><p>{dict.categories[c.id].desc}</p></span>
+        </a>
+      ))}
+    </div>
+  </section>
+</MainLayout>

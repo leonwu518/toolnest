@@ -1,0 +1,408 @@
+// 工具级中文文案。新增工具时在此与 en-tools.js 各补一条，键名保持一致。
+// ui 对象会同时序列化到页面 <html data-ui>，供客户端脚本通过 msg('key') 读取。
+export default {
+  'word-counter': {
+    name: '字数统计',
+    desc: '实时统计字符数、单词数、中文字符数、行数、段落数与阅读时间。',
+    short: '实时统计字数、字符、词数、行数与阅读时间',
+    seoTitle: '在线字数统计工具 - 字符数、词数、行数统计 | ToolNest',
+    seoDesc: '免费在线字数统计工具，实时计算字符数（含/不含空格）、英文单词数、中文字符数、行数、段落数、句子数、字节数与预计阅读时间。浏览器本地处理，无需注册。',
+    keywords: ['字数统计', '字符统计', '在线字数统计', 'word counter', 'character count'],
+    howto: { steps: ['在输入框中粘贴或输入需要统计的文本。', '下方统计卡片会随着输入实时更新，无需点击任何按钮。', '可点击「复制」把统计结果以文本形式复制到剪贴板，或使用「清空」重新开始。'] },
+    faqs: [
+      { q: '中文和英文的计词方式有什么不同？', a: '中文等无空格分隔的语言按「中文字符数」统计更准确；「英文单词数」按空白分隔的连续字符统计，适合英文等以空格分词的语言。工具同时给出两项，便于按不同平台的要求选用。' },
+      { q: '统计会把我输入的文字上传吗？', a: '不会。所有统计都在当前浏览器标签页内由 JavaScript 完成，文本不会离开你的设备，关闭页面后即消失。' },
+      { q: '预计阅读时间是怎么算的？', a: '按中文约每分钟 300 字、英文约每分钟 200 词的常见阅读速度估算，仅供快速参考，不同人群与文本难度会有差异。' },
+    ],
+    ui: {
+      inputLabel: '待统计文本', inputPlaceholder: '在这里粘贴或输入文本，统计结果会实时更新…', liveHint: '输入即统计，数据不会离开你的浏览器',
+      chars: '字符数', charsNoSpaces: '字符数（不含空格）', words: '英文单词数', cjk: '中文字符数', lines: '行数', paragraphs: '段落数', sentences: '句子数', bytes: '字节数（UTF-8）', readTime: '预计阅读时间',
+      minutes: '分钟', charsUnit: '个字符', wordsUnit: '个词', linesUnit: '行', resultLabel: '统计结果', copyStats: '复制统计结果',
+    },
+  },
+
+  'remove-duplicate-lines': {
+    name: '文本去重',
+    desc: '按行删除重复内容，支持忽略大小写、忽略首尾空白与结果排序。',
+    short: '按行去除重复内容，可忽略大小写与空白',
+    seoTitle: '在线文本去重工具 - 删除重复行 | ToolNest',
+    seoDesc: '免费在线去除重复行工具：粘贴文本即可按行去重，支持忽略大小写、忽略首尾空白、移除空行与结果排序，并统计删除行数。浏览器本地处理，可一键复制或下载。',
+    keywords: ['文本去重', '删除重复行', '去重工具', 'remove duplicate lines'],
+    howto: { steps: ['把需要处理的文本粘贴到输入框，每行一条记录。', '按需勾选「忽略大小写」「忽略首尾空白」「移除空行」或「结果排序」。', '点击「开始处理」，结果会出现在输出框，可复制或下载为 TXT 文件。'] },
+    faqs: [
+      { q: '勾选「忽略大小写」后保留哪一行？', a: '保留首次出现的那一行，并保留它原来的大小写与空白。后续被认为重复的行会被删除。' },
+      { q: '可以处理几万行的文本吗？', a: '可以。工具在浏览器本地用 Set 做去重，通常几万行也能在瞬间完成；极大文本（数十万行）建议分批粘贴。' },
+      { q: '结果排序会不会打乱原始顺序？', a: '默认保持原始顺序。只有勾选「结果排序」时，才会按文本自然顺序重新排列去重后的行。' },
+    ],
+    ui: {
+      inputLabel: '原始文本（每行一条）', inputPlaceholder: '苹果\n香蕉\n苹果\n橘子\n\n香蕉', outputLabel: '去重结果', outputPlaceholder: '处理结果会显示在这里',
+      ignoreCase: '忽略大小写', trimWhitespace: '忽略首尾空白', sortOutput: '结果按字母排序', removeEmpty: '移除空行', keepFirst: '保留首次出现的行',
+      removedCount: '共删除 {n} 行', originalCount: '原始 {n} 行', uniqueCount: '保留 {n} 行', runLabel: '开始去重',
+    },
+  },
+
+  'case-converter': {
+    name: '大小写转换',
+    desc: '在大写、小写、标题式、驼峰、下划线等常见命名格式间即时转换。',
+    short: '大写、小写、驼峰、下划线等格式一键互转',
+    seoTitle: '在线大小写转换工具 - 驼峰、下划线、标题格式 | ToolNest',
+    seoDesc: '免费在线大小写转换工具：支持全部大写、全部小写、首字母大写、句首大写、camelCase、PascalCase、snake_case、kebab-case、大小写反转与字符反转。即时转换，可复制下载。',
+    keywords: ['大小写转换', '驼峰命名', '下划线命名', 'case converter'],
+    howto: { steps: ['在输入框粘贴需要转换的文字或变量名。', '点击任意转换按钮，输出框会立即显示对应格式的结果。', '使用「复制」取走结果，或用「清空」重新输入。'] },
+    faqs: [
+      { q: 'camelCase 和 PascalCase 有什么区别？', a: 'camelCase 首单词小写、后续单词首字母大写（如 myVariable）；PascalCase 每个单词首字母都大写（如 MyVariable），常用于类名。' },
+      { q: '中文内容转换会怎样？', a: '大小写规则对汉字不生效，但空格、连字符、下划线等分隔符仍会被识别，方便把中文与英文混合的词组转成变量名格式。' },
+      { q: '转换会修改我的原文吗？', a: '不会。原文保留在左侧输入框，所有转换结果只写入输出框，可随时切换不同格式对比。' },
+    ],
+    ui: {
+      inputLabel: '原始文本', inputPlaceholder: '输入文字或变量名，例如 hello world 或 user_name', outputLabel: '转换结果', outputPlaceholder: '点击上方按钮生成结果',
+      upper: '全部大写', lower: '全部小写', title: '单词首字母大写', sentence: '句首大写', camel: 'camelCase', pascal: 'PascalCase', snake: 'snake_case', kebab: 'kebab-case', toggle: '大小写反转', reverse: '字符顺序反转',
+      hint: '点击任意按钮即时转换，原文不会被修改',
+    },
+  },
+
+  'text-diff': {
+    name: '文本对比',
+    desc: '逐行比较两段文本，清晰标出新增、删除与相同的行。',
+    short: '逐行比较两段文本差异，高亮新增与删除',
+    seoTitle: '在线文本对比工具 - 两段文本差异比较 | ToolNest',
+    seoDesc: '免费在线文本对比（Diff）工具：逐行比较两段文本，高亮显示新增、删除与未改动的行，支持忽略大小写与空白差异。基于 LCS 算法在浏览器本地计算，不上传内容。',
+    keywords: ['文本对比', '文本差异', 'diff 工具', 'text diff', '比较两段文本'],
+    howto: { steps: ['把原始文本粘贴到左侧「原文」，把修改后的文本粘贴到右侧「对比文本」。', '按需勾选「忽略大小写」或「忽略空白差异」，然后点击「开始对比」。', '结果区按行显示差异：绿色为新增、红色为删除、灰色为未改动，上方给出统计。'] },
+    faqs: [
+      { q: '差异是如何计算的？', a: '采用最长公共子序列（LCS）算法对两段时间做逐行对齐，得到最小的新增/删除集合，结果与常见代码 Diff 工具思路一致。' },
+      { q: '适合比较代码或配置文件吗？', a: '适合。逐行比较对代码、配置、名单都很有效。若需要忽略缩进差异，可勾选「忽略空白差异」。' },
+      { q: '文本会被上传吗？', a: '不会，比较完全在浏览器内完成。合同、代码等敏感文本也可以放心使用。' },
+    ],
+    ui: {
+      labelA: '原文 A', labelB: '对比文本 B', placeholderA: '粘贴原始文本…', placeholderB: '粘贴修改后的文本…',
+      ignoreCase: '忽略大小写', ignoreWhitespace: '忽略空白差异', runLabel: '开始对比',
+      added: '新增', removed: '删除', unchanged: '未改动', identical: '两段文本完全一致', diffStats: '新增 {a} 行 · 删除 {r} 行 · 未改动 {u} 行', resultLabel: '对比结果',
+      addedLine: '新增行', removedLine: '删除行', hint: '采用最长公共子序列算法逐行对齐，结果在本地计算',
+    },
+  },
+
+  'json-formatter': {
+    name: 'JSON 格式化',
+    desc: '格式化、压缩与校验 JSON，支持缩进设置与按键名排序。',
+    short: 'JSON 格式化、压缩、校验与语法错误定位',
+    seoTitle: '在线 JSON 格式化工具 - 美化、压缩、校验 | ToolNest',
+    seoDesc: '免费在线 JSON 格式化工具：美化缩进、压缩成单行、语法校验与错误定位，支持 2/4 空格或 Tab 缩进及按键名排序。浏览器本地处理，JSON 不上传服务器。',
+    keywords: ['JSON 格式化', 'JSON 校验', 'JSON 压缩', 'json formatter', 'json validator'],
+    howto: { steps: ['把 JSON 粘贴到输入框，或从文件复制进来。', '选择缩进方式，点击「格式化」「压缩」或「校验」。', '格式化结果可一键复制或下载为 .json 文件；若 JSON 非法，会显示具体错误信息。'] },
+    faqs: [
+      { q: 'JSON 校验失败时能看到错误位置吗？', a: '可以。工具会显示浏览器解析引擎给出的错误信息，包含出错位置描述，便于定位多余的逗号、引号或括号。' },
+      { q: '支持很大的 JSON 文件吗？', a: '几 MB 的文本在浏览器内处理通常很流畅；超大文件受浏览器内存限制，建议拆分处理。' },
+      { q: '按键名排序会影响数据吗？', a: '只改变对象键的输出顺序，不改变任何键值内容。JSON 对象本身无序，排序后更便于人工比对。' },
+    ],
+    ui: {
+      inputLabel: 'JSON 输入', inputPlaceholder: '{"name":"ToolNest","tools":20,"free":true}', outputLabel: '处理结果', outputPlaceholder: '结果会显示在这里',
+      format: '格式化', minify: '压缩', validate: '校验', indent: '缩进', indent2: '2 空格', indent4: '4 空格', indentTab: 'Tab', sortKeys: '按键名排序',
+      validMsg: 'JSON 语法合法', invalidMsg: 'JSON 语法错误', errorDetail: '错误详情', hint: '支持对象、数组、嵌套结构与 Unicode 中文',
+    },
+  },
+
+  'image-compressor': {
+    name: '图片压缩',
+    desc: '调整质量与格式，在浏览器本地压缩图片体积并预览对比。',
+    short: '本地压缩 JPG / PNG / WEBP，实时查看体积变化',
+    seoTitle: '在线图片压缩工具 - 不上传服务器 | ToolNest',
+    seoDesc: '免费在线图片压缩工具：拖动质量滑块即可压缩 JPG / PNG / WEBP 图片，实时对比压缩前后体积并预览效果。使用浏览器 Canvas 本地处理，图片不上传，保护隐私。',
+    keywords: ['图片压缩', '压缩图片', '减小图片体积', 'image compressor'],
+    howto: { steps: ['点击选择或拖入一张 JPG / PNG / WEBP 图片（不超过 20MB）。', '拖动质量滑块，选择输出格式（建议照片用 JPEG 或 WEBP）。', '点击「压缩」查看体积对比与预览，确认后下载压缩后的图片。'] },
+    faqs: [
+      { q: '压缩后的图片会变模糊吗？', a: 'JPEG 与 WEBP 属于有损压缩，质量越低体积越小、细节损失越多。PNG 为无损格式，改变质量不会明显减小体积。建议从 80% 起步微调。' },
+      { q: '透明背景会保留吗？', a: '选择 PNG 或 WEBP 作为输出格式时会保留透明通道；输出为 JPEG 时透明区域会被填充为白色。' },
+      { q: '图片会被上传到服务器吗？', a: '不会。图片通过浏览器 File API 读取，用 Canvas 重新编码，下载链接也是本地生成的，整个过程不产生网络上传。' },
+    ],
+    ui: {
+      selectLabel: '选择或拖入图片', hint: '支持 JPG / PNG / WEBP，单张不超过 20MB', quality: '输出质量', qualityHint: '数值越小体积越小，画质损失越大',
+      outputFormat: '输出格式', originalSize: '原始体积', outputSize: '压缩后体积', savedLabel: '节省', previewLabel: '预览', dimension: '尺寸',
+      runLabel: '压缩图片', downloadLabel: '下载压缩图片', typeError: '仅支持 JPG / PNG / WEBP 图片', sizeError: '图片超过 20MB，请选择更小的文件', readError: '图片读取失败，请更换文件重试',
+    },
+  },
+
+  'image-resizer': {
+    name: '图片尺寸调整',
+    desc: '按像素或常用预设调整图片宽高，可选保持原始比例。',
+    short: '按像素或预设调整图片宽高，可锁定比例',
+    seoTitle: '在线图片尺寸调整工具 - 修改宽高像素 | ToolNest',
+    seoDesc: '免费在线图片尺寸调整工具：输入宽度与高度像素，可锁定宽高比，提供常用尺寸预设，即时预览并下载。基于浏览器 Canvas 本地处理，图片不上传。',
+    keywords: ['图片尺寸调整', '修改图片大小', '调整分辨率', 'image resizer'],
+    howto: { steps: ['选择一张 JPG / PNG / WEBP 图片，工具会显示原始宽高。', '输入目标宽度与高度；勾选「保持宽高比」时只需填一项，另一项自动计算。', '点击「调整尺寸」预览效果，确认后下载。'] },
+    faqs: [
+      { q: '放大图片会变得更清晰吗？', a: '不会。放大只是重采样插值，不会增加原本不存在的细节。若对清晰度要求高，建议使用原始分辨率拍摄或导出。' },
+      { q: '支持批量调整多张图片吗？', a: '当前版本一次处理一张图片，保证交互简单稳定。批量处理已列入后续规划。' },
+      { q: '输出格式是什么？', a: '默认沿用原图格式（PNG 保留透明），也可以在结果区看到实际输出格式与体积。' },
+    ],
+    ui: {
+      selectLabel: '选择或拖入图片', hint: '支持 JPG / PNG / WEBP，单张不超过 20MB', width: '宽度（px）', height: '高度（px）', lockRatio: '保持宽高比',
+      presetLabel: '常用预设', presetCustom: '自定义', runLabel: '调整尺寸', downloadLabel: '下载图片', sizeLabel: '尺寸', originalSize: '原始体积', outputSize: '输出体积', previewLabel: '预览',
+      typeError: '仅支持 JPG / PNG / WEBP 图片', sizeError: '图片超过 20MB，请选择更小的文件', invalidSize: '请输入 1–20000 之间的宽高数值', readError: '图片读取失败，请更换文件重试',
+    },
+  },
+
+  'image-converter': {
+    name: '图片格式转换',
+    desc: '在 JPG、PNG、WEBP 之间互转，可调节有损格式质量。',
+    short: 'JPG / PNG / WEBP 互转，可调质量',
+    seoTitle: '在线图片格式转换 - JPG、PNG、WEBP 互转 | ToolNest',
+    seoDesc: '免费在线图片格式转换工具：JPG 转 PNG、PNG 转 JPG、WEBP 转 JPG/PNG，支持质量调节与透明背景处理。基于 Canvas 本地转换，不上传图片。',
+    keywords: ['图片格式转换', 'JPG 转 PNG', 'PNG 转 WEBP', 'image converter'],
+    howto: { steps: ['选择一张需要转换的图片。', '选择目标格式（JPG / PNG / WEBP），如选 JPG 或 WEBP 可调整质量。', '点击「转换」预览结果并下载。'] },
+    faqs: [
+      { q: 'PNG 转 JPG 后透明背景会怎样？', a: 'JPEG 不支持透明通道，透明区域会被填充为白色。若需保留透明，请选择 PNG 或 WEBP。' },
+      { q: 'WEBP 都能被打开吗？', a: '现代浏览器（Chrome、Edge、Firefox、Safari 14+）均支持 WEBP；如需兼容老旧软件或系统，建议转换为 JPG 或 PNG。' },
+      { q: '转换会损失画质吗？', a: '转为 PNG 为无损；转为 JPG / WEBP 属于有损编码，可通过提高质量值（建议 90% 以上）减小损失。' },
+    ],
+    ui: {
+      selectLabel: '选择或拖入图片', hint: '支持 JPG / PNG / WEBP，单张不超过 20MB', targetFormat: '目标格式', quality: '质量（JPG / WEBP）',
+      runLabel: '转换格式', downloadLabel: '下载转换后的图片', originalSize: '原始体积', outputSize: '输出体积', previewLabel: '预览',
+      typeError: '仅支持 JPG / PNG / WEBP 图片', sizeError: '图片超过 20MB，请选择更小的文件', readError: '图片读取失败，请更换文件重试',
+    },
+  },
+
+  'merge-pdf': {
+    name: 'PDF 合并',
+    desc: '把多个 PDF 按指定顺序合并为一个文件，可调整顺序。',
+    short: '多个 PDF 按顺序合并成一个文件',
+    seoTitle: '在线 PDF 合并工具 - 合并多个 PDF 文件 | ToolNest',
+    seoDesc: '免费在线合并 PDF：一次选择多个 PDF，拖动或点击按钮调整顺序后合并为一个文件，显示总页数。使用 pdf-lib 在浏览器本地处理，文件不上传服务器。',
+    keywords: ['PDF 合并', '合并 PDF 文件', '多个 PDF 合成一个', 'merge pdf'],
+    howto: { steps: ['点击「选择多个 PDF 文件」，可一次选择多个，也可分多次追加。', '在文件列表中用「上移 / 下移」调整合并顺序，或移除不需要的文件。', '点击「合并 PDF」，生成后自动下载合并结果。'] },
+    faqs: [
+      { q: '能合并加密或带密码的 PDF 吗？', a: '带密码保护的 PDF 无法在本地直接读取，请先解除密码再合并。工具不会尝试破解密码。' },
+      { q: '合并有文件大小或数量限制吗？', a: '没有硬性数量限制，但所有文件都要载入浏览器内存，建议单次合并总大小控制在几十 MB 以内，以免浏览器卡顿。' },
+      { q: '文件会上传到服务器吗？', a: '不会。合并使用 pdf-lib 在浏览器内完成，生成的 PDF 通过本地 Blob 下载，全程无网络上传。' },
+    ],
+    ui: {
+      selectLabel: '选择多个 PDF 文件', hint: '支持多个 PDF 文件，单个不超过 50MB', addMore: '继续添加', fileList: '文件列表（按顺序合并）', pages: '页', totalPages: '合计 {n} 页',
+      runLabel: '合并 PDF', emptyHint: '请至少添加 2 个 PDF 文件', minFiles: '至少需要 2 个 PDF 才能合并', typeError: '仅支持 PDF 文件', readError: '无法读取该 PDF，文件可能损坏或已加密', sizeError: '单个 PDF 不超过 50MB',
+      processing: '正在合并，请稍候…', success: '合并完成，已开始下载', orderHint: '使用上移 / 下移调整合并顺序',
+    },
+  },
+
+  'split-pdf': {
+    name: 'PDF 拆分',
+    desc: '按页码范围提取页面，或把每一页拆成单独的 PDF。',
+    short: '按页码范围提取，或每页拆为单独 PDF',
+    seoTitle: '在线 PDF 拆分工具 - 按页码提取页面 | ToolNest',
+    seoDesc: '免费在线 PDF 拆分工具：按页码范围（如 1-3,5,8-10）提取页面生成新 PDF，或把每一页拆分为单独文件打包下载。浏览器本地处理，文件不上传。',
+    keywords: ['PDF 拆分', '拆分 PDF 页面', '提取 PDF 页面', 'split pdf'],
+    howto: { steps: ['选择一个 PDF 文件，工具会显示总页数。', '选择「提取指定页码范围」并填写页码（如 1-3,5,8-10），或选择「每页拆分为单独文件」。', '点击「拆分」下载结果；每页拆分模式会打包为 ZIP 一次下载。'] },
+    faqs: [
+      { q: '页码范围怎么写？', a: '支持单个页码（3）、连续范围（1-5）以及逗号组合（1-3,5,8-10）。页码从 1 开始，超出总页数的页码会被忽略。' },
+      { q: '每页拆分后会有很多文件，怎么下载？', a: '工具会把每页生成的 PDF 打包成一个 ZIP 文件，一次下载后在本地解压即可。' },
+      { q: '原始 PDF 会被修改吗？', a: '不会。工具只读取原文件并生成新的 PDF，原文件保持不变。' },
+    ],
+    ui: {
+      selectLabel: '选择 PDF 文件', hint: '选择 1 个 PDF 文件，单个不超过 50MB', modeRange: '提取指定页码范围', modeEach: '每页拆分为单独文件', rangeLabel: '页码范围', rangePlaceholder: '例如：1-3,5,8-10',
+      runLabel: '拆分 PDF', pageCount: '文档共 {n} 页', invalidRange: '页码范围格式不正确，请使用 1-3,5 这样的写法', typeError: '仅支持 PDF 文件', readError: '无法读取该 PDF，文件可能损坏或已加密',
+      sizeError: 'PDF 不超过 50MB', emptyHint: '请先选择一个 PDF 文件', processing: '正在拆分，请稍候…', success: '拆分完成，已开始下载', rangeHint: '页码从 1 开始，支持 1-5 与逗号组合',
+    },
+  },
+
+  'image-to-pdf': {
+    name: '图片转 PDF',
+    desc: '把多张图片按顺序合成一个 PDF，可设置页面尺寸与方向。',
+    short: '多张图片合成 PDF，可设 A4 / 方向 / 页边距',
+    seoTitle: '在线图片转 PDF - 多张图片合成一个 PDF | ToolNest',
+    seoDesc: '免费在线图片转 PDF 工具：一次选择多张 JPG / PNG / WEBP 图片，自动按比例排版为 A4、Letter 或自适应页面，可设置方向与页边距，导出一个 PDF。本地处理，不上传图片。',
+    keywords: ['图片转 PDF', '多张图片合成 PDF', 'JPG 转 PDF', 'image to pdf'],
+    howto: { steps: ['选择一张或多张图片，列表会按选择顺序显示，可继续追加。', '设置页面尺寸（A4 / Letter / 适应图片）、方向与页边距。', '点击「生成 PDF」，浏览器会下载合成的 PDF 文件。'] },
+    faqs: [
+      { q: '图片会被拉伸变形吗？', a: '不会。工具按图片原始宽高比等比缩放并居中放置，选择「适应图片」时每页尺寸直接匹配对应图片。' },
+      { q: '支持透明 PNG 吗？', a: '支持读取，但 PDF 页面为白色背景，透明区域会显示为白色。' },
+      { q: '图片顺序可以调整吗？', a: '按选择顺序生成；如需调整，可重新选择或先在文件管理器中按顺序命名。' },
+    ],
+    ui: {
+      selectLabel: '选择图片（可多选）', hint: '支持 JPG / PNG / WEBP，单张不超过 20MB', addMore: '继续添加', pageSize: '页面尺寸', a4: 'A4', letter: 'Letter', fitImage: '适应图片',
+      orientation: '方向', portrait: '纵向', landscape: '横向', margin: '页边距（pt）', runLabel: '生成 PDF',
+      typeError: '仅支持 JPG / PNG / WEBP 图片', sizeError: '单张图片不超过 20MB', emptyHint: '请至少选择一张图片', processing: '正在生成 PDF，请稍候…', success: 'PDF 已生成，开始下载', orderHint: '图片按选择顺序排列',
+    },
+  },
+
+  'excel-to-csv': {
+    name: 'Excel 转 CSV',
+    desc: '读取 xlsx / xls 工作表，选择分隔符并导出 CSV 文件。',
+    short: 'xlsx / xls 转 CSV，可选工作表与分隔符',
+    seoTitle: '在线 Excel 转 CSV 工具 - xlsx 转 csv | ToolNest',
+    seoDesc: '免费在线 Excel 转 CSV：读取 .xlsx / .xls 文件，可切换工作表、选择分隔符、添加 UTF-8 BOM 以兼容 Excel，提供预览并下载 CSV。使用 SheetJS 在浏览器本地解析，文件不上传。',
+    keywords: ['Excel 转 CSV', 'xlsx 转 csv', '表格转换', 'excel to csv'],
+    howto: { steps: ['选择一个 .xlsx 或 .xls 文件，工具会列出所有工作表。', '选择需要导出的工作表、分隔符，以及是否添加 UTF-8 BOM。', '查看前 10 行预览，确认后点击「下载 CSV」。'] },
+    faqs: [
+      { q: '导出的 CSV 用 Excel 打开中文乱码怎么办？', a: '勾选「添加 UTF-8 BOM」后重新导出即可，BOM 能帮助 Excel 正确识别 UTF-8 编码。' },
+      { q: '会保留公式和单元格格式吗？', a: 'CSV 是纯文本格式，只保留单元格的计算结果与文本值，不保留公式、颜色、字体等格式。' },
+      { q: '多个工作表怎么导出？', a: '一次导出一个工作表。切换工作表后重新点击下载即可分别导出。' },
+    ],
+    ui: {
+      selectLabel: '选择 Excel 文件（.xlsx / .xls）', hint: '支持 .xlsx / .xls，文件不超过 20MB', sheetLabel: '工作表', delimiter: 'CSV 分隔符', comma: '逗号 ,', semicolon: '分号 ;', tab: '制表符 Tab', pipe: '竖线 |',
+      bomLabel: '添加 UTF-8 BOM（Excel 中文兼容）', previewLabel: '预览（前 10 行）', runLabel: '生成 CSV', downloadLabel: '下载 CSV', rowCount: '共 {n} 行', columnCount: '{n} 列',
+      typeError: '仅支持 .xlsx / .xls 文件', sizeError: '文件不超过 20MB', emptyHint: '请先选择一个 Excel 文件', readError: '表格解析失败，请检查文件是否损坏', encodingHint: '导出为 UTF-8 编码的纯文本',
+    },
+  },
+
+  'percentage-calculator': {
+    name: '百分比计算器',
+    desc: '四种常用百分比场景：求值、占比、增减与变化率。',
+    short: '四种百分比场景，附计算过程',
+    seoTitle: '在线百分比计算器 - 百分比、增长率计算 | ToolNest',
+    seoDesc: '免费在线百分比计算器：计算某数的百分之几、一个数占另一个数的百分比、增减指定百分比后的结果，以及两个数值之间的百分比变化。显示完整计算过程，即输即算。',
+    keywords: ['百分比计算器', '百分比计算', '增长率计算', 'percentage calculator'],
+    howto: { steps: ['选择需要的计算模式，例如「X 的 Y% 是多少」。', '按提示输入数值，结果会随输入实时更新。', '查看结果下方的计算过程，便于核对与复用。'] },
+    faqs: [
+      { q: '毛利率和加价率是一回事吗？', a: '不是。本工具计算的是数值百分比；毛利率与加价率请使用「利润率计算器」，两者分母不同（售价 vs 成本）。' },
+      { q: '支持小数和负数吗？', a: '支持小数。负数在「占比」与「变化率」场景下可能有数学意义但不符合日常语义，请结合实际场景判断。' },
+      { q: '结果保留几位小数？', a: '默认保留 4 位小数并去除多余的零，同时给出完整计算过程，可自行按需取整。' },
+    ],
+    ui: {
+      modeHint: '选择计算模式', mode1: 'X 的 Y% 是多少？', mode2: 'X 是 Y 的百分之几？', mode3: 'X 增加或减少 Y% 后是多少？', mode4: '从 X 变化到 Y 的百分比变化？',
+      xLabel: '数值 X', yLabel: '数值 Y', percentLabel: '百分比 Y（%）', direction: '方向', increase: '增加', decrease: '减少',
+      resultLabel: '计算结果', formulaLabel: '计算过程', runLabel: '计算', hint: '输入数值即时计算，并显示计算过程', invalidNumber: '请输入有效的数字', oldLabel: '原数值 X', newLabel: '新数值 Y',
+    },
+  },
+
+  'profit-margin-calculator': {
+    name: '利润率计算器',
+    desc: '由成本与售价计算毛利率、加价率、利润额与销售额。',
+    short: '成本售价一键算出毛利率、加价率与利润',
+    seoTitle: '在线利润率计算器 - 毛利率、加价率计算 | ToolNest',
+    seoDesc: '免费在线利润率计算器：输入成本、售价与数量，计算毛利、毛利率、加价率、销售额与总成本，支持计入运费等额外成本。适用于报价与定价核算，即输即算。',
+    keywords: ['利润率计算器', '毛利率计算', '加价率', 'profit margin calculator'],
+    howto: { steps: ['填写单位成本价与单位售价，数量默认为 1。', '如有运费、包装等额外成本，填入「额外成本」。', '结果区实时显示毛利、毛利率、加价率、销售额与总成本。'] },
+    faqs: [
+      { q: '毛利率和加价率有什么区别？', a: '毛利率 = 毛利 ÷ 售价，反映利润占售价的比例；加价率 = 毛利 ÷ 成本，反映在成本上加价多少。例如成本 80、售价 100，毛利率 20%，加价率 25%。' },
+      { q: '毛利率可能超过 100% 吗？', a: '不会。正常售价高于成本时毛利率在 0–100% 之间；若售价低于成本，结果为负值，表示亏损。' },
+      { q: '额外成本如何计入？', a: '额外成本按总额计入总成本，因此会降低毛利与毛利率，适合核算运费、包装、平台佣金等一次性费用。' },
+    ],
+    ui: {
+      costLabel: '单位成本价', priceLabel: '单位售价', quantityLabel: '数量', extraCostLabel: '额外成本（运费、包装等）',
+      marginLabel: '毛利率', markupLabel: '加价率', profitLabel: '毛利总额', unitProfitLabel: '单位毛利', revenueLabel: '销售额', totalCostLabel: '总成本',
+      resultLabel: '计算结果', runLabel: '计算', hint: '成本、售价与数量任一变化，结果即时更新', invalidNumber: '请输入有效的非负数字',
+      note: '毛利率以售价为分母，加价率以成本为分母', lossNote: '当前售价低于总成本，处于亏损状态',
+    },
+  },
+
+  'unit-converter': {
+    name: '单位换算',
+    desc: '长度、重量、温度、面积、体积、速度、数据与时间换算。',
+    short: '长度、重量、温度、面积、体积等 8 类换算',
+    seoTitle: '在线单位换算器 - 长度、重量、温度、面积、体积 | ToolNest',
+    seoDesc: '免费在线单位换算工具：支持长度、重量、温度、面积、体积、速度、数据存储与时间共 8 类常用单位互转，输入即时显示结果，支持交换单位。浏览器本地计算。',
+    keywords: ['单位换算', '长度换算', '重量换算', '温度换算', 'unit converter'],
+    howto: { steps: ['先选择换算类型，例如「长度」或「重量」。', '选择源单位与目标单位，输入数值。', '结果即时显示；点击「交换」可快速反向换算。'] },
+    faqs: [
+      { q: '温度换算为什么不是简单乘系数？', a: '摄氏度与华氏度、开尔文之间存在零点偏移，需要专用公式；其他类别使用固定换算系数，工具已分别处理。' },
+      { q: '数据存储按 1000 还是 1024 换算？', a: '本工具按国际单位制十进制（1 KB = 1000 B）换算，与硬盘厂商标称一致；操作系统常按 1024 显示，两者会有差异。' },
+      { q: '结果精度如何？', a: '内部使用双精度浮点计算，显示时最多保留 10 位有效数字并去除多余的零，极小数会用科学计数法表示。' },
+    ],
+    ui: {
+      categoryLabel: '换算类型', fromLabel: '从', toLabel: '到', valueLabel: '输入数值', resultLabel: '换算结果', swapLabel: '交换单位',
+      hint: '选择类型与单位后，输入数值即时换算', invalidNumber: '请输入有效的数字', formulaLabel: '换算关系',
+    },
+  },
+
+  'date-calculator': {
+    name: '日期计算器',
+    desc: '计算两个日期的间隔，或给某个日期加减天数。',
+    short: '日期间隔、工作日数与日期加减',
+    seoTitle: '在线日期计算器 - 日期间隔、天数加减 | ToolNest',
+    seoDesc: '免费在线日期计算器：计算两个日期相差的天数、周数、月数、年数与工作日数，也可给指定日期加上或减去若干天，得出目标日期与星期。即输即算。',
+    keywords: ['日期计算器', '日期间隔', '计算天数', '工作日计算', 'date calculator'],
+    howto: { steps: ['选择「计算日期间隔」或「日期加减天数」模式。', '按模式填写开始日期、结束日期或基准日期与天数。', '结果区即时显示相差天数、工作日数或计算后的日期与星期。'] },
+    faqs: [
+      { q: '工作日包含节假日吗？', a: '不包含。「工作日数」只排除周六与周日，不处理法定节假日与调休，用于正式排期时请结合日历复核。' },
+      { q: '相差天数包含结束当天吗？', a: '默认不包含（即两个日期的时间差）。勾选「包含结束日期」后会在结果上 +1 天，适合计算含首尾的租期、工期。' },
+      { q: '月数和年数怎么估算？', a: '按平均每月 30.44 天、每年 365.25 天估算，用于快速参考；精确的「几个月后」请用日期加减模式按天数计算。' },
+    ],
+    ui: {
+      modeDiff: '计算两个日期的间隔', modeAdd: '给日期加上或减去天数', modeHint: '选择计算模式',
+      startDate: '开始日期', endDate: '结束日期', baseDate: '基准日期', days: '天数', add: '加上', subtract: '减去', includeEnd: '包含结束日期',
+      resultLabel: '计算结果', daysDiff: '相差天数', weeks: '约合周数', months: '约合月数', years: '约合年数', weekdays: '工作日数（不含周末）', weekendDays: '周末天数',
+      resultDate: '计算后日期', weekday: '星期', runLabel: '计算', hint: '日期变更时结果即时更新', invalidDate: '请选择完整的有效日期', negativeHint: '结束日期早于开始日期，结果为负数',
+      daysUnit: '天', weeksUnit: '周', monthsUnit: '个月', yearsUnit: '年',
+    },
+  },
+
+  'url-encoder-decoder': {
+    name: 'URL 编码解码',
+    desc: '对 URL 或参数进行百分号编码与解码，正确处理中文。',
+    short: 'URL 百分号编码 / 解码，支持中文与 Unicode',
+    seoTitle: '在线 URL 编码解码工具 - 百分号编码 | ToolNest',
+    seoDesc: '免费在线 URL 编码解码工具：对网址、查询参数进行 encodeURIComponent 编码与解码，正确处理中文、空格与特殊字符，可切换完整 URL 模式。浏览器本地运行。',
+    keywords: ['URL 编码', 'URL 解码', '百分号编码', 'url encode decode'],
+    howto: { steps: ['把需要处理的网址或参数粘贴到输入框。', '点击「编码」或「解码」；默认按组件方式处理，可切换「仅编码组件」选项。', '结果可一键复制，解码失败时会给出明确提示。'] },
+    faqs: [
+      { q: '编码组件和编码整个 URL 有什么区别？', a: '组件模式（encodeURIComponent）会编码 : / ? & = 等保留字符，适合处理查询参数值；关闭后使用 encodeURI，保留 URL 结构字符，适合处理完整网址。' },
+      { q: '中文为什么一定要编码？', a: 'URL 标准只允许 ASCII 字符，中文与 emoji 需要先转成 UTF-8 字节再做百分号编码，否则在部分服务器或浏览器上会被错误解析。' },
+      { q: '空格会变成 + 还是 %20？', a: '本工具按标准 encodeURIComponent 输出 %20。表单 application/x-www-form-urlencoded 才使用 +，两者并不等价。' },
+    ],
+    ui: {
+      inputLabel: '输入内容', inputPlaceholder: '粘贴 URL 或查询参数，例如：https://example.com/search?q=中文 工具', outputLabel: '处理结果', outputPlaceholder: '编码或解码结果会显示在这里',
+      encode: '编码', decode: '解码', componentOnly: '组件模式（encodeURIComponent / decodeURIComponent）', hint: '组件模式适合参数值；关闭后适合完整网址',
+      decodeError: '解码失败：输入不是合法的百分号编码字符串', emptyHint: '请先输入内容',
+    },
+  },
+
+  'base64-encoder-decoder': {
+    name: 'Base64 编码解码',
+    desc: '文本与文件的 Base64 编解码，完整支持中文与 Unicode。',
+    short: '文本 / 文件 Base64 编解码，正确处理中文',
+    seoTitle: '在线 Base64 编码解码工具 - 文本与文件 | ToolNest',
+    seoDesc: '免费在线 Base64 编码解码：支持文本与任意文件的 Base64 / Data URL 生成，解码时可导出原文件，完整正确处理中文与 Unicode 字符。浏览器本地运行，文件不上传。',
+    keywords: ['Base64 编码', 'Base64 解码', '图片转 Base64', 'base64 encoder decoder'],
+    howto: { steps: ['选择「文本模式」并输入文字，或选择「文件模式」并选择一个文件。', '点击「编码」生成 Base64（文件模式同时生成 Data URL），或粘贴 Base64 后点击「解码」。', '文本结果可复制，文件模式解码后可下载还原的文件。'] },
+    faqs: [
+      { q: '为什么中文直接 btoa 会报错？', a: 'btoa 只接受 Latin-1 字符。本工具先用 TextEncoder 转成 UTF-8 字节再编码，解码时用 TextDecoder 还原，因此中文与 emoji 都能正确处理。' },
+      { q: 'Base64 是加密吗？', a: '不是。Base64 只是一种二进制到文本的编码方式，任何人都能解码，请勿用它保护敏感信息。' },
+      { q: '文件模式有大小限制吗？', a: '建议不超过 10MB。大文件转成 Base64 后体积会增加约 33%，受浏览器内存限制，超大文件可能卡顿。' },
+    ],
+    ui: {
+      inputLabel: '输入内容', inputPlaceholder: '输入要编码的文本，或粘贴 Base64 字符串进行解码', outputLabel: '处理结果', outputPlaceholder: '结果会显示在这里',
+      encode: '编码', decode: '解码', modeText: '文本模式', modeFile: '文件模式', fileLabel: '选择文件', fileHint: '任意类型文件，建议不超过 10MB',
+      dataUrlLabel: 'Data URL', hint: '使用 UTF-8 字节编码，中文与 emoji 均可正确处理', decodeError: '解码失败：输入不是合法的 Base64 字符串',
+      sizeError: '文件超过 10MB，请选择更小的文件', emptyHint: '请先输入文本或选择文件', downloadLabel: '下载解码后的文件', utf8Label: 'UTF-8 文本',
+    },
+  },
+
+  'color-converter': {
+    name: '颜色转换器',
+    desc: '在 HEX、RGB、HSL 之间互转，含取色器与配色参考。',
+    short: 'HEX / RGB / HSL 互转，取色与明暗变体',
+    seoTitle: '在线颜色转换工具 - HEX、RGB、HSL 互转 | ToolNest',
+    seoDesc: '免费在线颜色转换器：输入 HEX、RGB 或 HSL 即时互转，提供取色器、颜色预览、明暗变体与互补色，一键复制 CSS 颜色值。适合前端设计与配色，浏览器本地运行。',
+    keywords: ['颜色转换', 'HEX 转 RGB', 'RGB 转 HSL', 'color converter'],
+    howto: { steps: ['在任意输入框（HEX / RGB / HSL）填写颜色值，或使用取色器选色。', '其余格式会自动换算，预览区实时显示颜色。', '点击「变亮 / 变暗 / 互补色」获取配色参考，点击色值即可复制。'] },
+    faqs: [
+      { q: '支持简写的 HEX 吗？', a: '支持 #fff 这类 3 位简写，也支持 6 位完整写法；带透明度的 8 位 HEX 会取其 RGB 部分。' },
+      { q: 'RGB 输入可以写成 css 格式吗？', a: '可以。既支持 255, 99, 71 这样的纯数字，也支持 rgb(255, 99, 71) 写法，逗号、空格分隔均可识别。' },
+      { q: '互补色是怎么算的？', a: '在 HSL 色彩空间把色相旋转 180°，保持饱和度与亮度不变，常用于快速生成对比色。' },
+    ],
+    ui: {
+      hexLabel: 'HEX', rgbLabel: 'RGB', hslLabel: 'HSL', pickerLabel: '取色器', previewLabel: '颜色预览',
+      invalidMsg: '颜色值格式不正确，请检查后重试', lighten: '变亮 10%', darken: '变暗 10%', complementary: '互补色',
+      hint: '修改任意一项，其余格式自动同步', cssLabel: 'CSS 色值', copyHint: '点击色值即可复制',
+    },
+  },
+
+  'qr-code-generator': {
+    name: '二维码生成器',
+    desc: '把网址或文字生成二维码，可设尺寸、容错级别与颜色。',
+    short: '生成二维码，导出 PNG 或 SVG',
+    seoTitle: '在线二维码生成器 - 自定义颜色与容错级别 | ToolNest',
+    seoDesc: '免费在线二维码生成器：输入网址或文字即可生成二维码，可自定义尺寸、容错级别、前景色、背景色与留白，支持下载 PNG 与 SVG。内容在浏览器本地编码，不上传服务器。',
+    keywords: ['二维码生成器', '生成二维码', '网址转二维码', 'qr code generator'],
+    howto: { steps: ['在输入框填写网址或任意文字内容。', '按需设置尺寸、容错级别、前景/背景色与留白。', '点击「生成二维码」查看预览，再下载 PNG 或 SVG。'] },
+    faqs: [
+      { q: '容错级别选哪个？', a: '级别越高，二维码被遮挡或污损后越容易识别，但图案更密。普通屏幕展示选 M 即可；需要印在包装或加 Logo 时建议选 Q 或 H。' },
+      { q: '二维码会过期吗？', a: '不会。生成的二维码是把内容直接编码进图案，不依赖任何短链服务，只要内容本身有效就能一直使用。' },
+      { q: '内容会被上传吗？', a: '不会。二维码在本地用 qrcode 库生成，PNG / SVG 均由浏览器直接导出，不经过任何服务器。' },
+    ],
+    ui: {
+      contentLabel: '二维码内容', contentPlaceholder: 'https://example.com 或任意文字', sizeLabel: '尺寸（px）', levelLabel: '容错级别',
+      levelL: 'L（约 7%）', levelM: 'M（约 15%）', levelQ: 'Q（约 25%）', levelH: 'H（约 30%）',
+      fgLabel: '前景色', bgLabel: '背景色', marginLabel: '留白（模块数）', runLabel: '生成二维码', downloadPng: '下载 PNG', downloadSvg: '下载 SVG',
+      emptyHint: '请输入要编码的内容', tooLong: '内容过长，请缩短后再试', hint: '建议前景与背景保持足够对比度，便于扫码', previewLabel: '二维码预览', contrastHint: '颜色对比度偏低可能影响识别',
+    },
+  },
+};

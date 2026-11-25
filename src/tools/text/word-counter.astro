@@ -1,0 +1,40 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui;
+const a = dict.actions;
+const stats = [
+  ['chars', ui.chars, ui.charsUnit, 'type'],
+  ['charsNoSpaces', ui.charsNoSpaces, ui.charsUnit, 'type'],
+  ['words', ui.words, ui.wordsUnit, 'align-left'],
+  ['cjk', ui.cjk, ui.charsUnit, 'languages'],
+  ['lines', ui.lines, ui.linesUnit, 'list'],
+  ['paragraphs', ui.paragraphs, ui.linesUnit, 'align-left'],
+  ['sentences', ui.sentences, '', 'circle-dot'],
+  ['bytes', ui.bytes, 'B', 'database'],
+  ['readTime', ui.readTime, ui.minutes, 'clock'],
+];
+---
+<div class="tool-ui">
+  <div class="field">
+    <label for="wc-input">{ui.inputLabel}</label>
+    <textarea id="wc-input" class="textarea plain" data-role="input" placeholder={ui.inputPlaceholder} spellcheck="false"></textarea>
+    <span class="field-hint">{ui.liveHint}</span>
+  </div>
+  <div class="btn-row" style="margin-top:12px">
+    <button type="button" class="btn btn-outline btn-sm" data-role="copy"><Icon name="copy" size={15} /> {a.copy}</button>
+    <button type="button" class="btn btn-outline btn-sm" data-role="clear"><Icon name="eraser" size={15} /> {a.clear}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <div class="status-line" data-role="status"></div>
+
+  <h3 class="tool-section-title" style="margin-top:20px"><Icon name="chart-no-axes-combined" /> {ui.resultLabel}</h3>
+  <div class="stat-grid" data-role="stats">
+    {stats.map(([key, label, unit, icon]) => (
+      <div class="stat-card" data-stat={key}>
+        <div class="stat-label"><Icon name={icon} size={14} /> {label}</div>
+        <div class="stat-value"><span data-role="stat-value">0</span><span class="stat-unit">{unit}</span></div>
+      </div>
+    ))}
+  </div>
+</div>

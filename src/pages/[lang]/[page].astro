@@ -1,0 +1,190 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Icon from '../../components/Icon.astro';
+import { getDict, isLang } from '../../i18n/index.js';
+import { langPath, pageUrl } from '../../lib/site.js';
+
+export function getStaticPaths() {
+  const pages = ['about', 'contact', 'privacy', 'terms', 'suggest', 'changelog', 'data'];
+  return ['zh', 'en'].flatMap((lang) => pages.map((page) => ({ params: { lang, page } })));
+}
+
+const { lang, page } = Astro.params;
+if (!isLang(lang)) return Astro.redirect('/');
+const dict = getDict(lang);
+const isData = page === 'data';
+const info = isData ? dict.dataPage : dict.pages[page];
+if (!info) return Astro.redirect('/');
+const path = pageUrl(lang, page);
+const sections = info.sections || [];
+const releases = info.releases || [];
+const label = dict.footer.links[page] || info.title;
+---
+<MainLayout lang={lang} title={info.title} description={info.desc} path={path} active={page}>
+  <Breadcrumb dict={dict} items={[
+    { label: dict.toolPage.breadcrumbHome, href: langPath(lang) },
+    { label: label },
+  ]} />
+
+  <div style="padding:24px 0 26px;max-width:820px">
+    <h1>{info.h1 || label}</h1>
+    <p class="lead muted" style="margin:10px 0 0;font-size:1.02rem">{info.lead || info.desc}</p>
+  </div>
+
+  <div class="prose" style="margin-bottom:34px">
+    {sections.map((s) => (
+      <section>
+        <h2>{s.h}</h2>
+        {s.p.map((para) => <p>{para}</p>)}
+      </section>
+    ))}
+  </div>
+
+  {page === 'changelog' && (
+    <div class="prose" style="margin-bottom:34px">
+      {releases.map((r) => (
+        <div class="release">
+          <div class="date">{r.date}</div>
+          <h2>{r.version}</h2>
+          <ul>{r.items.map((i) => <li>{i}</li>)}</ul>
+        </div>
+      ))}
+    </div>
+  )}
+
+  {(page === 'contact' || page === 'suggest') && (
+    <div class="form-card" style="margin-bottom:34px">
+      <h2 style="font-size:1.1rem;margin-bottom:14px">{info.formTitle}</h2>
+      <form data-role="feedback-form" data-kind={page} data-required={info.formRequired} novalidate>
+        <div class="field-grid two">
+          <div class="field">
+            <label for="fb-name">{page === 'contact' ? info.formName : info.formTool}</label>
+            <input class="input" id="fb-name" data-role="fb-name" placeholder={page === 'suggest' ? info.formToolPlaceholder : ''} />
+          </div>
+          <div class="field">
+            <label for="fb-email">{page === 'contact' ? info.formEmail : info.formEmail}</label>
+            <input class="input" id="fb-email" type="email" data-role="fb-email" />
+          </div>
+        </div>
+        {page === 'contact' && (
+          <div class="field" style="margin-top:14px">
+            <label for="fb-topic">{info.formTopic}</label>
+            <input class="input" id="fb-topic" data-role="fb-topic" />
+          </div>
+        )}
+        <div class="field" style="margin-top:14px">
+          <label for="fb-message">{page === 'contact' ? info.formMessage : info.formScenario}</label>
+          <textarea class="textarea plain" id="fb-message" data-role="fb-message" style="min-height:130px" placeholder={page === 'suggest' ? info.formScenarioPlaceholder : ''}></textarea>
+        </div>
+        <div class="btn-row">
+          <button type="submit" class="btn btn-primary"><Icon name="mail" size={16} /> {page === 'contact' ? info.formSubmit : info.formSubmit}</button>
+          <button type="button" class="btn btn-outline" data-role="fb-clear"><Icon name="eraser" size={16} /> {dict.actions.clear}</button>
+        </div>
+        <p class="field-hint" style="margin-top:12px">{info.formNote}</p>
+        <p class="field-hint">{lang === 'zh' ? '提示：收件邮箱为占位地址，部署前请在源码中替换为你的实际邮箱。' : 'Note: the recipient address is a placeholder — replace it with your real address before deploying.'}</p>
+      </form>
+    </div>
+  )}
+
+  {isData && (
+    <div style="max-width:820px" data-role="data-page"
+      data-msg-export={info.exportTitle}
+      data-msg-import-ok={info.importSuccess}
+      data-msg-import-fail={info.importFailed}
+      data-msg-clear-confirm={info.clearConfirm}
+      data-msg-clear-done={info.clearDone}>
+      <div class="data-panel">
+        <h2>{info.statusTitle}</h2>
+        <div class="status-grid" style="margin-top:12px">
+          <div class="status-item"><div class="k">{info.statusFavorites}</div><div class="v" data-role="stat-favorites">0</div></div>
+          <div class="status-item"><div class="k">{info.statusRecent}</div><div class="v" data-role="stat-recent">0</div></div>
+          <div class="status-item"><div class="k">{info.statusTheme}</div><div class="v" data-role="stat-theme">—</div></div>
+          <div class="status-item"><div class="k">{info.statusLang}</div><div class="v" data-role="stat-lang">—</div></div>
+        </div>
+      </div>
+      <div class="data-panel">
+        <h2>{info.storedTitle}</h2>
+        <ul>{info.storedItems.map((i) => <li>{i}</li>)}</ul>
+        <h2 style="margin-top:18px">{info.neverTitle}</h2>
+        <ul>{info.neverItems.map((i) => <li>{i}</li>)}</ul>
+      </div>
+      <div class="data-panel">
+        <h2>{info.exportTitle}</h2>
+        <p>{info.exportDesc}</p>
+        <div class="btn-row" style="margin-top:12px">
+          <button type="button" class="btn btn-primary" data-role="data-export"><Icon name="download" size={16} /> {info.exportButton}</button>
+          <label class="btn btn-outline" for="data-import-file" style="cursor:pointer"><Icon name="upload" size={16} /> {info.importButton}</label>
+          <input type="file" id="data-import-file" accept="application/json,.json" data-role="data-import" style="display:none" />
+        </div>
+        <p class="field-hint" style="margin-top:10px">{info.importDesc}</p>
+      </div>
+      <div class="data-panel" style="border-color:var(--danger)">
+        <h2>{info.clearTitle}</h2>
+        <p>{info.clearDesc}</p>
+        <div class="btn-row" style="margin-top:12px">
+          <button type="button" class="btn btn-outline" style="color:var(--danger);border-color:var(--danger)" data-role="data-clear"><Icon name="trash-2" size={16} /> {info.clearButton}</button>
+        </div>
+      </div>
+    </div>
+  )}
+</MainLayout>
+
+<script>
+  import { $, role, on, toast, downloadText, readAsText } from '../../scripts/utils.js';
+  import { exportBackup, importBackup, clearAll, stats } from '../../scripts/storage.js';
+
+  /* 反馈表单：只在本地生成 mailto 草稿，不向任何服务器提交 */
+  const form = $('[data-role="feedback-form"]');
+  if (form) {
+    const required = form.dataset.required || 'Please fill in the required fields';
+    on(form, 'submit', (e) => {
+      e.preventDefault();
+      const name = role('fb-name')?.value.trim() || '';
+      const email = role('fb-email')?.value.trim() || '';
+      const topic = role('fb-topic')?.value.trim() || '';
+      const message = role('fb-message')?.value.trim() || '';
+      if (!name || !message) { toast(required, 'error'); return; }
+      const kind = form.dataset.kind === 'suggest' ? 'Tool suggestion' : 'Feedback';
+      const subject = `[ToolNest ${kind}] ${topic || name}`;
+      const body = [`Name: ${name}`, `Email: ${email || '-'}`, '', message].join('\n');
+      window.location.href = `mailto:hello@toolnest.example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+    on(role('fb-clear'), 'click', () => { form.reset(); });
+  }
+
+  /* 本地数据管理 */
+  const dm = $('[data-role="data-page"]')?.dataset || {};
+  const refresh = () => {
+    const s = stats();
+    const set = (k, v) => { const el = role(k); if (el) el.textContent = String(v); };
+    set('stat-favorites', s.favorites);
+    set('stat-recent', s.recent);
+    set('stat-theme', s.theme);
+    set('stat-lang', s.lang);
+  };
+  refresh();
+
+  on(role('data-export'), 'click', () => {
+    downloadText(JSON.stringify(exportBackup(), null, 2), 'toolnest-backup.json', 'application/json');
+    toast(dm.msgExport || 'Exported', 'success');
+  });
+
+  on(role('data-import'), 'change', async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const ok = importBackup(JSON.parse(await readAsText(file)));
+      toast(ok ? dm.msgImportOk : dm.msgImportFail, ok ? 'success' : 'error');
+      if (ok) refresh();
+    } catch { toast(dm.msgImportFail, 'error'); }
+    e.target.value = '';
+  });
+
+  on(role('data-clear'), 'click', () => {
+    if (!window.confirm(dm.msgClearConfirm)) return;
+    clearAll();
+    refresh();
+    toast(dm.msgClearDone, 'success');
+  });
+</script>

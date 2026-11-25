@@ -1,0 +1,54 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+---
+<div class="tool-ui">
+  <div class="field">
+    <span class="field-label">{ui.modeHint}</span>
+    <div class="radio-row" style="margin-top:8px">
+      <label class="radio-chip"><input type="radio" name="date-mode" data-role="mode" value="diff" checked /><span>{ui.modeDiff}</span></label>
+      <label class="radio-chip"><input type="radio" name="date-mode" data-role="mode" value="add" /><span>{ui.modeAdd}</span></label>
+    </div>
+  </div>
+
+  <div class="field-grid three" style="margin-top:18px" data-role="diff-fields">
+    <div class="field"><label for="dc-start">{ui.startDate}</label><input class="input" type="date" id="dc-start" data-role="start" /></div>
+    <div class="field"><label for="dc-end">{ui.endDate}</label><input class="input" type="date" id="dc-end" data-role="end" /></div>
+    <div class="field" style="justify-content:flex-end"><label class="check"><input type="checkbox" data-role="include-end" /> {ui.includeEnd}</label></div>
+  </div>
+
+  <div class="field-grid three" style="margin-top:18px" data-role="add-fields" hidden>
+    <div class="field"><label for="dc-base">{ui.baseDate}</label><input class="input" type="date" id="dc-base" data-role="base" /></div>
+    <div class="field"><label for="dc-days">{ui.days}</label><input class="input" type="number" step="1" id="dc-days" data-role="days" value="30" /></div>
+    <div class="field">
+      <span class="field-label">{ui.direction}</span>
+      <div class="radio-row" style="margin-top:6px">
+        <label class="radio-chip"><input type="radio" name="dc-dir" data-role="direction" value="add" checked /><span>{ui.add}</span></label>
+        <label class="radio-chip"><input type="radio" name="dc-dir" data-role="direction" value="subtract" /><span>{ui.subtract}</span></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-actions">
+    <button type="button" class="btn btn-primary" data-role="run"><Icon name="calendar-days" size={16} /> {ui.runLabel}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {a.clear}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+
+  <h3 class="tool-section-title" style="margin-top:22px"><Icon name="calendar" /> {ui.resultLabel}</h3>
+  <div class="stat-grid" data-role="diff-results">
+    <div class="stat-card"><div class="stat-label">{ui.daysDiff}</div><div class="stat-value"><span data-role="days">—</span><span class="stat-unit">{ui.daysUnit}</span></div></div>
+    <div class="stat-card"><div class="stat-label">{ui.weeks}</div><div class="stat-value"><span data-role="weeks">—</span><span class="stat-unit">{ui.weeksUnit}</span></div></div>
+    <div class="stat-card"><div class="stat-label">{ui.months}</div><div class="stat-value"><span data-role="months">—</span><span class="stat-unit">{ui.monthsUnit}</span></div></div>
+    <div class="stat-card"><div class="stat-label">{ui.years}</div><div class="stat-value"><span data-role="years">—</span><span class="stat-unit">{ui.yearsUnit}</span></div></div>
+    <div class="stat-card"><div class="stat-label">{ui.weekdays}</div><div class="stat-value" data-role="weekdays">—</div></div>
+    <div class="stat-card"><div class="stat-label">{ui.weekendDays}</div><div class="stat-value" data-role="weekend-days">—</div></div>
+  </div>
+  <div class="stat-grid" data-role="add-results" hidden>
+    <div class="stat-card"><div class="stat-label">{ui.resultDate}</div><div class="stat-value" data-role="result-date" style="font-size:1.4rem">—</div></div>
+    <div class="stat-card"><div class="stat-label">{ui.weekday}</div><div class="stat-value" data-role="weekday" style="font-size:1.4rem">—</div></div>
+  </div>
+  <div class="status-line" data-role="status"></div>
+  <p class="field-hint">{ui.hint}</p>
+</div>

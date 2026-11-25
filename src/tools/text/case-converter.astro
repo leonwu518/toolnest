@@ -1,0 +1,34 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+const cases = [
+  ['upper', ui.upper], ['lower', ui.lower], ['title', ui.title], ['sentence', ui.sentence],
+  ['camel', ui.camel], ['pascal', ui.pascal], ['snake', ui.snake], ['kebab', ui.kebab],
+  ['toggle', ui.toggle], ['reverse', ui.reverse],
+];
+---
+<div class="tool-ui">
+  <div class="tool-columns">
+    <div class="field">
+      <label for="case-input">{ui.inputLabel}</label>
+      <textarea id="case-input" class="textarea plain" data-role="input" placeholder={ui.inputPlaceholder} spellcheck="false"></textarea>
+    </div>
+    <div class="field">
+      <div class="output-head">
+        <label for="case-output" class="field-label">{ui.outputLabel}</label>
+        <button type="button" class="btn btn-ghost btn-sm" data-role="copy"><Icon name="copy" size={14} /> {a.copy}</button>
+      </div>
+      <textarea id="case-output" class="textarea plain" data-role="output" readonly placeholder={ui.outputPlaceholder}></textarea>
+    </div>
+  </div>
+  <div class="btn-row" style="margin-top:14px">
+    {cases.map(([key, label]) => <button type="button" class="btn btn-outline btn-sm" data-case={key}>{label}</button>)}
+  </div>
+  <div class="tool-actions">
+    <button type="button" class="btn btn-outline" data-role="download" disabled><Icon name="download" size={16} /> {a.download}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {a.clear}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <p class="field-hint" style="margin-top:10px">{ui.hint}</p>
+</div>

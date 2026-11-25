@@ -1,0 +1,8 @@
+---
+import Icon from './Icon.astro';
+const { dict } = Astro.props;
+---
+<button type="button" class="icon-btn" data-action="theme-toggle" aria-label={dict.theme.toggle} title={dict.theme.toggle}>
+  <Icon name="sun" size={18} />
+  <Icon name="moon" size={18} />
+</button>

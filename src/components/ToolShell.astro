@@ -1,0 +1,120 @@
+---
+import Icon from './Icon.astro';
+import Breadcrumb from './Breadcrumb.astro';
+import { categoryById } from '../data/categories.js';
+import { langPath, categoryUrl, toolUrl, absoluteUrl } from '../lib/site.js';
+
+const { lang, dict, meta, t, catName, related = [], canonical } = Astro.props;
+const accent = categoryById[meta.category]?.accent || 'blue';
+
+const breadcrumbItems = [
+  { label: dict.toolPage.breadcrumbHome, href: langPath(lang) },
+  { label: catName, href: categoryUrl(lang, meta.category) },
+  { label: t.name },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: `${t.name} | ToolNest`,
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: 'Any (web browser)',
+      url: canonical,
+      description: t.seoDesc,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: (t.faqs || []).map((f) => ({
+        '@type': 'Question', name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbItems.map((item, i) => ({
+        '@type': 'ListItem', position: i + 1, name: item.label,
+        item: item.href ? absoluteUrl(item.href) : canonical,
+      })),
+    },
+  ],
+};
+const jsonLdSafe = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
+---
+<Breadcrumb items={breadcrumbItems} dict={dict} />
+
+<div class="tool-header">
+  <div class="tool-header-main">
+    <span class:list={['tool-icon', `accent-${accent}`]}><Icon name={meta.icon} size={27} /></span>
+    <div>
+      <h1>{t.name}</h1>
+      <p>{t.desc}</p>
+      <div class="tool-header-meta">
+        <span class="badge"><Icon name="shield-check" size={12} /> {dict.common.localBadge}</span>
+        <a class="badge" href={categoryUrl(lang, meta.category)} style="text-decoration:none">{catName}</a>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-outline favorite-btn" data-action="favorite" aria-pressed="false" title={dict.toolPage.favoriteHint}>
+    <Icon name="star" size={16} />
+    <span data-role="favorite-label">{dict.actions.favorite}</span>
+  </button>
+</div>
+
+<div class="tool-body">
+  <slot />
+</div>
+
+<div class="content-grid">
+  <div>
+    <section class="info-block">
+      <h2>{dict.toolPage.howtoTitle}</h2>
+      <ol class="howto-list">
+        {(t.howto.steps || []).map((step) => <li>{step}</li>)}
+      </ol>
+    </section>
+
+    <section class="info-block">
+      <h2>{dict.toolPage.faqTitle}</h2>
+      {(t.faqs || []).map((f) => (
+        <details class="faq-item">
+          <summary>{f.q}</summary>
+          <div class="faq-answer">{f.a}</div>
+        </details>
+      ))}
+    </section>
+
+    <section class="info-block">
+      <h2>{dict.toolPage.privacyTitle}</h2>
+      <div class="privacy-note">
+        <Icon name="shield-check" size={20} />
+        <span>{dict.toolPage.privacyNote}</span>
+      </div>
+    </section>
+  </div>
+
+  <aside>
+    <div class="card card-pad">
+      <div class="side-title">{dict.toolPage.relatedTitle}</div>
+      <div class="related-list">
+        {related.map((r) => (
+          <a class="related-item" href={toolUrl(lang, r.slug)}>
+            <span class="tool-icon"><Icon name={r.icon} size={16} /></span>
+            <span>{r.name}</span>
+          </a>
+        ))}
+      </div>
+      <div style="margin-top:16px">
+        <a class="btn btn-outline btn-sm" href={categoryUrl(lang, meta.category)}>
+          <Icon name="arrow-left" size={14} /> {dict.toolPage.backToCategory}
+        </a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script type="application/ld+json" set:html={jsonLdSafe}></script>
+<script>import '../scripts/tool-runner.js';</script>

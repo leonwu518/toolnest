@@ -1,0 +1,53 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+---
+<div class="tool-ui">
+  <div class="field">
+    <span class="field-label">{ui.modeHint}</span>
+    <div class="radio-row" style="margin-top:8px">
+      {[1, 2, 3, 4].map((n) => (
+        <label class="radio-chip">
+          <input type="radio" name="pct-mode" data-role="mode" value={n} checked={n === 1} /><span>{ui[`mode${n}`]}</span>
+        </label>
+      ))}
+    </div>
+  </div>
+
+  <div class="field-grid three" style="margin-top:18px">
+    <div class="field">
+      <label for="pct-x" data-role="label-x">{ui.xLabel}</label>
+      <input class="input" type="number" step="any" id="pct-x" data-role="x" placeholder="100" />
+    </div>
+    <div class="field" data-role="field-y">
+      <label for="pct-y" data-role="label-y">{ui.yLabel}</label>
+      <input class="input" type="number" step="any" id="pct-y" data-role="y" placeholder="25" />
+    </div>
+    <div class="field" data-role="field-percent" hidden>
+      <label for="pct-percent">{ui.percentLabel}</label>
+      <input class="input" type="number" step="any" id="pct-percent" data-role="percent" placeholder="15" />
+    </div>
+  </div>
+
+  <div class="field" data-role="field-direction" style="margin-top:14px" hidden>
+    <span class="field-label">{ui.direction}</span>
+    <div class="radio-row" style="margin-top:8px">
+      <label class="radio-chip"><input type="radio" name="pct-dir" data-role="direction" value="increase" checked /><span>{ui.increase}</span></label>
+      <label class="radio-chip"><input type="radio" name="pct-dir" data-role="direction" value="decrease" /><span>{ui.decrease}</span></label>
+    </div>
+  </div>
+
+  <div class="tool-actions">
+    <button type="button" class="btn btn-primary" data-role="run"><Icon name="percent" size={16} /> {ui.runLabel}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {a.clear}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+
+  <h3 class="tool-section-title" style="margin-top:22px"><Icon name="calculator" /> {ui.resultLabel}</h3>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-label"><Icon name="hash" size={14} /> {ui.resultLabel}</div><div class="stat-value" data-role="result">—</div></div>
+    <div class="stat-card" style="grid-column:span 2"><div class="stat-label"><Icon name="book-open" size={14} /> {ui.formulaLabel}</div><div class="stat-value" style="font-size:1.05rem;font-family:var(--mono)" data-role="formula">—</div></div>
+  </div>
+  <p class="field-hint" style="margin-top:10px">{ui.hint}</p>
+</div>

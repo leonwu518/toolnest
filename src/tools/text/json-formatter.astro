@@ -1,0 +1,46 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+---
+<div class="tool-ui">
+  <div class="field-grid three" style="margin-bottom:14px">
+    <div class="field">
+      <label for="json-indent">{ui.indent}</label>
+      <select class="select" id="json-indent" data-role="indent">
+        <option value="2">{ui.indent2}</option>
+        <option value="4">{ui.indent4}</option>
+        <option value="tab">{ui.indentTab}</option>
+      </select>
+    </div>
+    <div class="field" style="justify-content:flex-end">
+      <label class="check"><input type="checkbox" data-opt="sortKeys" /> {ui.sortKeys}</label>
+    </div>
+    <div class="field" style="justify-content:flex-end">
+      <span class="field-hint">{ui.hint}</span>
+    </div>
+  </div>
+  <div class="tool-columns">
+    <div class="field">
+      <label for="json-input">{ui.inputLabel}</label>
+      <textarea id="json-input" class="textarea" data-role="input" placeholder={ui.inputPlaceholder} spellcheck="false"></textarea>
+    </div>
+    <div class="field">
+      <div class="output-head">
+        <label for="json-output" class="field-label">{ui.outputLabel}</label>
+        <button type="button" class="btn btn-ghost btn-sm" data-role="copy"><Icon name="copy" size={14} /> {a.copy}</button>
+      </div>
+      <textarea id="json-output" class="textarea" data-role="output" readonly placeholder={ui.outputPlaceholder}></textarea>
+    </div>
+  </div>
+  <div class="tool-actions">
+    <button type="button" class="btn btn-primary" data-action="format"><Icon name="braces" size={16} /> {ui.format}</button>
+    <button type="button" class="btn btn-outline" data-action="minify"><Icon name="minimize-2" size={16} /> {ui.minify}</button>
+    <button type="button" class="btn btn-outline" data-action="validate"><Icon name="circle-check" size={16} /> {ui.validate}</button>
+    <button type="button" class="btn btn-outline" data-role="download" disabled><Icon name="download" size={16} /> {a.download}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {a.clear}</button>
+  </div>
+  <div class="alert alert-success" data-role="success" hidden></div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <div class="status-line" data-role="status"></div>
+</div>

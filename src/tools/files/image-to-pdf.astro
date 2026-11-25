@@ -1,0 +1,47 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+---
+<div class="tool-ui">
+  <label class="file-drop" data-role="file-drop">
+    <Icon name="upload" size={28} />
+    <strong>{ui.selectLabel}</strong>
+    <small>{ui.hint}</small>
+    <input type="file" data-role="file-input" accept="image/jpeg,image/png,image/webp" multiple />
+  </label>
+  <div class="btn-row" style="margin-top:12px">
+    <button type="button" class="btn btn-outline btn-sm" data-role="add-more"><Icon name="plus" size={15} /> {ui.addMore}</button>
+  </div>
+  <div class="file-list" data-role="file-list"></div>
+  <p class="field-hint" style="margin-top:8px">{ui.orderHint}</p>
+
+  <div class="field-grid three" style="margin-top:18px">
+    <div class="field">
+      <label for="pdf-size">{ui.pageSize}</label>
+      <select class="select" id="pdf-size" data-role="page-size">
+        <option value="a4">{ui.a4}</option>
+        <option value="letter">{ui.letter}</option>
+        <option value="fit">{ui.fitImage}</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="pdf-orientation">{ui.orientation}</label>
+      <select class="select" id="pdf-orientation" data-role="orientation">
+        <option value="portrait">{ui.portrait}</option>
+        <option value="landscape">{ui.landscape}</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="pdf-margin">{ui.margin}</label>
+      <input class="input" type="number" id="pdf-margin" data-role="margin" min="0" max="100" value="24" />
+    </div>
+  </div>
+
+  <div class="tool-actions">
+    <button type="button" class="btn btn-primary" data-role="run"><Icon name="file-image" size={16} /> {ui.runLabel}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {a.clear}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <div class="status-line" data-role="status"></div>
+</div>

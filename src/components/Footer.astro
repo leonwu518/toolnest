@@ -1,0 +1,40 @@
+---
+import Icon from './Icon.astro';
+import { categories } from '../data/categories.js';
+import { langPath, categoryUrl, pageUrl } from '../lib/site.js';
+const { lang, dict } = Astro.props;
+const year = 2025;
+---
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a class="brand" href={langPath(lang)}>
+        <span class="brand-mark"><Icon name="wrench" size={19} /></span>
+        <span>ToolNest</span>
+      </a>
+      <p>{dict.footer.tagline}</p>
+      <p style="font-size:.8rem;color:var(--text-muted);margin-top:12px">{dict.footer.privacyShort}</p>
+    </div>
+    <div class="footer-col">
+      <h4>{dict.footer.productTitle}</h4>
+      {categories.map((c) => <a href={categoryUrl(lang, c.id)}>{dict.categories[c.id].name}</a>)}
+    </div>
+    <div class="footer-col">
+      <h4>{dict.footer.companyTitle}</h4>
+      <a href={pageUrl(lang, 'about')}>{dict.footer.links.about}</a>
+      <a href={pageUrl(lang, 'contact')}>{dict.footer.links.contact}</a>
+      <a href={pageUrl(lang, 'suggest')}>{dict.footer.links.suggest}</a>
+      <a href={pageUrl(lang, 'changelog')}>{dict.footer.links.changelog}</a>
+    </div>
+    <div class="footer-col">
+      <h4>{dict.footer.legalTitle}</h4>
+      <a href={pageUrl(lang, 'privacy')}>{dict.footer.links.privacy}</a>
+      <a href={pageUrl(lang, 'terms')}>{dict.footer.links.terms}</a>
+      <a href={pageUrl(lang, 'data')}>{dict.footer.links.data}</a>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>{dict.footer.copyright.replace('2025', String(year))}</span>
+    <span>{dict.footer.builtWith}</span>
+  </div>
+</footer>

@@ -1,0 +1,52 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+---
+<div class="tool-ui">
+  <div class="field">
+    <label for="qr-content">{ui.contentLabel}</label>
+    <textarea id="qr-content" class="textarea plain" data-role="input" style="min-height:90px" placeholder={ui.contentPlaceholder} spellcheck="false"></textarea>
+  </div>
+
+  <div class="field-grid four" style="margin-top:16px">
+    <div class="field">
+      <label for="qr-size">{ui.sizeLabel}</label>
+      <input class="input" type="number" id="qr-size" data-role="size" min="64" max="2048" value="320" />
+    </div>
+    <div class="field">
+      <label for="qr-level">{ui.levelLabel}</label>
+      <select class="select" id="qr-level" data-role="level">
+        <option value="L">{ui.levelL}</option>
+        <option value="M" selected>{ui.levelM}</option>
+        <option value="Q">{ui.levelQ}</option>
+        <option value="H">{ui.levelH}</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="qr-fg">{ui.fgLabel}</label>
+      <input class="input" type="color" id="qr-fg" data-role="fg" value="#0f172a" />
+    </div>
+    <div class="field">
+      <label for="qr-bg">{ui.bgLabel}</label>
+      <input class="input" type="color" id="qr-bg" data-role="bg" value="#ffffff" />
+    </div>
+  </div>
+  <div class="field" style="margin-top:14px;max-width:240px">
+    <label for="qr-margin">{ui.marginLabel}</label>
+    <input class="input" type="number" id="qr-margin" data-role="margin" min="0" max="20" value="4" />
+  </div>
+
+  <div class="tool-actions">
+    <button type="button" class="btn btn-primary" data-role="run"><Icon name="qr-code" size={16} /> {ui.runLabel}</button>
+    <button type="button" class="btn btn-outline" data-role="download-png" disabled><Icon name="download" size={16} /> {ui.downloadPng}</button>
+    <button type="button" class="btn btn-outline" data-role="download-svg" disabled><Icon name="download" size={16} /> {ui.downloadSvg}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {a.clear}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <div class="status-line" data-role="status"></div>
+  <p class="field-hint">{ui.hint}</p>
+
+  <h3 class="tool-section-title" style="margin-top:20px"><Icon name="scan-line" /> {ui.previewLabel}</h3>
+  <div class="qr-preview" data-role="preview"><span class="preview-placeholder">{ui.previewLabel}</span></div>
+</div>
