@@ -56,6 +56,8 @@ async function check(name, fn) {
 }
 const go = async (url) => {
   await page.goto(BASE + url, { waitUntil: 'networkidle2' });
+  // 站点启用了平滑滚动；自动化坐标点击前关闭它，避免滚动动画未结束时点击落空
+  await page.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; });
   await sleep(180);
 };
 const setVal = (sel, value) => page.$eval(sel, (el, v) => {
@@ -321,6 +323,94 @@ await check('二维码生成器：生成 + PNG 下载', async () => {
   assert(fs.statSync(f).size > 100, 'PNG 下载为空');
 });
 
+/* ---------- G. 办公效率工具（第二批新增） ---------- */
+await check('Excel 公式助手：生成、参数切换、试算与重置', async () => {
+  await go('/zh/tools/excel-formula-helper/');
+  assert((await val('[data-role="output"]')) === '=SUM(A1:A10)', '默认 SUM 公式错误');
+  assert((await text('[data-role="trial-result"]')) === '60', 'SUM 本地试算应为 60');
+  await page.select('[data-role="formula-type"]', 'if');
+  await sleep(120);
+  assert((await val('[data-role="output"]')).startsWith('=IF('), 'IF 公式错误');
+  assert((await page.$$('[data-param]')).length === 3, 'IF 应渲染 3 个参数');
+  await page.select('[data-role="formula-type"]', 'vlookup');
+  await sleep(120);
+  assert((await val('[data-role="output"]')).startsWith('=VLOOKUP('), 'VLOOKUP 公式错误');
+  assert((await text('[data-role="trial-result"]')).includes('Excel'), '依赖单元格引用的公式应提示在 Excel 中试算');
+  await page.click('[data-role="clear"]');
+  assert((await val('[data-role="output"]')) === '=SUM(A1:A10)', '重置未恢复默认公式');
+});
+
+await check('CSV 数据清洗：去重、列筛选、预览、下载与本地文件上传', async () => {
+  await go('/zh/tools/csv-cleaner/');
+  await setVal('[data-role="input"]', 'name,qty\n Apple ,10\nApple,10\n\nBanana,20\n');
+  await page.click('[data-opt="removeDuplicates"]');
+  await page.click('[data-role="run"]');
+  await sleep(150);
+  const out = await val('[data-role="output"]');
+  const lines = out.split('\n').filter(Boolean);
+  assert(lines.length === 3, `去重+去空行后应为 3 行，实际 ${lines.length}`);
+  assert(lines.filter((l) => l === 'Apple,10').length === 1, '重复行未删除');
+  assert(lines[0] === 'name,qty', '表头未保留');
+  assert((await text('[data-role="stat-original"]')) === '5', '原始行数统计错误');
+  assert((await page.$$('[data-role="preview"] .csv-table tbody tr')).length === 3, '预览表格行数错误');
+  await page.select('[data-role="column-mode"]', 'keep');
+  await setVal('[data-role="column-spec"]', '1');
+  await page.click('[data-role="run"]');
+  await sleep(150);
+  assert(!(await val('[data-role="output"]')).includes(','), '只保留第 1 列后不应再有分隔符');
+  clearDownloads();
+  await page.click('[data-role="download"]');
+  const f = await waitDownload('cleaned.csv');
+  assert(fs.readFileSync(f, 'utf8').includes('name'), 'CSV 下载内容错误');
+  // 本地文件上传：FileReader 读取，不产生网络请求
+  fs.mkdirSync(FIXTURES, { recursive: true });
+  fs.writeFileSync(path.join(FIXTURES, 'sample.csv'), 'col1,col2\na,b\n');
+  await page.click('[data-role="reset"]');
+  await upload('[data-role="file"]', 'sample.csv');
+  assert((await val('[data-role="input"]')).includes('col1,col2'), '上传文件未读入输入框');
+  assert((await val('[data-role="output"]')).includes('a,b'), '上传文件未触发清洗');
+});
+
+await check('批量文本处理：步骤链、顺序调整、下载与重置', async () => {
+  await go('/zh/tools/batch-text-processor/');
+  await setVal('[data-role="input"]', '  apple \n\nApple\nbanana\n');
+  for (const t of ['trim', 'removeEmpty', 'dedupe', 'number']) {
+    await page.select('[data-role="step-type"]', t);
+    await page.click('[data-role="add-step"]');
+  }
+  await page.$eval('.bt-step:nth-child(3) .bt-check input', (el) => {
+    el.checked = true; el.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await page.click('[data-role="run"]');
+  await sleep(150);
+  assert((await val('[data-role="output"]')) === '1. apple\n2. banana', '步骤链结果错误');
+  assert((await text('[data-role="stat-original"]')) === '4', '原始行数错误');
+  assert((await text('[data-role="stat-steps"]')) === '4', '步骤数错误');
+  // 点击「开始处理」后页面下滚，粘性导航栏会遮挡位于视口顶部的步骤按钮；
+  // 先向上滚动一点，模拟用户看到按钮后再真实点击
+  await page.evaluate(() => window.scrollBy(0, -160));
+  const downBtn = '.bt-step:nth-child(1) .bt-step-actions button:nth-child(2)';
+  await page.click(downBtn);
+  await sleep(120);
+  assert((await text('.bt-step:nth-child(1) .bt-step-title')).includes('删除空行'), '下移按钮未改变步骤顺序');
+  clearDownloads();
+  await page.click('[data-role="download"]');
+  const f = await waitDownload('processed.txt');
+  assert(fs.readFileSync(f, 'utf8').includes('apple'), 'TXT 下载内容错误');
+  await page.click('[data-role="reset"]');
+  assert((await page.$$('.bt-step')).length === 0, '重置未清空步骤');
+  assert((await val('[data-role="input"]')) === '', '重置未清空输入');
+});
+
+await check('新增工具的英文页面与语言路由', async () => {
+  await go('/en/tools/csv-cleaner/');
+  assert((await text('h1')).includes('CSV Data Cleaner'), '英文 H1 错误');
+  assert((await page.$eval('[data-lang-link="zh"]', (a) => a.getAttribute('href'))) === '/zh/tools/csv-cleaner/', '语言回切链接错误');
+  assert((await page.$eval('link[rel="canonical"]', (a) => a.getAttribute('href'))).endsWith('/en/tools/csv-cleaner/'), 'canonical 错误');
+  await go('/en/tools/batch-text-processor/');
+  assert((await text('h1')).includes('Batch Text Processor'), '英文批量文本页 H1 错误');
+});
+
 /* ---------- 个人功能 / 双语 / 响应式 ---------- */
 await check('收藏与最近使用：localStorage 写入', async () => {
   await go('/zh/tools/word-counter/');
@@ -361,11 +451,35 @@ await check('英文页面与语言路由保持', async () => {
 
 await check('移动端布局：无横向溢出', async () => {
   await page.setViewport({ width: 375, height: 780, isMobile: true });
-  for (const url of ['/zh/', '/zh/tools/merge-pdf/', '/zh/tools/percentage-calculator/']) {
+  for (const url of [
+    '/zh/', '/zh/tools/merge-pdf/', '/zh/tools/percentage-calculator/',
+    '/zh/tools/excel-formula-helper/', '/zh/tools/csv-cleaner/', '/zh/tools/batch-text-processor/',
+  ]) {
     await go(url);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     assert(overflow <= 2, `${url} 横向溢出 ${overflow}px`);
   }
+  await page.setViewport({ width: 1280, height: 900 });
+});
+
+await check('移动端交互：三个新工具可正常操作', async () => {
+  await page.setViewport({ width: 390, height: 844, isMobile: true });
+  await go('/zh/tools/excel-formula-helper/');
+  await page.select('[data-role="formula-type"]', 'countif');
+  await sleep(120);
+  assert((await val('[data-role="output"]')).startsWith('=COUNTIF('), '移动端公式切换失败');
+  await go('/zh/tools/csv-cleaner/');
+  await setVal('[data-role="input"]', 'a,b\n1,2\n');
+  await page.click('[data-role="run"]');
+  await sleep(150);
+  assert((await val('[data-role="output"]')).includes('1,2'), '移动端 CSV 清洗失败');
+  await go('/zh/tools/batch-text-processor/');
+  await setVal('[data-role="input"]', 'a\nb\n');
+  await page.select('[data-role="step-type"]', 'reverse');
+  await page.click('[data-role="add-step"]');
+  await sleep(150);
+  assert((await page.$$('.bt-step')).length === 1, '移动端添加步骤失败');
+  assert((await val('[data-role="output"]')) === 'b\na', '移动端批量文本处理结果错误');
   await page.setViewport({ width: 1280, height: 900 });
 });
 

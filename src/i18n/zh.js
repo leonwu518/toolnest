@@ -296,7 +296,7 @@ export default {
   roadmap: {
     business: ['FOB 报价计算器', '贸易利润计算器', 'MOQ 报价计算器', 'CBM 体积计算器', '装箱数量计算器', '毛重净重计算器', '产品成本核算', '采购交期计算器'],
     ai: ['英文邮件润色', '产品标题生成', '产品卖点生成', 'SEO 关键词生成', 'AI 提示词生成器'],
-    productivity: ['Excel 公式助手', 'CSV 数据清洗', '批量文本处理'],
+    productivity: [],
   },
 
   categories: {
@@ -306,7 +306,7 @@ export default {
     calculators: { name: '计算器', desc: '百分比、利润率、单位换算与日期间隔计算', seoTitle: '在线计算器合集 - 百分比、利润率、单位与日期 | ToolNest', seoDesc: '免费在线计算器：百分比计算、利润率与加价率计算、长度重量等单位换算、日期间隔与工作日计算。即输即算，无需注册。', intro: '把常用的计算公式做成清晰的表单，输入即时得到结果与计算过程。' },
     ai: { name: 'AI 工具', desc: '面向外贸与内容工作的 AI 辅助工具（规划中）', seoTitle: 'AI 工具 - 邮件润色、文案与关键词生成 | ToolNest', seoDesc: 'ToolNest AI 工具规划：英文邮件润色、产品标题与卖点生成、SEO 关键词生成、提示词生成器。关注更新日志了解上线进度。', intro: 'AI 辅助工具正在规划中，我们将优先实现无需上传敏感数据、可在本地完成的场景。' },
     developer: { name: '开发工具', desc: 'URL 编码解码、Base64 编码解码与颜色转换', seoTitle: '开发者工具 - URL / Base64 编解码、颜色转换 | ToolNest', seoDesc: '免费在线开发工具：URL 编码解码、Base64 文本与文件编码解码、HEX / RGB / HSL 颜色转换。浏览器本地运行，无需注册。', intro: '开发调试时最常用的小工具，支持中文与 Unicode 的正确编解码。' },
-    productivity: { name: '效率工具', desc: '二维码生成与日常办公效率工具', seoTitle: '效率工具 - 在线二维码生成器 | ToolNest', seoDesc: '免费在线二维码生成器，可自定义尺寸、容错级别与颜色，导出 PNG 或 SVG。无需注册，内容不上传服务器。', intro: '把重复的小操作变成一个页面，打开就能完成。' },
+    productivity: { name: '效率工具', desc: '二维码生成、Excel 公式助手、CSV 数据清洗与批量文本处理', seoTitle: '效率工具 - 二维码、Excel 公式与 CSV 清洗 | ToolNest', seoDesc: '免费在线效率工具：二维码生成、Excel 公式助手、CSV 数据清洗与批量文本处理。全部在浏览器本地运行，无需注册，文件不上传。', intro: '把重复的小操作变成一个页面，打开就能完成：从生成二维码到批量整理表格与文本。' },
     business: { name: '外贸工厂', desc: 'FOB 报价、CBM 体积、装箱数量等外贸与工厂工具（规划中）', seoTitle: '外贸工厂工具 - 报价、体积、装箱计算 | ToolNest', seoDesc: 'ToolNest 外贸工厂工具规划：FOB 报价、贸易利润、MOQ 报价、CBM 体积、装箱数量、毛净重、成本核算与交期计算器。', intro: '面向外贸业务与工厂报价场景的工具集，正在按优先级开发中。' },
   },
 

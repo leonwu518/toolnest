@@ -8,6 +8,9 @@ import { convertUnit, unitGroups } from '../src/scripts/logic/units.js';
 import { dateDiff, addDays, countWeekdays, toUTC } from '../src/scripts/logic/date.js';
 import { parseColor, rgbToHex, rgbToHsl, hslToRgb, complementary, adjustLightness } from '../src/scripts/logic/color.js';
 import { parsePageRanges, toCSV, targetSize, mimeForFormat } from '../src/scripts/logic/files.js';
+import { parseCSV, stringifyCSV, detectDelimiter, cleanCSV } from '../src/scripts/logic/csv.js';
+import { applySteps, splitLines, STEP_TYPES } from '../src/scripts/logic/batch-text.js';
+import { FORMULAS, buildFormula, evaluateFormula, parseCriteria, trialValues } from '../src/scripts/logic/excel-formula.js';
 
 /* ---------------- 文本工具 ---------------- */
 test('dedupeLines: 基本去重保留首次出现', () => {
@@ -205,4 +208,125 @@ test('targetSize: 锁定比例与非法输入', () => {
   assert.deepEqual(targetSize(1000, 500, 800, 400, false), { width: 800, height: 400 });
   assert.equal(targetSize(1000, 500, 'abc', '', true), null);
   assert.equal(mimeForFormat('webp'), 'image/webp');
+});
+
+/* ---------------- CSV 数据清洗 ---------------- */
+test('parseCSV: 引号内逗号、换行与双引号转义', () => {
+  const r = parseCSV('name,note\r\n"a,b","line\nbreak"\r\n"say ""hi""",ok\r\n');
+  assert.equal(r.error, null);
+  assert.deepEqual(r.rows, [['name', 'note'], ['a,b', 'line\nbreak'], ['say "hi"', 'ok']]);
+});
+
+test('parseCSV: 自动识别分隔符、BOM 与补列', () => {
+  assert.equal(detectDelimiter('a;b;c\n1;2;3'), ';');
+  assert.equal(detectDelimiter('a\tb\tc\n1\t2\t3'), '\t');
+  const r = parseCSV('\uFEFFa|b\n1', 'auto');
+  assert.equal(r.delimiter, '|');
+  assert.deepEqual(r.rows, [['a', 'b'], ['1', '']]);
+  assert.equal(parseCSV('a,"unterminated', ',').error, 'unclosedQuote');
+});
+
+test('stringifyCSV: 按需加引号、转义与 BOM，往返无损', () => {
+  assert.equal(stringifyCSV([['a', 'b'], ['x,y', 'he said "hi"']]), 'a,b\r\n"x,y","he said ""hi"""');
+  assert.equal(stringifyCSV([['中文', '值']], ',', { bom: true }).charCodeAt(0), 0xFEFF);
+  const rows = [['name', 'note'], ['a,b', 'line\nbreak']];
+  assert.deepEqual(parseCSV(stringifyCSV(rows)).rows, rows);
+});
+
+test('cleanCSV: 去空白/空行/重复行并保留表头', () => {
+  const { rows, stats, error } = cleanCSV(parseCSV('name,qty\n Apple ,10\nApple,10\n\nBanana,20\n', ',').rows, {
+    trim: true, removeEmptyRows: true, removeDuplicates: true, keepHeader: true,
+  });
+  assert.equal(error, null);
+  assert.deepEqual(rows, [['name', 'qty'], ['Apple', '10'], ['Banana', '20']]);
+  assert.equal(stats.removedEmpty, 1);
+  assert.equal(stats.removedDuplicates, 1);
+  assert.equal(stats.outputRows, 3);
+});
+
+test('cleanCSV: 保留/删除列、查找替换、行过滤与排序', () => {
+  const src = parseCSV('name,qty,city\napple,10,SH\nbanana,3,BJ\ncherry,7,SH\n', ',').rows;
+  const kept = cleanCSV(src, { columnMode: 'keep', columnSpec: '1,3', keepHeader: true });
+  assert.deepEqual(kept.rows[0], ['name', 'city']);
+  assert.equal(kept.stats.columnCount, 2);
+  assert.equal(cleanCSV(src, { columnMode: 'drop', columnSpec: 'qty', keepHeader: true }).rows[0].join(','), 'name,city');
+  const replaced = cleanCSV(src, { replaceFind: 'SH', replaceWith: '上海', keepHeader: true });
+  assert.equal(replaced.rows[1][2], '上海');
+  const filtered = cleanCSV(src, { filterMode: 'keep', filterText: 'SH', keepHeader: true });
+  assert.equal(filtered.stats.removedByFilter, 1);
+  const sorted = cleanCSV(src, { sortColumn: '2', sortOrder: 'desc', keepHeader: true });
+  assert.deepEqual(sorted.rows.slice(1).map((r) => r[1]), ['10', '7', '3']);
+  assert.equal(cleanCSV(src, { columnMode: 'keep', columnSpec: '99' }).error, 'invalidColumns');
+  assert.equal(cleanCSV(src, { replaceFind: '[', useRegex: true }).error, 'invalidRegex');
+});
+
+/* ---------------- 批量文本处理 ---------------- */
+test('applySteps: 有序步骤链（trim → 去空 → 去重 → 加前后缀 → 编号）', () => {
+  const lines = splitLines('  apple \n\nApple\nbanana\n');
+  const r = applySteps(lines, [
+    { type: 'trim' }, { type: 'removeEmpty' },
+    { type: 'dedupe', options: { ignoreCase: true } },
+    { type: 'affix', options: { prefix: '· ', suffix: '' } },
+    { type: 'number', options: { start: 1, separator: '. ' } },
+  ]);
+  assert.equal(r.error, null);
+  assert.deepEqual(r.lines, ['1. · apple', '2. · banana']);
+  assert.equal(r.stats.removed, 2);
+  assert.equal(r.stats.stepCount, 5);
+});
+
+test('applySteps: 排序、大小写、正则替换、过滤与提取', () => {
+  assert.deepEqual(applySteps(['b', 'A', 'c'], [{ type: 'sort', options: { order: 'asc' } }]).lines, ['A', 'b', 'c']);
+  assert.deepEqual(applySteps(['b', 'a'], [{ type: 'sort', options: { order: 'reverse' } }]).lines, ['a', 'b']);
+  assert.deepEqual(applySteps(['hello world'], [{ type: 'case', options: { mode: 'title' } }]).lines, ['Hello World']);
+  assert.deepEqual(applySteps(['a1', 'b2'], [{ type: 'replace', options: { find: '\\d', replacement: '#', useRegex: true } }]).lines, ['a#', 'b#']);
+  assert.deepEqual(applySteps(['keep', 'drop'], [{ type: 'filter', options: { mode: 'drop', keyword: 'drop' } }]).lines, ['keep']);
+  assert.deepEqual(applySteps(['a,b,c'], [{ type: 'extract', options: { mode: 'column', separator: ',', index: 2 } }]).lines, ['b']);
+  assert.deepEqual(applySteps(['id=42'], [{ type: 'extract', options: { mode: 'regex', pattern: 'id=(\\d+)', group: 1 } }]).lines, ['42']);
+  assert.equal(applySteps(['x'], [{ type: 'replace', options: { find: '[', useRegex: true } }]).error, 'invalidRegex');
+  assert.equal(applySteps(['x'], [{ type: 'nope' }]).error, 'invalidStep');
+  assert.ok(STEP_TYPES.includes('reverse'));
+  assert.deepEqual(splitLines('a\r\nb\r\n'), ['a', 'b']);
+});
+
+/* ---------------- Excel 公式助手 ---------------- */
+test('buildFormula: 常用公式生成与参数校验', () => {
+  assert.equal(buildFormula('sum', { range: 'A1:A10' }).formula, '=SUM(A1:A10)');
+  assert.equal(buildFormula('if', { condition: 'A1>=60', trueValue: '"Pass"', falseValue: '"Fail"' }).formula,
+    '=IF(A1>=60, "Pass", "Fail")');
+  assert.equal(buildFormula('sumif', { range: 'A1:A10', criteria: '">60"', sumRange: 'B1:B10' }).formula,
+    '=SUMIF(A1:A10, ">60", B1:B10)');
+  assert.equal(buildFormula('vlookup', { lookupValue: 'E2', tableArray: 'A2:C100', colIndex: '2' }).formula,
+    '=VLOOKUP(E2, A2:C100, 2, FALSE)');
+  assert.equal(buildFormula('sum', { range: '' }).error, 'missingParams');
+  assert.equal(buildFormula('unknown', {}).error, 'unknownFormula');
+  assert.ok(FORMULAS.length >= 15);
+});
+
+test('evaluateFormula: 本地试算与不支持的公式', () => {
+  const v = trialValues('10\n20\n30\n');
+  assert.equal(evaluateFormula('sum', v, {}).value, 60);
+  assert.equal(evaluateFormula('average', v, {}).value, 20);
+  assert.equal(evaluateFormula('count', ['1', 'x', ''], {}).value, 1);
+  assert.equal(evaluateFormula('counta', ['1', 'x', ''], {}).value, 2);
+  assert.equal(evaluateFormula('max', v, {}).value, 30);
+  assert.equal(evaluateFormula('min', v, {}).value, 10);
+  assert.equal(evaluateFormula('round', ['3.14159'], { digits: '2' }).value, 3.14);
+  assert.equal(evaluateFormula('sumif', v, { criteria: '">15"' }).value, 50);
+  assert.equal(evaluateFormula('countif', v, { criteria: '>=20' }).value, 2);
+  assert.equal(evaluateFormula('textjoin', ['a', 'b'], { delimiter: '"-"' }).value, 'a-b');
+  assert.equal(evaluateFormula('trim', ['  a   b  '], {}).value, 'a b');
+  assert.equal(evaluateFormula('upper', ['abc'], {}).value, 'ABC');
+  assert.equal(evaluateFormula('len', ['中文'], {}).value, 2);
+  assert.equal(evaluateFormula('vlookup', v, {}).supported, false);
+});
+
+test('parseCriteria: 比较运算符与文本相等', () => {
+  assert.equal(parseCriteria('">60"')(70), true);
+  assert.equal(parseCriteria('">60"')(50), false);
+  assert.equal(parseCriteria('<=20')(20), true);
+  assert.equal(parseCriteria('<>5')(6), true);
+  assert.equal(parseCriteria('"Apple"')('Apple'), true);
+  assert.equal(parseCriteria('"Apple"')('Banana'), false);
+  assert.equal(parseCriteria(''), null);
 });

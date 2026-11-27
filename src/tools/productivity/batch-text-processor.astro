@@ -1,0 +1,71 @@
+---
+import Icon from '../../components/Icon.astro';
+import { STEP_TYPES } from '../../scripts/logic/batch-text.js';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+---
+<div class="tool-ui">
+  <div class="tool-columns">
+    <div class="field">
+      <label for="bt-input">{ui.inputLabel}</label>
+      <textarea id="bt-input" class="textarea" data-role="input" placeholder={ui.inputPlaceholder} spellcheck="false"></textarea>
+    </div>
+    <div class="field">
+      <div class="output-head">
+        <label for="bt-output" class="field-label">{ui.outputLabel}</label>
+        <button type="button" class="btn btn-ghost btn-sm" data-role="copy"><Icon name="copy" size={14} /> {a.copy}</button>
+      </div>
+      <textarea id="bt-output" class="textarea" data-role="output" readonly spellcheck="false"></textarea>
+    </div>
+  </div>
+
+  <h3 class="tool-section-title" style="margin-top:22px"><Icon name="layers" /> {ui.stepsLabel}</h3>
+  <div class="bt-add-row">
+    <select class="select" data-role="step-type" aria-label={ui.stepsLabel}>
+      {STEP_TYPES.map((t) => <option value={t}>{ui.stepTypes[t] || t}</option>)}
+    </select>
+    <button type="button" class="btn btn-outline" data-role="add-step"><Icon name="plus" size={16} /> {ui.addStepLabel}</button>
+  </div>
+  <p class="field-hint" data-role="empty-steps" style="margin-top:10px">{ui.emptySteps}</p>
+  <div data-role="steps"></div>
+
+  <div class="tool-actions">
+    <button type="button" class="btn btn-primary" data-role="run"><Icon name="wand-sparkles" size={16} /> {ui.runLabel}</button>
+    <button type="button" class="btn btn-outline" data-role="download" disabled><Icon name="download" size={16} /> {a.download}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {a.clear}</button>
+    <button type="button" class="btn btn-ghost" data-role="reset"><Icon name="rotate-ccw" size={16} /> {ui.resetLabel}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <div class="status-line" data-role="status"></div>
+
+  <div class="stat-grid" style="margin-top:16px">
+    <div class="stat-card"><div class="stat-label">{ui.statOriginal}</div><div class="stat-value" data-role="stat-original">—</div></div>
+    <div class="stat-card"><div class="stat-label">{ui.statOutput}</div><div class="stat-value" data-role="stat-output">—</div></div>
+    <div class="stat-card"><div class="stat-label">{ui.statRemoved}</div><div class="stat-value" data-role="stat-removed">—</div></div>
+    <div class="stat-card"><div class="stat-label">{ui.stepCount}</div><div class="stat-value" data-role="stat-steps">0</div></div>
+  </div>
+  <p class="field-hint" style="margin-top:14px">{ui.hint}</p>
+
+  <template data-role="icon-up"><Icon name="arrow-up" size={14} /></template>
+  <template data-role="icon-down"><Icon name="arrow-down" size={14} /></template>
+  <template data-role="icon-remove"><Icon name="x" size={14} /></template>
+</div>
+
+<style is:global>
+  /* 步骤卡片由客户端脚本动态创建，使用全局作用域（类名带 bt- 前缀） */
+  .bt-add-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .bt-add-row .select { width: auto; min-width: 210px; flex: 1 1 210px; }
+  .bt-step { margin-top: 10px; padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-subtle); scroll-margin-top: calc(var(--header-h) + 16px); }
+  .bt-step-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .bt-step-title { font-size: .9rem; font-weight: 700; }
+  .bt-step-actions { display: flex; gap: 6px; }
+  .bt-icon-btn { width: 30px; height: 30px; display: grid; place-items: center; padding: 0; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-elevated); color: var(--text-soft); cursor: pointer; }
+  .bt-icon-btn:hover { color: var(--blue); border-color: var(--blue); }
+  .bt-icon-btn svg { width: 14px; height: 14px; }
+  .bt-step-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 10px; }
+  .bt-field { display: flex; flex-direction: column; gap: 5px; font-size: .78rem; color: var(--text-soft); }
+  .bt-field .input, .bt-field .select { min-height: 36px; font-size: .85rem; }
+  .bt-check { flex-direction: row; align-items: center; gap: 7px; align-self: end; min-height: 36px; }
+  .bt-check input { width: 16px; height: 16px; accent-color: var(--blue); margin: 0; }
+  @media (max-width: 640px) { .bt-step-fields { grid-template-columns: 1fr; } }
+</style>

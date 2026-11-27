@@ -296,7 +296,7 @@ export default {
   roadmap: {
     business: ['FOB Quote Calculator', 'Trade Profit Calculator', 'MOQ Quote Calculator', 'CBM Volume Calculator', 'Carton Quantity Calculator', 'Gross / Net Weight Calculator', 'Product Cost Calculator', 'Lead Time Calculator'],
     ai: ['English Email Polisher', 'Product Title Generator', 'Selling Points Generator', 'SEO Keyword Generator', 'AI Prompt Generator'],
-    productivity: ['Excel Formula Helper', 'CSV Data Cleaner', 'Batch Text Processor'],
+    productivity: [],
   },
 
   categories: {
@@ -306,7 +306,7 @@ export default {
     calculators: { name: 'Calculators', desc: 'Percentage, profit margin, unit conversion and date calculators', seoTitle: 'Online Calculators — Percentage, Margin, Units & Dates | ToolNest', seoDesc: 'Free online calculators: percentage, profit margin and markup, unit conversions, date difference and weekdays. Instant results, no sign-up.', intro: 'Common formulas turned into clear forms, with results and the calculation steps shown as you type.' },
     ai: { name: 'AI Tools', desc: 'AI-assisted writing tools for trade and content work (planned)', seoTitle: 'AI Tools — Email Polishing, Copy & Keywords | ToolNest', seoDesc: 'Planned ToolNest AI tools: English email polishing, product titles and selling points, SEO keyword generation, prompt generator. Follow the changelog for releases.', intro: 'AI-assisted tools are on the roadmap. We will prioritize use cases that work locally without sending sensitive data away.' },
     developer: { name: 'Developer Tools', desc: 'URL encode/decode, Base64 encode/decode and color conversion', seoTitle: 'Developer Tools — URL, Base64 & Color Converters | ToolNest', seoDesc: 'Free online developer tools: URL encoder/decoder, Base64 encoder/decoder for text and files, HEX / RGB / HSL color converter. Runs locally, no sign-up.', intro: 'Small utilities for debugging, with correct handling of Chinese and other Unicode text.' },
-    productivity: { name: 'Productivity', desc: 'QR code generator and everyday office helpers', seoTitle: 'Productivity Tools — Online QR Code Generator | ToolNest', seoDesc: 'Free online QR code generator with custom size, error correction and colors; export PNG or SVG. No sign-up, no content uploaded.', intro: 'Turning small repetitive tasks into a single page you can just open and finish.' },
+    productivity: { name: 'Productivity', desc: 'QR codes, Excel formula helper, CSV cleaner and batch text processing', seoTitle: 'Productivity Tools — QR Codes, Excel Formulas & CSV Cleaning | ToolNest', seoDesc: 'Free online productivity tools: QR code generator, Excel formula helper, CSV data cleaner and batch text processor. Everything runs locally in your browser with no sign-up or uploads.', intro: 'Turning small repetitive tasks into a single page you can just open and finish — from QR codes to cleaning spreadsheets and batch-processing text.' },
     business: { name: 'Business Tools', desc: 'FOB quotes, CBM volume, carton quantities and factory tools (planned)', seoTitle: 'Factory & Trade Tools — Quotes, Volume, Cartons | ToolNest', seoDesc: 'Planned ToolNest business tools: FOB quote, trade profit, MOQ quote, CBM volume, carton quantity, gross/net weight, product cost and lead time calculators.', intro: 'A toolset for trade and factory quoting workflows, currently in development by priority.' },
   },
 

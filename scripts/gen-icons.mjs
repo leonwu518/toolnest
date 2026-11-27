@@ -19,9 +19,10 @@ const ICONS = [
   'plus', 'arrow-up', 'arrow-down', 'shield-check', 'clock', 'mail', 'lock', 'database',
   'rotate-ccw', 'sliders-horizontal', 'calendar', 'hash', 'file-plus', 'image-plus',
   'external-link', 'circle-help', 'lightbulb', 'eye', 'move-up', 'move-down', 'clipboard',
-  'eraser', 'save', 'file-down', 'file-up', 'settings', 'list', 'arrow-left-right',
+  'eraser', 'save', 'file-down', 'file-up', 'settings', 'settings-2', 'list', 'arrow-left-right',
   'table', 'circle-x', 'scan-line', 'droplet', 'square-stack', 'book-open', 'heart',
   'briefcase', 'circle-dot', 'filter', 'align-left', 'wand-sparkles', 'chart-no-axes-combined', 'wallet',
+  'function-square', 'list-checks', 'sigma', 'regex', 'list-ordered', 'grip-vertical',
 ];
 
 const base = path.resolve('node_modules/lucide-static/icons');

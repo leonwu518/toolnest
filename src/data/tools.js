@@ -34,7 +34,10 @@ export const tools = [
   { slug: 'color-converter',        category: 'developer',    icon: 'palette',     popular: false, recommended: false, isNew: false, addedAt: '2025-02-18' },
 
   // ---------- F. 效率工具 ----------
-  { slug: 'qr-code-generator',      category: 'productivity', icon: 'qr-code',     popular: true,  recommended: true,  isNew: false, addedAt: '2025-01-22' },
+  { slug: 'qr-code-generator',      category: 'productivity', icon: 'qr-code',        popular: true,  recommended: true,  isNew: false, addedAt: '2025-01-22' },
+  { slug: 'excel-formula-helper',   category: 'productivity', icon: 'function-square', popular: false, recommended: false, isNew: true,  addedAt: '2026-11-27' },
+  { slug: 'csv-cleaner',            category: 'productivity', icon: 'list-checks',    popular: false, recommended: false, isNew: true,  addedAt: '2026-11-27' },
+  { slug: 'batch-text-processor',   category: 'productivity', icon: 'layers',         popular: false, recommended: false, isNew: true,  addedAt: '2026-11-27' },
 ];
 
 export const toolBySlug = Object.fromEntries(tools.map((t) => [t.slug, t]));
@@ -58,5 +61,5 @@ export function relatedTools(slug, limit = 6) {
 export const roadmap = {
   business: ['fob-quote-calculator', 'trade-profit-calculator', 'moq-quote-calculator', 'cbm-calculator', 'carton-quantity-calculator', 'gross-net-weight-calculator', 'product-cost-calculator', 'lead-time-calculator'],
   ai: ['email-polisher', 'product-title-generator', 'selling-points-generator', 'seo-keyword-generator', 'prompt-generator'],
-  productivity: ['excel-formula-helper', 'csv-cleaner', 'batch-text-processor'],
+  // productivity 三个工具（Excel 公式助手 / CSV 数据清洗 / 批量文本处理）已上线，从路线图移除
 };

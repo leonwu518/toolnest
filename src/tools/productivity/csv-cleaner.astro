@@ -1,0 +1,152 @@
+---
+import Icon from '../../components/Icon.astro';
+const { dict, tool } = Astro.props;
+const ui = tool.ui, a = dict.actions;
+const d = ui.delimiters;
+---
+<div class="tool-ui">
+  <div class="tool-columns">
+    <div class="field">
+      <label for="csv-input">{ui.inputLabel}</label>
+      <textarea id="csv-input" class="textarea" data-role="input" placeholder={ui.inputPlaceholder} spellcheck="false"></textarea>
+      <label class="file-drop" style="margin-top:12px;min-height:96px" data-role="file-drop">
+        <Icon name="upload" size={24} />
+        <strong>{ui.fileLabel}</strong>
+        <small>{ui.fileHint}</small>
+        <input type="file" data-role="file" accept=".csv,.txt,text/csv,text/plain" />
+      </label>
+    </div>
+    <div class="field">
+      <div class="output-head">
+        <label for="csv-output" class="field-label">{ui.outputLabel}</label>
+        <button type="button" class="btn btn-ghost btn-sm" data-role="copy"><Icon name="copy" size={14} /> {a.copy}</button>
+      </div>
+      <textarea id="csv-output" class="textarea" data-role="output" readonly spellcheck="false"></textarea>
+    </div>
+  </div>
+
+  <h3 class="tool-section-title" style="margin-top:22px"><Icon name="sliders-horizontal" /> {ui.optionsTitle}</h3>
+  <div class="field-grid three">
+    <div class="field">
+      <label for="csv-delimiter">{ui.delimiterLabel}</label>
+      <select class="select" id="csv-delimiter" data-role="delimiter">
+        <option value="auto">{d.auto}</option>
+        <option value="comma">{d.comma}</option>
+        <option value="semicolon">{d.semicolon}</option>
+        <option value="tab">{d.tab}</option>
+        <option value="pipe">{d.pipe}</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="csv-out-delimiter">{ui.outputDelimiterLabel}</label>
+      <select class="select" id="csv-out-delimiter" data-role="output-delimiter">
+        <option value="comma">{d.comma}</option>
+        <option value="semicolon">{d.semicolon}</option>
+        <option value="tab">{d.tab}</option>
+        <option value="pipe">{d.pipe}</option>
+      </select>
+    </div>
+    <div class="field" style="justify-content:flex-end">
+      <label class="check"><input type="checkbox" data-opt="bom" /> {ui.optBom}</label>
+    </div>
+  </div>
+
+  <div class="option-row" style="margin-top:12px">
+    <label class="check"><input type="checkbox" data-opt="trim" checked /> {ui.optTrim}</label>
+    <label class="check"><input type="checkbox" data-opt="removeEmptyRows" checked /> {ui.optRemoveEmpty}</label>
+    <label class="check"><input type="checkbox" data-opt="removeDuplicates" /> {ui.optRemoveDuplicates}</label>
+    <label class="check"><input type="checkbox" data-opt="ignoreCase" /> {ui.optIgnoreCase}</label>
+    <label class="check"><input type="checkbox" data-opt="keepHeader" checked /> {ui.optKeepHeader}</label>
+  </div>
+
+  <div class="field-grid two" style="margin-top:14px">
+    <div class="field">
+      <label for="csv-col-mode">{ui.columnLabel}</label>
+      <select class="select" id="csv-col-mode" data-role="column-mode">
+        <option value="all">{ui.columnModes.all}</option>
+        <option value="keep">{ui.columnModes.keep}</option>
+        <option value="drop">{ui.columnModes.drop}</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="csv-col-spec">&nbsp;</label>
+      <input class="input" id="csv-col-spec" data-role="column-spec" placeholder={ui.columnPlaceholder} />
+    </div>
+  </div>
+
+  <div class="field-grid three" style="margin-top:14px;align-items:end">
+    <div class="field">
+      <label for="csv-find">{ui.replaceLabel}</label>
+      <input class="input" id="csv-find" data-role="replace-find" placeholder={ui.findPlaceholder} />
+    </div>
+    <div class="field">
+      <label for="csv-replace">&nbsp;</label>
+      <input class="input" id="csv-replace" data-role="replace-with" placeholder={ui.replacePlaceholder} />
+    </div>
+    <div class="field" style="justify-content:flex-end">
+      <label class="check"><input type="checkbox" data-opt="useRegex" /> {ui.optRegex}</label>
+    </div>
+  </div>
+
+  <div class="field-grid three" style="margin-top:14px;align-items:end">
+    <div class="field">
+      <label for="csv-empty">{ui.emptyLabel}</label>
+      <input class="input" id="csv-empty" data-role="empty-value" placeholder={ui.emptyPlaceholder} />
+    </div>
+    <div class="field">
+      <label for="csv-filter-mode">{ui.filterLabel}</label>
+      <select class="select" id="csv-filter-mode" data-role="filter-mode">
+        <option value="none">{ui.filterModes.none}</option>
+        <option value="keep">{ui.filterModes.keep}</option>
+        <option value="drop">{ui.filterModes.drop}</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="csv-filter-text">&nbsp;</label>
+      <input class="input" id="csv-filter-text" data-role="filter-text" placeholder={ui.filterPlaceholder} />
+    </div>
+  </div>
+
+  <div class="field-grid two" style="margin-top:14px">
+    <div class="field">
+      <label for="csv-sort-col">{ui.sortLabel}</label>
+      <input class="input" id="csv-sort-col" type="number" min="1" data-role="sort-column" placeholder={ui.sortPlaceholder} />
+    </div>
+    <div class="field">
+      <label for="csv-sort-order">&nbsp;</label>
+      <select class="select" id="csv-sort-order" data-role="sort-order">
+        <option value="asc">{ui.sortOrders.asc}</option>
+        <option value="desc">{ui.sortOrders.desc}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="tool-actions">
+    <button type="button" class="btn btn-primary" data-role="run"><Icon name="list-checks" size={16} /> {ui.runLabel}</button>
+    <button type="button" class="btn btn-outline" data-role="download" disabled><Icon name="download" size={16} /> {a.download}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {a.clear}</button>
+    <button type="button" class="btn btn-ghost" data-role="reset"><Icon name="rotate-ccw" size={16} /> {ui.resetLabel}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <div class="status-line" data-role="status"></div>
+
+  <div class="stat-grid" style="margin-top:16px">
+    <div class="stat-card"><div class="stat-label">{ui.statOriginal}</div><div class="stat-value" data-role="stat-original">—</div></div>
+    <div class="stat-card"><div class="stat-label">{ui.statOutput}</div><div class="stat-value" data-role="stat-output">—</div></div>
+    <div class="stat-card"><div class="stat-label">{ui.statRemoved}</div><div class="stat-value" data-role="stat-removed">—</div></div>
+  </div>
+
+  <h3 class="tool-section-title" style="margin-top:22px"><Icon name="table" /> {ui.previewLabel}</h3>
+  <div class="csv-preview" data-role="preview"><div class="preview-placeholder">{ui.previewLabel}</div></div>
+  <p class="field-hint" style="margin-top:14px">{ui.hint}</p>
+</div>
+
+<style is:global>
+  /* 预览表格由客户端脚本动态创建，使用全局作用域（类名带 csv- 前缀） */
+  .csv-preview { overflow-x: auto; }
+  .csv-table { border-collapse: collapse; width: 100%; font-size: .8rem; }
+  .csv-table th, .csv-table td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; white-space: nowrap; }
+  .csv-table th { background: var(--bg-elevated); font-weight: 700; color: var(--text-soft); }
+  .csv-table td { font-family: var(--mono); }
+  .csv-preview-empty { padding: 20px; text-align: center; color: var(--text-muted); font-size: .85rem; }
+</style>
