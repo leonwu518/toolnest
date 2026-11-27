@@ -290,15 +290,17 @@ export default {
     seoTitle: 'Unit Converter — Length, Weight, Temperature & More | ToolNest',
     seoDesc: 'Free online unit converter for length, weight, temperature, area, volume, speed, digital storage and time. Pick units, enter a value, get an instant result, and swap units with one click. Calculated locally in your browser.',
     keywords: ['unit converter', 'length converter', 'weight converter', 'temperature converter', '单位换算'],
-    howto: { steps: ['Pick a conversion category, for example Length or Weight.', 'Choose the source and target units, then enter a value.', 'The result appears instantly; click Swap to convert in the opposite direction.'] },
+    howto: { steps: ['Pick a conversion category, for example Length or Weight.', 'Choose the source and target units, then enter a value — the result updates instantly.', 'Click Swap to convert in the opposite direction; pick a fixed decimal precision (0-10) or leave it on Auto.', 'The "All units" panel below converts your value into every unit in the category at once; click any unit to set it as the target.'] },
     faqs: [
       { q: 'Why is temperature not a simple multiplication?', a: 'Celsius, Fahrenheit and Kelvin have different zero points, so they need dedicated formulas. Other categories use fixed conversion factors, and both cases are handled separately.' },
       { q: 'Is data storage converted with 1000 or 1024?', a: 'This tool uses SI decimal units (1 KB = 1000 B), matching drive manufacturers. Operating systems often display 1024-based units, so the numbers can differ.' },
-      { q: 'How precise are the results?', a: 'Calculations use double-precision floats and display up to 10 significant digits with trailing zeros removed; very small numbers use scientific notation.' },
+      { q: 'How precise are the results?', a: 'Auto mode shows up to 6 significant digits with trailing zeros removed, and uses scientific notation for very small numbers. You can also pick a fixed number of decimal places (0-10) in the Precision selector.' },
     ],
     ui: {
       categoryLabel: 'Category', fromLabel: 'From', toLabel: 'To', valueLabel: 'Value', resultLabel: 'Result', swapLabel: 'Swap units',
       hint: 'Choose a category and units, then enter a value', invalidNumber: 'Please enter a valid number', formulaLabel: 'Conversion',
+      precisionLabel: 'Precision', precisionAuto: 'Auto', precisionDigits: 'decimal places',
+      allUnitsLabel: 'All units in this category', allUnitsHint: 'Enter a value once to see it converted into every unit of the category; click any unit to set it as the target.',
     },
   },
 

@@ -2,6 +2,7 @@
 import Icon from '../../components/Icon.astro';
 const { dict, tool } = Astro.props;
 const ui = tool.ui, a = dict.actions;
+const precisionOptions = Array.from({ length: 11 }, (_, i) => i);
 ---
 <div class="tool-ui">
   <div class="field-grid two">
@@ -21,7 +22,7 @@ const ui = tool.ui, a = dict.actions;
       <select class="select" id="uc-from" data-role="from"></select>
     </div>
     <div class="field" style="align-items:center">
-      <button type="button" class="btn btn-outline" data-role="swap"><Icon name="arrow-left-right" size={16} /> {ui.swapLabel}</button>
+      <button type="button" class="btn btn-outline" data-role="swap" aria-label={ui.swapLabel}><Icon name="arrow-left-right" size={16} /> {ui.swapLabel}</button>
     </div>
     <div class="field">
       <label for="uc-to">{ui.toLabel}</label>
@@ -29,11 +30,72 @@ const ui = tool.ui, a = dict.actions;
     </div>
   </div>
 
-  <h3 class="tool-section-title" style="margin-top:22px"><Icon name="ruler" /> {ui.resultLabel}</h3>
-  <div class="stat-grid">
-    <div class="stat-card"><div class="stat-label"><Icon name="hash" size={14} /> {ui.resultLabel}</div><div class="stat-value" data-role="result">—</div></div>
-    <div class="stat-card" style="grid-column:span 2"><div class="stat-label"><Icon name="book-open" size={14} /> {ui.formulaLabel}</div><div class="stat-value" style="font-size:1rem;font-family:var(--mono)" data-role="formula">—</div></div>
+  <div class="uc-precision">
+    <label for="uc-precision"><Icon name="settings-2" size={14} /> {ui.precisionLabel}</label>
+    <select class="select" id="uc-precision" data-role="precision">
+      <option value="auto">{ui.precisionAuto}</option>
+      {precisionOptions.map((n) => <option value={String(n)}>{n} {ui.precisionDigits}</option>)}
+    </select>
   </div>
+
+  <div class="uc-big" data-role="big-result" hidden>
+    <span class="uc-big-v" data-role="big-from"></span>
+    <span class="uc-big-u" data-role="big-from-unit"></span>
+    <span class="uc-big-eq">=</span>
+    <span class="uc-big-v main" data-role="result">—</span>
+    <span class="uc-big-u" data-role="big-to-unit"></span>
+  </div>
+
   <div class="alert alert-error" data-role="error" hidden></div>
-  <p class="field-hint" style="margin-top:10px">{ui.hint}</p>
+
+  <h3 class="tool-section-title" style="margin-top:22px"><Icon name="book-open" /> {ui.formulaLabel}</h3>
+  <div class="stat-grid">
+    <div class="stat-card" style="grid-column:1/-1"><div class="stat-value" style="font-size:1rem;font-family:var(--mono)" data-role="formula">—</div></div>
+  </div>
+
+  <h3 class="tool-section-title" style="margin-top:22px"><Icon name="list" /> {ui.allUnitsLabel}</h3>
+  <p class="field-hint" style="margin-top:-6px;margin-bottom:12px">{ui.allUnitsHint}</p>
+  <div class="uc-all" data-role="all-units"></div>
+
+  <p class="field-hint" style="margin-top:14px">{ui.hint}</p>
 </div>
+
+<style is:global>
+  /* 全单位卡片由客户端脚本动态创建，无法获得 Astro scoped 属性，故使用全局作用域（类名均带 uc- 前缀避免冲突） */
+  .uc-precision { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+  .uc-precision label { display: inline-flex; align-items: center; gap: 5px; font-size: .85rem; color: var(--text-soft); white-space: nowrap; }
+  .uc-precision .select { width: auto; min-width: 140px; }
+
+  .uc-big {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 10px;
+    margin-top: 20px; padding: 18px 20px;
+    background: var(--bg-muted, rgba(37, 99, 235, .05));
+    border: 1px solid var(--border); border-radius: var(--radius);
+    font-size: 1.15rem; line-height: 1.4;
+  }
+  .uc-big[hidden] { display: none; }
+  .uc-big-v { font-weight: 700; font-size: 1.5rem; font-family: var(--mono); word-break: break-all; }
+  .uc-big-v.main { color: var(--primary); font-size: 1.9rem; }
+  .uc-big-u { color: var(--text-soft); font-size: .95rem; }
+  .uc-big-eq { color: var(--text-soft); font-weight: 600; margin: 0 4px; }
+
+  .uc-all { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+  .uc-unit {
+    display: flex; flex-direction: column; gap: 4px; align-items: flex-start;
+    padding: 10px 14px; text-align: left; cursor: pointer;
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); transition: border-color .15s, box-shadow .15s;
+    font: inherit; color: inherit;
+  }
+  .uc-unit:hover { border-color: var(--primary); }
+  .uc-unit.active { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(37, 99, 235, .18); }
+  .uc-unit .u { font-size: .78rem; color: var(--text-soft); }
+  .uc-unit .v { font-size: 1.02rem; font-weight: 700; font-family: var(--mono); word-break: break-all; }
+
+  @media (max-width: 640px) {
+    .uc-big { padding: 14px 16px; }
+    .uc-big-v { font-size: 1.25rem; }
+    .uc-big-v.main { font-size: 1.5rem; }
+    .uc-all { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+  }
+</style>

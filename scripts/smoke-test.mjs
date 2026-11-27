@@ -261,6 +261,14 @@ await check('单位换算：长度与温度', async () => {
   await setVal('[data-role="unit-group"]', 'temperature');
   await sleep(120);
   assert((await text('[data-role="result"]')) !== '—', '温度换算无结果');
+  await setVal('[data-role="precision"]', '2');
+  await sleep(120);
+  assert((await text('[data-role="result"]')) === '33.80', '精度 2 位小数应为 33.80');
+  const units = await page.$$eval('[data-role="all-units"] .uc-unit', (els) => els.length);
+  assert(units === 3, '温度类别应有 3 个全单位卡片');
+  await page.click('[data-role="all-units"] .uc-unit:nth-child(3)');
+  await sleep(120);
+  assert((await page.$eval('[data-role="to"]', (el) => el.value)) === 'k', '点击全单位卡片应切换目标单位');
 });
 
 await check('日期计算器：间隔与工作日', async () => {
