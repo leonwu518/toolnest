@@ -285,15 +285,17 @@ export default {
 
   'unit-converter': {
     name: 'Unit Converter',
-    desc: 'Convert length, weight, temperature, area, volume, speed, data and time units.',
-    short: '8 unit categories including length, weight and temperature',
-    seoTitle: 'Unit Converter — Length, Weight, Temperature & More | ToolNest',
-    seoDesc: 'Free online unit converter for length, weight, temperature, area, volume, speed, digital storage and time. Pick units, enter a value, get an instant result, and swap units with one click. Calculated locally in your browser.',
-    keywords: ['unit converter', 'length converter', 'weight converter', 'temperature converter', '单位换算'],
-    howto: { steps: ['Pick a conversion category, for example Length or Weight.', 'Choose the source and target units, then enter a value — the result updates instantly.', 'Click Swap to convert in the opposite direction; pick a fixed decimal precision (0-10) or leave it on Auto.', 'The "All units" panel below converts your value into every unit in the category at once; click any unit to set it as the target.'] },
+    desc: 'Convert length, weight, force, energy, temperature, area, volume, speed, data and time units.',
+    short: '10 unit categories including length, weight, force and energy',
+    seoTitle: 'Unit Converter — cm to mm, cm to Inches, N to lbf, kJ to J | ToolNest',
+    seoDesc: 'Free online unit converter for 10 categories: length, weight, force, energy, temperature, area, volume, speed, digital storage and time. Includes cm to mm, cm to inches, newton to lbf, kJ to J and bytes to GB. Instant results, one-click swap, calculated locally in your browser.',
+    keywords: ['unit converter', 'cm to mm', 'cm to inches', 'newton to lbf', 'kj to j', 'bytes to gb', 'length converter', 'weight converter', 'temperature converter', '单位换算'],
+    howto: { steps: ['Pick a conversion category, for example Length, Force or Energy.', 'Choose the source and target units, then enter a value — the result updates instantly.', 'Click Swap to convert in the opposite direction; pick a fixed decimal precision (0-10) or leave it on Auto.', 'The "All units" panel below converts your value into every unit in the category at once; click any unit to set it as the target.'] },
     faqs: [
+      { q: 'How do I convert cm to mm or cm to inches?', a: 'Pick the Length category: 1 cm = 10 mm and 1 cm ≈ 0.3937 in. The "All units" panel below also shows every length unit at once.' },
+      { q: 'Can I convert newton to lbf and kJ to J?', a: 'Yes. In the Force category pick Newton (N) and Pound-force (lbf): 1 N ≈ 0.2248 lbf. In the Energy category pick Kilojoule (kJ) and Joule (J): 1 kJ = 1000 J. Energy also covers calories, watt-hours and BTU.' },
       { q: 'Why is temperature not a simple multiplication?', a: 'Celsius, Fahrenheit and Kelvin have different zero points, so they need dedicated formulas. Other categories use fixed conversion factors, and both cases are handled separately.' },
-      { q: 'Is data storage converted with 1000 or 1024?', a: 'This tool uses SI decimal units (1 KB = 1000 B), matching drive manufacturers. Operating systems often display 1024-based units, so the numbers can differ.' },
+      { q: 'Is bytes to GB converted with 1000 or 1024?', a: 'This tool uses SI decimal units (1 KB = 1000 B, 1 GB = 10⁹ B), matching drive manufacturers. Operating systems often display 1024-based units, so the numbers can differ. That means 1 B = 10⁻⁹ GB; enter 1000000000 bytes to get 1 GB.' },
       { q: 'How precise are the results?', a: 'Auto mode shows up to 6 significant digits with trailing zeros removed, and uses scientific notation for very small numbers. You can also pick a fixed number of decimal places (0-10) in the Precision selector.' },
     ],
     ui: {

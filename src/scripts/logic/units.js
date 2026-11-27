@@ -20,6 +20,23 @@ export const unitGroups = [
     { id: 'oz', label: L('盎司 (oz)', 'Ounce (oz)'), factor: 0.028349523125 },
     { id: 'lb', label: L('磅 (lb)', 'Pound (lb)'), factor: 0.45359237 },
   ] },
+  { id: 'force', label: L('力', 'Force'), units: [
+    { id: 'n', label: L('牛顿 (N)', 'Newton (N)'), factor: 1 },
+    { id: 'kn', label: L('千牛 (kN)', 'Kilonewton (kN)'), factor: 1000 },
+    { id: 'kgf', label: L('千克力 (kgf)', 'Kilogram-force (kgf)'), factor: 9.80665 },
+    { id: 'lbf', label: L('磅力 (lbf)', 'Pound-force (lbf)'), factor: 4.4482216152605 },
+    { id: 'dyn', label: L('达因 (dyn)', 'Dyne (dyn)'), factor: 0.00001 },
+  ] },
+  { id: 'energy', label: L('能量', 'Energy'), units: [
+    { id: 'j', label: L('焦耳 (J)', 'Joule (J)'), factor: 1 },
+    { id: 'kj', label: L('千焦 (kJ)', 'Kilojoule (kJ)'), factor: 1000 },
+    { id: 'mj', label: L('兆焦 (MJ)', 'Megajoule (MJ)'), factor: 1e6 },
+    { id: 'cal', label: L('卡路里 (cal)', 'Calorie (cal)'), factor: 4.184 },
+    { id: 'kcal', label: L('千卡 (kcal)', 'Kilocalorie (kcal)'), factor: 4184 },
+    { id: 'wh', label: L('瓦时 (Wh)', 'Watt-hour (Wh)'), factor: 3600 },
+    { id: 'kwh', label: L('千瓦时 (kWh)', 'Kilowatt-hour (kWh)'), factor: 3.6e6 },
+    { id: 'btu', label: L('英热单位 (BTU)', 'British thermal unit (BTU)'), factor: 1055.05585262 },
+  ] },
   { id: 'temperature', label: L('温度', 'Temperature'), units: [
     { id: 'c', label: L('摄氏度 (°C)', 'Celsius (°C)') },
     { id: 'f', label: L('华氏度 (°F)', 'Fahrenheit (°F)') },

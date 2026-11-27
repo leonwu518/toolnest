@@ -256,7 +256,7 @@ await check('利润率计算器：毛利率/加价率', async () => {
   assert((await text('[data-role="markup"]')) === '25', '加价率应为 25%');
 });
 
-await check('单位换算：长度与温度', async () => {
+await check('单位换算：长度、温度、力与能量', async () => {
   await go('/zh/tools/unit-converter/');
   await setVal('[data-role="value"]', '1');
   assert((await text('[data-role="result"]')) === '0.1', 'mm→cm 换算错误');
@@ -271,6 +271,21 @@ await check('单位换算：长度与温度', async () => {
   await page.click('[data-role="all-units"] .uc-unit:nth-child(3)');
   await sleep(120);
   assert((await page.$eval('[data-role="to"]', (el) => el.value)) === 'k', '点击全单位卡片应切换目标单位');
+
+  await setVal('[data-role="precision"]', 'auto');
+  await setVal('[data-role="unit-group"]', 'force');
+  await sleep(120);
+  await setVal('[data-role="from"]', 'n');
+  await setVal('[data-role="to"]', 'lbf');
+  await sleep(120);
+  assert((await text('[data-role="result"]')) === '0.224809', 'N→lbf 应显示 0.224809');
+
+  await setVal('[data-role="unit-group"]', 'energy');
+  await sleep(120);
+  await setVal('[data-role="from"]', 'kj');
+  await setVal('[data-role="to"]', 'j');
+  await sleep(120);
+  assert((await text('[data-role="result"]')) === '1000', 'kJ→J 应显示 1000');
 });
 
 await check('日期计算器：间隔与工作日', async () => {

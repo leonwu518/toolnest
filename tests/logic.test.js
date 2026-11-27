@@ -122,6 +122,14 @@ test('convertUnit: 线性单位', () => {
   assert.equal(convertUnit(1, 'data', 'gb', 'mb'), 1000);
 });
 
+test('convertUnit: 常用长尾换算 cm→mm / cm→in / B→GB / N→lbf / kJ→J', () => {
+  assert.equal(convertUnit(1, 'length', 'cm', 'mm'), 10);
+  assert.ok(Math.abs(convertUnit(1, 'length', 'cm', 'in') - 0.3937007874015748) < 1e-12);
+  assert.equal(convertUnit(1, 'data', 'b', 'gb'), 1e-9);
+  assert.ok(Math.abs(convertUnit(1, 'force', 'n', 'lbf') - 0.2248089431) < 1e-9);
+  assert.equal(convertUnit(1, 'energy', 'kj', 'j'), 1000);
+});
+
 test('convertUnit: 温度零点偏移', () => {
   assert.equal(convertUnit(0, 'temperature', 'c', 'f'), 32);
   assert.equal(convertUnit(100, 'temperature', 'c', 'f'), 212);
@@ -130,13 +138,17 @@ test('convertUnit: 温度零点偏移', () => {
   assert.ok(Math.abs(convertUnit(0, 'temperature', 'k', 'c') + 273.15) < 1e-9);
 });
 
-test('unitGroups: 8 类单位数据完整', () => {
-  assert.equal(unitGroups.length, 8);
+test('unitGroups: 10 类单位数据完整', () => {
+  assert.equal(unitGroups.length, 10);
   for (const g of unitGroups) {
     assert.ok(g.units.length >= 3, `${g.id} 单位过少`);
     assert.ok(g.label.zh && g.label.en);
     if (g.id !== 'temperature') for (const u of g.units) assert.ok(u.factor > 0, `${g.id}.${u.id} 缺少 factor`);
   }
+  const force = unitGroups.find((g) => g.id === 'force');
+  const energy = unitGroups.find((g) => g.id === 'energy');
+  assert.ok(force && ['n', 'lbf', 'kn', 'kgf'].every((id) => force.units.some((u) => u.id === id)), '缺少力单位');
+  assert.ok(energy && ['j', 'kj', 'kwh', 'kcal'].every((id) => energy.units.some((u) => u.id === id)), '缺少能量单位');
 });
 
 /* ---------------- 日期 ---------------- */
