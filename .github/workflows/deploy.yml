@@ -3,7 +3,7 @@
 # 需要在仓库 Secrets/Variables 中配置：
 #   CLOUDFLARE_API_TOKEN (Secret)  —— 含 Cloudflare Pages: Edit 权限的 API Token
 #   CLOUDFLARE_ACCOUNT_ID (Secret) —— Cloudflare Account ID
-#   SITE_URL (Variable)            —— 正式域名，例如 https://toolnest.example.com
+#   SITE_URL (Variable)            —— 正式域名，例如 https://www.toolwild.com
 # 未配置上述两个 Secrets 时，工作流仍完成依赖安装、单元测试、构建与产物校验，仅跳过部署步骤（整体标记成功）。
 name: Deploy to Cloudflare Pages
 

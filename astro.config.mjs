@@ -1,8 +1,8 @@
 import { defineConfig } from 'astro/config';
 
-// 部署时通过环境变量 SITE_URL 指定正式域名，用于 canonical / hreflang / sitemap
-// 例如 Cloudflare Pages: SITE_URL=https://your-domain.com
-const SITE_URL = process.env.SITE_URL || 'https://toolnest.pages.dev';
+// 正式域名 www.toolwild.com，用于 canonical / hreflang / sitemap
+// 部署时可用环境变量 SITE_URL 覆盖，例如 SITE_URL=https://www.toolwild.com
+const SITE_URL = process.env.SITE_URL || 'https://www.toolwild.com';
 
 export default defineConfig({
   site: SITE_URL,

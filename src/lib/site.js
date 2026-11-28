@@ -1,7 +1,7 @@
 // URL 与站点级工具函数（服务端 / 构建期使用）
 export const SITE = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.SITE)
   || process.env.SITE_URL
-  || 'https://toolnest.pages.dev';
+  || 'https://www.toolwild.com';
 
 export const LANGS = ['zh', 'en'];
 export const DEFAULT_LANG = 'zh';

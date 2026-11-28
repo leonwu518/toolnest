@@ -92,7 +92,7 @@ export default {
     heroBadge: 'Free · No sign-up · Files stay on your device',
     heroTitle: 'One toolbox for',
     heroTitleHighlight: 'everyday work',
-    heroDesc: '20 fully working online tools for text, images, PDFs, calculations, development and productivity. Every conversion and calculation happens inside your browser — nothing is uploaded, nothing is stored.',
+    heroDesc: '23 fully working online tools for text, images, PDFs, calculations, development and productivity. Every conversion and calculation happens inside your browser — nothing is uploaded, nothing is stored.',
     statTools: 'free online tools',
     statLocal: 'local processing, privacy first',
     statFree: 'no account required',

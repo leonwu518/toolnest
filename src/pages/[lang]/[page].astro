@@ -148,7 +148,7 @@ const label = dict.footer.links[page] || info.title;
       const kind = form.dataset.kind === 'suggest' ? 'Tool suggestion' : 'Feedback';
       const subject = `[ToolNest ${kind}] ${topic || name}`;
       const body = [`Name: ${name}`, `Email: ${email || '-'}`, '', message].join('\n');
-      window.location.href = `mailto:hello@toolnest.example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = `mailto:hello@toolwild.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     });
     on(role('fb-clear'), 'click', () => { form.reset(); });
   }

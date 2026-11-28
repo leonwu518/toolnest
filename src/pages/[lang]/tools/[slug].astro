@@ -28,7 +28,7 @@ const ToolUI = uiModules[uiKey]?.default;
 if (!ToolUI) throw new Error(`工具 UI 组件缺失: src/tools/${meta.category}/${slug}.astro`);
 ---
 <MainLayout lang={lang} title={t.seoTitle} description={t.seoDesc} path={path} active={meta.category} tool={slug} toolI18n={t}>
-  <ToolShell lang={lang} dict={dict} meta={meta} t={t} catName={catName} related={related} canonical={new URL(path, Astro.site || 'https://toolnest.pages.dev').href}>
+  <ToolShell lang={lang} dict={dict} meta={meta} t={t} catName={catName} related={related} canonical={new URL(path, Astro.site || 'https://www.toolwild.com').href}>
     <ToolUI dict={dict} tool={t} lang={lang} />
   </ToolShell>
 </MainLayout>

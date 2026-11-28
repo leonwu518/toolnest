@@ -123,7 +123,7 @@ tests/                   # 单元测试
 
 - 每个工具页：独立 Title / Meta Description、单一 H1、使用说明、3 条以上 FAQ、相关工具内链、`SoftwareApplication` + `FAQPage` + `BreadcrumbList` 结构化数据
 - 每页 canonical、zh / en / x-default hreflang、Open Graph、WebSite JSON-LD
-- `sitemap.xml`（73 条 URL，含 hreflang）、`robots.txt`、语义化内部链接
+- `sitemap.xml`（79 条 URL，含 hreflang）、`robots.txt`、语义化内部链接
 - 静态生成、工具脚本按工具独立分包；`pdf-lib` / `xlsx` / `jszip` / `qrcode` 仅在使用对应工具时加载
 - `public/_headers`：CSP、X-Content-Type-Options、X-Frame-Options、Referrer-Policy、Permissions-Policy、资源长期缓存
 - 文件类型与大小校验；所有动态文本使用 `textContent` / 转义，避免 HTML 注入；前端不含任何 API 密钥
@@ -135,12 +135,12 @@ tests/                   # 单元测试
 复制 `.env.example` 为 `.env` 或修改部署环境变量：
 
 ```
-SITE_URL=https://your-domain.com
+SITE_URL=https://www.toolwild.com
 ```
 
-`SITE_URL` 决定 canonical、hreflang 与 sitemap 中的绝对地址。**部署到正式域名后必须设置并重新构建**，否则默认使用 `https://toolnest.pages.dev`。
+`SITE_URL` 决定 canonical、hreflang、sitemap 与 `og:url` 中的绝对地址。正式域名已固定为 `https://www.toolwild.com`，未设置环境变量时也使用该值；更换域名时需设置 `SITE_URL` 并重新构建。域名解析与绑定步骤见 [DEPLOY.md](./DEPLOY.md)。
 
-联系邮箱为占位地址 `hello@toolnest.example.com`，位于 `src/pages/[lang]/[page].astro`（反馈/建议表单生成 mailto 草稿），上线前请替换为真实邮箱。
+反馈/建议表单的 `mailto:` 地址位于 `src/pages/[lang]/[page].astro`，现为 `hello@toolwild.com`。该地址需要在域名处配置邮箱或邮件转发后才能真正收信。
 
 ---
 
