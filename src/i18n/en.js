@@ -120,7 +120,7 @@ export default {
       { icon: 'layers', title: 'Built to grow', desc: 'A modular architecture that keeps growing, with favorites and recent tools stored in your own browser.' },
     ],
     aboutTitle: 'About ToolWild',
-    aboutBody: 'ToolWild is a free online toolbox for users in China and around the world. We think everyday utilities should be simple, fast and trustworthy: no registration, no file uploads and no hidden limits. The first release ships {TOOL_COUNT} high-frequency tools, with trade, AI-assist and office automation tools to follow.',
+    aboutBody: 'ToolWild is a free online toolbox for users around the world. We think everyday utilities should be simple, fast and trustworthy: no registration, no file uploads and no hidden limits. The first release ships {TOOL_COUNT} high-frequency tools, with trade, AI-assist and office automation tools to follow.',
     footerCtaTitle: 'Need a tool that is not here yet?',
     footerCtaDesc: 'Tell us what you need and we will prioritize it.',
     footerCtaButton: 'Suggest a tool',
