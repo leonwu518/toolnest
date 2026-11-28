@@ -95,7 +95,7 @@ console.log('\n=== ToolWild 浏览器冒烟测试 ===');
 
 /* ---------- 站点级 ---------- */
 await check('首页 / 搜索 / 语言切换 / 深色模式', async () => {
-  await go('/zh/');
+  await go('/');
   assert((await text('h1')).includes('打开就能用'), '首页 H1 不正确');
   await setVal('[data-role="site-search"]', '压缩');
   await sleep(150);
@@ -110,7 +110,7 @@ await check('首页 / 搜索 / 语言切换 / 深色模式', async () => {
 
 /* ---------- A. 文本工具 ---------- */
 await check('字数统计：实时统计中文/英文/行数', async () => {
-  await go('/zh/tools/word-counter/');
+  await go('/tools/word-counter/');
   await setVal('[data-role="input"]', 'hello 世界\n第二行');
   await sleep(100);
   const cjk = await text('[data-stat="cjk"] [data-role="stat-value"]');
@@ -120,7 +120,7 @@ await check('字数统计：实时统计中文/英文/行数', async () => {
 });
 
 await check('文本去重：删除重复行并统计', async () => {
-  await go('/zh/tools/remove-duplicate-lines/');
+  await go('/tools/remove-duplicate-lines/');
   await setVal('[data-role="input"]', 'apple\nbanana\napple\norange');
   await page.click('[data-role="run"]');
   assert((await val('[data-role="output"]')) === 'apple\nbanana\norange', '去重结果错误');
@@ -128,14 +128,14 @@ await check('文本去重：删除重复行并统计', async () => {
 });
 
 await check('大小写转换：camelCase', async () => {
-  await go('/zh/tools/case-converter/');
+  await go('/tools/case-converter/');
   await setVal('[data-role="input"]', 'hello world');
   await page.click('[data-case="camel"]');
   assert((await val('[data-role="output"]')) === 'helloWorld', '驼峰转换错误');
 });
 
 await check('文本对比：Diff 结果渲染', async () => {
-  await go('/zh/tools/text-diff/');
+  await go('/tools/text-diff/');
   await setVal('[data-role="input-a"]', 'a\nb\nc');
   await setVal('[data-role="input-b"]', 'a\nx\nc\nd');
   await page.click('[data-role="run"]');
@@ -145,7 +145,7 @@ await check('文本对比：Diff 结果渲染', async () => {
 });
 
 await check('JSON 格式化：格式化 + 校验错误', async () => {
-  await go('/zh/tools/json-formatter/');
+  await go('/tools/json-formatter/');
   await setVal('[data-role="input"]', '{"b":2,"a":1}');
   await page.click('[data-action="format"]');
   assert((await val('[data-role="output"]')).includes('\n  "b": 2'), '格式化失败');
@@ -157,7 +157,7 @@ await check('JSON 格式化：格式化 + 校验错误', async () => {
 /* ---------- B. 图片工具 ---------- */
 await check('图片压缩：Canvas 本地压缩 + JPG 下载', async () => {
   clearDownloads();
-  await go('/zh/tools/image-compressor/');
+  await go('/tools/image-compressor/');
   await upload('[data-role="file-input"]', 'test.png');
   await page.click('[data-role="run"]');
   await page.waitForFunction(() => !document.querySelector('[data-role="download"]').disabled, { timeout: 10000 });
@@ -169,7 +169,7 @@ await check('图片压缩：Canvas 本地压缩 + JPG 下载', async () => {
 });
 
 await check('图片尺寸调整：等比缩放', async () => {
-  await go('/zh/tools/image-resizer/');
+  await go('/tools/image-resizer/');
   await upload('[data-role="file-input"]', 'test.png');
   assert((await val('[data-role="width"]')) === '800', '未读取原始宽度');
   await setVal('[data-role="width"]', '400');
@@ -179,7 +179,7 @@ await check('图片尺寸调整：等比缩放', async () => {
 });
 
 await check('图片格式转换：PNG → WEBP', async () => {
-  await go('/zh/tools/image-converter/');
+  await go('/tools/image-converter/');
   await upload('[data-role="file-input"]', 'test.png');
   await setVal('[data-role="format"]', 'webp');
   await page.click('[data-role="run"]');
@@ -190,7 +190,7 @@ await check('图片格式转换：PNG → WEBP', async () => {
 /* ---------- C. 文件工具 ---------- */
 await check('PDF 合并：2 个 PDF → 合并下载', async () => {
   clearDownloads();
-  await go('/zh/tools/merge-pdf/');
+  await go('/tools/merge-pdf/');
   await upload('[data-role="file-input"]', 'a.pdf', 'b.pdf');
   assert((await page.$$('.file-item')).length === 2, '文件列表应为 2 项');
   assert((await text('[data-role="total-pages"]')).includes('5'), '总页数应为 5');
@@ -203,7 +203,7 @@ await check('PDF 合并：2 个 PDF → 合并下载', async () => {
 
 await check('PDF 拆分：页码范围提取', async () => {
   clearDownloads();
-  await go('/zh/tools/split-pdf/');
+  await go('/tools/split-pdf/');
   await upload('[data-role="file-input"]', 'a.pdf');
   assert((await text('[data-role="file-info"]')).includes('2 页'), '未读取页数');
   await setVal('[data-role="range"]', '1');
@@ -214,7 +214,7 @@ await check('PDF 拆分：页码范围提取', async () => {
 
 await check('图片转 PDF：多图合成', async () => {
   clearDownloads();
-  await go('/zh/tools/image-to-pdf/');
+  await go('/tools/image-to-pdf/');
   await upload('[data-role="file-input"]', 'test.png', 'test.jpg');
   assert((await page.$$('.file-item')).length === 2, '图片列表应为 2 项');
   await page.click('[data-role="run"]');
@@ -224,7 +224,7 @@ await check('图片转 PDF：多图合成', async () => {
 
 await check('Excel 转 CSV：解析 + 预览 + 下载', async () => {
   clearDownloads();
-  await go('/zh/tools/excel-to-csv/');
+  await go('/tools/excel-to-csv/');
   await upload('[data-role="file-input"]', 'test.xlsx');
   assert((await page.$$('[data-role="preview"] table tr')).length >= 3, '预览表格缺失');
   await page.click('[data-role="run"]');
@@ -238,7 +238,7 @@ await check('Excel 转 CSV：解析 + 预览 + 下载', async () => {
 
 /* ---------- D. 计算器 ---------- */
 await check('百分比计算器：四种模式', async () => {
-  await go('/zh/tools/percentage-calculator/');
+  await go('/tools/percentage-calculator/');
   await setVal('[data-role="x"]', '200');
   await setVal('[data-role="percent"]', '15');
   await page.click('[data-role="run"]');
@@ -251,13 +251,13 @@ await check('百分比计算器：四种模式', async () => {
 });
 
 await check('利润率计算器：毛利率/加价率', async () => {
-  await go('/zh/tools/profit-margin-calculator/');
+  await go('/tools/profit-margin-calculator/');
   assert((await text('[data-role="margin"]')) === '20', '毛利率应为 20%');
   assert((await text('[data-role="markup"]')) === '25', '加价率应为 25%');
 });
 
 await check('单位换算：长度、温度、力与能量', async () => {
-  await go('/zh/tools/unit-converter/');
+  await go('/tools/unit-converter/');
   await setVal('[data-role="value"]', '1');
   assert((await text('[data-role="result"]')) === '0.1', 'mm→cm 换算错误');
   await setVal('[data-role="unit-group"]', 'temperature');
@@ -289,14 +289,14 @@ await check('单位换算：长度、温度、力与能量', async () => {
 });
 
 await check('日期计算器：间隔与工作日', async () => {
-  await go('/zh/tools/date-calculator/');
+  await go('/tools/date-calculator/');
   assert((await text('[data-role="days"]')) === '7', '默认间隔应为 7 天');
   assert((await text('[data-role="weekdays"]')) === '5', '工作日应为 5');
 });
 
 /* ---------- E. 开发工具 ---------- */
 await check('URL 编码解码：中文往返', async () => {
-  await go('/zh/tools/url-encoder-decoder/');
+  await go('/tools/url-encoder-decoder/');
   await setVal('[data-role="input"]', '中文 工具');
   await page.click('[data-action="encode"]');
   assert((await val('[data-role="output"]')).includes('%E4%B8%AD%E6%96%87'), '编码错误');
@@ -307,7 +307,7 @@ await check('URL 编码解码：中文往返', async () => {
 });
 
 await check('Base64 编码解码：中文与 emoji', async () => {
-  await go('/zh/tools/base64-encoder-decoder/');
+  await go('/tools/base64-encoder-decoder/');
   await setVal('[data-role="input"]', '你好 🚀');
   await page.click('[data-action="encode"]');
   const encoded = await val('[data-role="output"]');
@@ -318,7 +318,7 @@ await check('Base64 编码解码：中文与 emoji', async () => {
 });
 
 await check('颜色转换器：HEX → RGB/HSL 联动', async () => {
-  await go('/zh/tools/color-converter/');
+  await go('/tools/color-converter/');
   await setVal('[data-role="hex"]', '#FF0000');
   await page.click('[data-action="complementary"]');
   assert((await val('[data-role="hex"]')) === '#00FFFF' || (await val('[data-role="hex"]')) !== '', '颜色变体未生效');
@@ -328,7 +328,7 @@ await check('颜色转换器：HEX → RGB/HSL 联动', async () => {
 /* ---------- F. 效率工具 ---------- */
 await check('二维码生成器：生成 + PNG 下载', async () => {
   clearDownloads();
-  await go('/zh/tools/qr-code-generator/');
+  await go('/tools/qr-code-generator/');
   await setVal('[data-role="input"]', 'https://example.com');
   await page.click('[data-role="run"]');
   await page.waitForFunction(() => !document.querySelector('[data-role="download-png"]').disabled, { timeout: 10000 });
@@ -340,7 +340,7 @@ await check('二维码生成器：生成 + PNG 下载', async () => {
 
 /* ---------- G. 办公效率工具（第二批新增） ---------- */
 await check('Excel 公式助手：生成、参数切换、试算与重置', async () => {
-  await go('/zh/tools/excel-formula-helper/');
+  await go('/tools/excel-formula-helper/');
   assert((await val('[data-role="output"]')) === '=SUM(A1:A10)', '默认 SUM 公式错误');
   assert((await text('[data-role="trial-result"]')) === '60', 'SUM 本地试算应为 60');
   await page.select('[data-role="formula-type"]', 'if');
@@ -356,7 +356,7 @@ await check('Excel 公式助手：生成、参数切换、试算与重置', asyn
 });
 
 await check('CSV 数据清洗：去重、列筛选、预览、下载与本地文件上传', async () => {
-  await go('/zh/tools/csv-cleaner/');
+  await go('/tools/csv-cleaner/');
   await setVal('[data-role="input"]', 'name,qty\n Apple ,10\nApple,10\n\nBanana,20\n');
   await page.click('[data-opt="removeDuplicates"]');
   await page.click('[data-role="run"]');
@@ -387,7 +387,7 @@ await check('CSV 数据清洗：去重、列筛选、预览、下载与本地文
 });
 
 await check('批量文本处理：步骤链、顺序调整、下载与重置', async () => {
-  await go('/zh/tools/batch-text-processor/');
+  await go('/tools/batch-text-processor/');
   await setVal('[data-role="input"]', '  apple \n\nApple\nbanana\n');
   for (const t of ['trim', 'removeEmpty', 'dedupe', 'number']) {
     await page.select('[data-role="step-type"]', t);
@@ -420,7 +420,7 @@ await check('批量文本处理：步骤链、顺序调整、下载与重置', a
 await check('新增工具的英文页面与语言路由', async () => {
   await go('/en/tools/csv-cleaner/');
   assert((await text('h1')).includes('CSV Data Cleaner'), '英文 H1 错误');
-  assert((await page.$eval('[data-lang-link="zh"]', (a) => a.getAttribute('href'))) === '/zh/tools/csv-cleaner/', '语言回切链接错误');
+  assert((await page.$eval('[data-lang-link="zh"]', (a) => a.getAttribute('href'))) === '/tools/csv-cleaner/', '语言回切链接错误');
   assert((await page.$eval('link[rel="canonical"]', (a) => a.getAttribute('href'))).endsWith('/en/tools/csv-cleaner/'), 'canonical 错误');
   await go('/en/tools/batch-text-processor/');
   assert((await text('h1')).includes('Batch Text Processor'), '英文批量文本页 H1 错误');
@@ -428,7 +428,9 @@ await check('新增工具的英文页面与语言路由', async () => {
 
 /* ---------- 个人功能 / 双语 / 响应式 ---------- */
 await check('收藏与最近使用：localStorage 写入', async () => {
-  await go('/zh/tools/word-counter/');
+  await go('/tools/word-counter/');
+  const enHref = await page.$eval('[data-lang-link="en"]', (a) => a.getAttribute('href'));
+  assert(enHref === '/en/tools/word-counter/', `工具页 EN 切换未停留当前工具: ${enHref}`);
   await page.click('[data-action="favorite"]');
   const fav = await page.evaluate(() => JSON.parse(localStorage.getItem('toolwild.favorites') || '[]'));
   const recent = await page.evaluate(() => JSON.parse(localStorage.getItem('toolwild.recent') || '[]'));
@@ -438,7 +440,7 @@ await check('收藏与最近使用：localStorage 写入', async () => {
 
 await check('本地数据页：备份导出与清除', async () => {
   clearDownloads();
-  await go('/zh/data/');
+  await go('/data/');
   assert((await text('[data-role="stat-favorites"]')) !== '', '状态未渲染');
   await page.click('[data-role="data-export"]');
   const f = await waitDownload('backup.json');
@@ -459,7 +461,7 @@ await check('英文页面与语言路由保持', async () => {
   await go('/en/tools/word-counter/');
   assert((await text('h1')).includes('Word Counter'), '英文 H1 错误');
   const zhHref = await page.$eval('[data-lang-link="zh"]', (a) => a.getAttribute('href'));
-  assert(zhHref === '/zh/tools/word-counter/', `语言回切链接错误: ${zhHref}`);
+  assert(zhHref === '/tools/word-counter/', `语言回切链接错误: ${zhHref}`);
   const canonical = await page.$eval('link[rel="canonical"]', (a) => a.getAttribute('href'));
   assert(canonical.endsWith('/en/tools/word-counter/'), 'canonical 错误');
 });
@@ -467,8 +469,8 @@ await check('英文页面与语言路由保持', async () => {
 await check('移动端布局：无横向溢出', async () => {
   await page.setViewport({ width: 375, height: 780, isMobile: true });
   for (const url of [
-    '/zh/', '/zh/tools/merge-pdf/', '/zh/tools/percentage-calculator/',
-    '/zh/tools/excel-formula-helper/', '/zh/tools/csv-cleaner/', '/zh/tools/batch-text-processor/',
+    '/', '/tools/merge-pdf/', '/tools/percentage-calculator/',
+    '/tools/excel-formula-helper/', '/tools/csv-cleaner/', '/tools/batch-text-processor/',
   ]) {
     await go(url);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
@@ -479,16 +481,16 @@ await check('移动端布局：无横向溢出', async () => {
 
 await check('移动端交互：三个新工具可正常操作', async () => {
   await page.setViewport({ width: 390, height: 844, isMobile: true });
-  await go('/zh/tools/excel-formula-helper/');
+  await go('/tools/excel-formula-helper/');
   await page.select('[data-role="formula-type"]', 'countif');
   await sleep(120);
   assert((await val('[data-role="output"]')).startsWith('=COUNTIF('), '移动端公式切换失败');
-  await go('/zh/tools/csv-cleaner/');
+  await go('/tools/csv-cleaner/');
   await setVal('[data-role="input"]', 'a,b\n1,2\n');
   await page.click('[data-role="run"]');
   await sleep(150);
   assert((await val('[data-role="output"]')).includes('1,2'), '移动端 CSV 清洗失败');
-  await go('/zh/tools/batch-text-processor/');
+  await go('/tools/batch-text-processor/');
   await setVal('[data-role="input"]', 'a\nb\n');
   await page.select('[data-role="step-type"]', 'reverse');
   await page.click('[data-role="add-step"]');

@@ -8,6 +8,16 @@ export default defineConfig({
   site: SITE_URL,
   output: 'static',
   trailingSlash: 'always',
+  /* i18n：默认语言(简体中文 zh)走根目录，英文走 /en/，不再使用 /zh/ 前缀
+   * Astro 5 用 locales 字符串数组 + defaultLocale 表示默认语言；
+   * prefixDefaultLocale:false 即把默认语言页面放在 src/pages/ 根下。
+   */
+  i18n: {
+    locales: ['zh', 'en'],
+    defaultLocale: 'zh',
+    routing: { prefixDefaultLocale: false, redirectToDefaultLocale: false },
+    fallback: { en: 'zh' },
+  },
   build: {
     format: 'directory',
     inlineStylesheets: 'auto',

@@ -1,0 +1,12 @@
+---
+/* 中文：分类页 */
+import CategoryPage from '../../templates/CategoryPage.astro';
+import { activeCategories } from '../../data/categories.js';
+
+export function getStaticPaths() {
+  return activeCategories.map((c) => ({ params: { category: c.id }, props: { lang: 'zh' } }));
+}
+
+const { lang } = Astro.props;
+---
+<CategoryPage lang={lang} category={Astro.params.category} />

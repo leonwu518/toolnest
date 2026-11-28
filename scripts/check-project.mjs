@@ -72,8 +72,9 @@ for (const file of fs.readdirSync(path.join(root, 'src/scripts/tools'))) {
 if (exists('dist')) {
   const expected = [];
   for (const lang of ['zh', 'en']) {
-    expected.push(`dist/${lang}/index.html`);
-    for (const t of tools) expected.push(`dist/${lang}/tools/${t.slug}/index.html`);
+    const pre = lang === 'en' ? 'dist/en/' : 'dist/';
+    expected.push(`${pre}index.html`);
+    for (const t of tools) expected.push(`${pre}tools/${t.slug}/index.html`);
   }
   for (const p of expected) if (!exists(p)) errors.push(`构建产物缺失: ${p}`);
   for (const p of ['dist/index.html', 'dist/sitemap.xml', 'dist/robots.txt', 'dist/_headers', 'dist/favicon.svg']) {

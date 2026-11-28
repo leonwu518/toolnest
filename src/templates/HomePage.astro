@@ -1,19 +1,15 @@
 ---
-import MainLayout from '../../layouts/MainLayout.astro';
-import Icon from '../../components/Icon.astro';
-import ToolCard from '../../components/ToolCard.astro';
-import SearchBox from '../../components/SearchBox.astro';
-import { getDict, getToolI18n, isLang } from '../../i18n/index.js';
-import { tools, popularTools } from '../../data/tools.js';
-import { activeCategories, categoryById } from '../../data/categories.js';
-import { langPath, categoryUrl, pageUrl } from '../../lib/site.js';
+import MainLayout from '../layouts/MainLayout.astro';
+import Icon from '../components/Icon.astro';
+import ToolCard from '../components/ToolCard.astro';
+import SearchBox from '../components/SearchBox.astro';
+import { getDict, getToolI18n } from '../i18n/index.js';
+import { tools, popularTools } from '../data/tools.js';
+import { activeCategories, categoryById } from '../data/categories.js';
+import { langPath, categoryUrl, pageUrl } from '../lib/site.js';
 
-export function getStaticPaths() {
-  return [{ params: { lang: 'zh' } }, { params: { lang: 'en' } }];
-}
-
-const { lang } = Astro.params;
-if (!isLang(lang)) return Astro.redirect('/');
+/* 共享页面模板：语言由路由包装器通过 props 传入（zh=根路径，en=/en/） */
+const { lang } = Astro.props;
 const dict = getDict(lang);
 const path = langPath(lang);
 const cardData = (m) => ({

@@ -41,7 +41,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 try {
   /* 1. 工具页：config 注入 + tool_use + copy_result */
-  await page.goto(`${BASE}/zh/tools/unit-converter/`, { waitUntil: 'networkidle0' });
+  await page.goto(`${BASE}/tools/unit-converter/`, { waitUntil: 'networkidle0' });
   const config1 = (await gtagCalls()).filter((c) => c.t === 'config');
   check('gtag config 已注入', config1.length === 1 && config1[0].id === ID, JSON.stringify(config1));
   const pv = (await gtagCalls()).filter((c) => c.t === 'js').length;

@@ -1,18 +1,14 @@
 ---
-import MainLayout from '../../../layouts/MainLayout.astro';
-import ToolShell from '../../../components/ToolShell.astro';
-import { getDict, getToolI18n, isLang } from '../../../i18n/index.js';
-import { tools, toolBySlug, relatedTools } from '../../../data/tools.js';
-import { toolUrl } from '../../../lib/site.js';
+import MainLayout from '../layouts/MainLayout.astro';
+import ToolShell from '../components/ToolShell.astro';
+import { getDict, getToolI18n } from '../i18n/index.js';
+import { toolBySlug, relatedTools } from '../data/tools.js';
+import { toolUrl } from '../lib/site.js';
 
-export function getStaticPaths() {
-  return ['zh', 'en'].flatMap((lang) => tools.map((m) => ({ params: { lang, slug: m.slug } })));
-}
-
-const { lang, slug } = Astro.params;
-if (!isLang(lang)) return Astro.redirect('/');
+/* 共享页面模板：语言与 slug 均由路由包装器通过 props 传入 */
+const { lang, slug } = Astro.props;
 const meta = toolBySlug[slug];
-if (!meta) return Astro.redirect('/');
+if (!meta) throw new Error(`未知工具 slug: ${slug}`);
 
 const dict = getDict(lang);
 const t = getToolI18n(lang, slug);
@@ -21,8 +17,8 @@ const path = toolUrl(lang, slug);
 const related = relatedTools(slug, 6).map((m) => ({ ...m, name: getToolI18n(lang, m.slug).name }));
 
 /* 按 slug 动态加载对应工具的 UI 组件；缺失时直接让构建失败，避免交付空页面 */
-const uiModules = import.meta.glob('../../../tools/**/*.astro', { eager: true });
-const uiKey = `../../../tools/${meta.category}/${slug}.astro`;
+const uiModules = import.meta.glob('../tools/**/*.astro', { eager: true });
+const uiKey = `../tools/${meta.category}/${slug}.astro`;
 const ToolUI = uiModules[uiKey]?.default;
 // 构建期强制校验：任何工具缺少 UI 组件或页面结构不完整都会导致构建失败
 if (!ToolUI) throw new Error(`工具 UI 组件缺失: src/tools/${meta.category}/${slug}.astro`);

@@ -1,0 +1,12 @@
+---
+/* 英文：工具详情页 */
+import ToolPage from '../../../templates/ToolPage.astro';
+import { tools } from '../../../data/tools.js';
+
+export function getStaticPaths() {
+  return tools.map((m) => ({ params: { slug: m.slug }, props: { lang: 'en' } }));
+}
+
+const { lang } = Astro.props;
+---
+<ToolPage lang={lang} slug={Astro.params.slug} />

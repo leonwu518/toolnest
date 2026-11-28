@@ -79,7 +79,7 @@ function renderNextTools() {
   CHAINS[slug].forEach((s) => {
     const a = document.createElement('a');
     a.className = 'chip';
-    a.href = `/${handoffLang}/tools/${s}/`;
+    a.href = `${handoffLang === 'en' ? '/en' : ''}/tools/${s}/`;
     const t = bySlug[s];
     a.textContent = t ? (handoffLang === 'zh' ? t.zh.n : t.en.n) : s;
     a.addEventListener('click', () => storeHandoff(s));

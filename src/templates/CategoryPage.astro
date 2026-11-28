@@ -1,22 +1,18 @@
 ---
-import MainLayout from '../../../layouts/MainLayout.astro';
-import Icon from '../../../components/Icon.astro';
-import ToolCard from '../../../components/ToolCard.astro';
-import Breadcrumb from '../../../components/Breadcrumb.astro';
-import SearchBox from '../../../components/SearchBox.astro';
-import { getDict, getToolI18n, isLang } from '../../../i18n/index.js';
-import { activeCategories, categoryById } from '../../../data/categories.js';
-import { toolsByCategory, roadmap } from '../../../data/tools.js';
-import { langPath, categoryUrl } from '../../../lib/site.js';
+import MainLayout from '../layouts/MainLayout.astro';
+import Icon from '../components/Icon.astro';
+import ToolCard from '../components/ToolCard.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import SearchBox from '../components/SearchBox.astro';
+import { getDict, getToolI18n } from '../i18n/index.js';
+import { activeCategories, categoryById } from '../data/categories.js';
+import { toolsByCategory, roadmap } from '../data/tools.js';
+import { langPath, categoryUrl } from '../lib/site.js';
 
-export function getStaticPaths() {
-  return ['zh', 'en'].flatMap((lang) => activeCategories.map((c) => ({ params: { lang, category: c.id } })));
-}
-
-const { lang, category } = Astro.params;
-if (!isLang(lang)) return Astro.redirect('/');
+/* 共享页面模板：语言与分类均由路由包装器通过 props 传入 */
+const { lang, category } = Astro.props;
 const cat = categoryById[category];
-if (!cat) return Astro.redirect('/');
+if (!cat) throw new Error(`未知分类: ${category}`);
 
 const dict = getDict(lang);
 const info = dict.categories[category];

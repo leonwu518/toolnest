@@ -1,21 +1,16 @@
 ---
-import MainLayout from '../../layouts/MainLayout.astro';
-import Breadcrumb from '../../components/Breadcrumb.astro';
-import Icon from '../../components/Icon.astro';
-import { getDict, isLang } from '../../i18n/index.js';
-import { langPath, pageUrl } from '../../lib/site.js';
+import MainLayout from '../layouts/MainLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Icon from '../components/Icon.astro';
+import { getDict } from '../i18n/index.js';
+import { langPath, pageUrl } from '../lib/site.js';
 
-export function getStaticPaths() {
-  const pages = ['about', 'contact', 'privacy', 'terms', 'suggest', 'changelog', 'data'];
-  return ['zh', 'en'].flatMap((lang) => pages.map((page) => ({ params: { lang, page } })));
-}
-
-const { lang, page } = Astro.params;
-if (!isLang(lang)) return Astro.redirect('/');
+/* 共享页面模板：语言与页面名均由路由包装器通过 props 传入 */
+const { lang, page } = Astro.props;
 const dict = getDict(lang);
 const isData = page === 'data';
 const info = isData ? dict.dataPage : dict.pages[page];
-if (!info) return Astro.redirect('/');
+if (!info) throw new Error(`未知静态页面: ${page}`);
 const path = pageUrl(lang, page);
 const sections = info.sections || [];
 const releases = info.releases || [];
@@ -135,8 +130,8 @@ const label = dict.footer.links[page] || info.title;
 </MainLayout>
 
 <script>
-  import { $, role, on, toast, downloadText, readAsText } from '../../scripts/utils.js';
-  import { exportBackup, importBackup, clearAll, stats } from '../../scripts/storage.js';
+  import { $, role, on, toast, downloadText, readAsText } from '../scripts/utils.js';
+  import { exportBackup, importBackup, clearAll, stats } from '../scripts/storage.js';
 
   /* 反馈表单：只在本地生成 mailto 草稿，不向任何服务器提交 */
   const form = $('[data-role="feedback-form"]');

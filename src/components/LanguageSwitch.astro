@@ -1,8 +1,17 @@
 ---
-import { switchLangPath } from '../lib/site.js';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
 const { lang, path, dict } = Astro.props;
+
+/* 当前页是否为英文页；优先用路由传入的 lang，兜底 Astro.currentLocale */
+const isEn = Astro.currentLocale === 'en' || lang === 'en';
+/* path 是当前页规范化路径（zh 为 /tools/x/，en 为 /en/tools/x/），先去掉 /en 前缀 */
+const base = String(path || '/').replace(/^\/en(?=\/|$)/, '') || '/';
+/* 默认语言 zh 产出不带前缀的根 URL，en 产出 /en/ 前缀，均停留在当前工具页 */
+const zhHref = getRelativeLocaleUrl('zh', base);
+const enHref = getRelativeLocaleUrl('en', base);
 ---
 <div class="lang-switch" role="group" aria-label={dict.langSwitch.title}>
-  <a href={switchLangPath(path, 'zh')} data-lang-link="zh" hreflang="zh-CN" lang="zh" title={dict.langSwitch.zh} class:list={['lang-btn', lang === 'zh' && 'active']}>中</a>
-  <a href={switchLangPath(path, 'en')} data-lang-link="en" hreflang="en" lang="en" title={dict.langSwitch.en} class:list={['lang-btn', lang === 'en' && 'active']}>EN</a>
+  <a href={zhHref} data-lang-link="zh" hreflang="zh-CN" lang="zh" title={dict.langSwitch.zh} class:list={['lang-btn', !isEn && 'active']}>中</a>
+  <a href={enHref} data-lang-link="en" hreflang="en" lang="en" title={dict.langSwitch.en} class:list={['lang-btn', isEn && 'active']}>EN</a>
 </div>

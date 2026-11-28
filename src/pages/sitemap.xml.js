@@ -1,15 +1,16 @@
 import { tools } from '../data/tools.js';
 import { activeCategories } from '../data/categories.js';
-import { LANGS, DEFAULT_LANG, langPath, toolUrl, categoryUrl, pageUrl, absoluteUrl, switchLangPath } from '../lib/site.js';
+import { LANGS, langPath, toolUrl, categoryUrl, pageUrl, absoluteUrl, switchLangPath } from '../lib/site.js';
 
 export const prerender = true;
 
 const STATIC_PAGES = ['about', 'contact', 'privacy', 'terms', 'suggest', 'changelog', 'data'];
 const TODAY = new Date().toISOString().slice(0, 10);
 
+/* 每个 URL 都给出 zh-CN / en / x-default 三条 hreflang，中英互指同一页面 */
 function alternates(path) {
   return LANGS.map((l) => `<xhtml:link rel="alternate" hreflang="${l === 'zh' ? 'zh-CN' : l}" href="${absoluteUrl(switchLangPath(path, l))}" />`).join('')
-    + `<xhtml:link rel="alternate" hreflang="x-default" href="${absoluteUrl(switchLangPath(path, DEFAULT_LANG))}" />`;
+    + `<xhtml:link rel="alternate" hreflang="x-default" href="${absoluteUrl('/')}" />`;
 }
 
 function entry(path, { priority = '0.7', changefreq = 'monthly', lastmod = TODAY } = {}) {
@@ -17,8 +18,8 @@ function entry(path, { priority = '0.7', changefreq = 'monthly', lastmod = TODAY
 }
 
 export function GET() {
-  const urls = [`<url><loc>${absoluteUrl('/')}</loc><lastmod>${TODAY}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority>${alternates('/zh/')}</url>`];
-
+  const urls = [];
+  /* 默认语言 zh 输出根路径，英文输出 /en/ 路径，不再产生任何 /zh/ URL */
   for (const lang of LANGS) {
     urls.push(entry(langPath(lang), { priority: '1.0', changefreq: 'weekly' }));
     urls.push(entry(langPath(lang, 'tools'), { priority: '0.9', changefreq: 'weekly' }));

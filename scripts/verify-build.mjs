@@ -30,28 +30,34 @@ const htmlFiles = [];
 let checked = 0;
 for (const file of htmlFiles) {
   const html = read(file);
-  const url = '/' + file.replace(/\/index\.html$/, '/').replace(/^\.\//, '');
-  const isRoot = file === 'index.html';
-  const lang = url.startsWith('/en/') ? 'en' : url.startsWith('/zh/') ? 'zh' : null;
+  const rel = file.replace(/(^|\/)index\.html$/, '').replace(/^\.\//, '');
+  const url = rel ? `/${rel.replace(/\/+$/, '')}/` : '/';
+  /* 默认语言 zh 在根目录，en 在 /en/；根首页也是完整页面，同样参与 SEO 校验 */
+  const lang = url.startsWith('/en/') ? 'en' : 'zh';
   const isTool = /\/tools\/[^/]+\/$/.test(url);
   const tag = url;
 
   const has = (re) => re.test(html);
   if (!has(/<title>[^<]+<\/title>/)) errors.push(`${tag} 缺少 title`);
-  if (!isRoot && !has(/<meta name="description" content="[^"]{20,}"/)) errors.push(`${tag} 缺少有效 description`);
+  if (!has(/<meta name="description" content="[^"]{20,}"/)) errors.push(`${tag} 缺少有效 description`);
   if (!has(/<link rel="canonical" href="https?:\/\/[^"]+"/)) errors.push(`${tag} 缺少 canonical`);
-  if (!isRoot) {
-    for (const l of ['zh-CN', 'en', 'x-default']) {
-      if (!has(new RegExp(`hreflang="${l}"`))) errors.push(`${tag} 缺少 hreflang=${l}`);
-    }
+  for (const l of ['zh-CN', 'en', 'x-default']) {
+    if (!has(new RegExp(`hreflang="${l}"`))) errors.push(`${tag} 缺少 hreflang=${l}`);
   }
   if (!has(/<html lang="(zh-CN|en)"/)) errors.push(`${tag} 缺少 html lang`);
-  if (lang && !has(new RegExp(`<html lang="${lang === 'zh' ? 'zh-CN' : 'en'}"`))) errors.push(`${tag} html lang 与路由语言不符`);
-  // 根路径是独立的语言选择页（不含工具 UI），无需注入客户端文案与搜索索引
-  if (!isRoot) {
-    if (!has(/data-ui="[^"]+"/)) errors.push(`${tag} 缺少客户端文案注入`);
-    if (!has(/id="tool-index"/)) errors.push(`${tag} 缺少搜索索引`);
-  }
+  if (!has(new RegExp(`<html lang="${lang === 'zh' ? 'zh-CN' : 'en'}"`))) errors.push(`${tag} html lang 与路由语言不符`);
+
+  /* canonical 必须自指（不跨语言），hreflang 中英互指同一相对路径 */
+  const canonical = /<link rel="canonical" href="([^"]+)"/.exec(html)?.[1] || '';
+  if (!canonical.endsWith(url)) errors.push(`${tag} canonical 未自指: ${canonical}`);
+  const altHref = (l) => new RegExp(`hreflang="${l}" href="([^"]+)"`).exec(html)?.[1] || '';
+  const expectedZh = lang === 'zh' ? url : '/' + url.replace(/^\/en\//, '');
+  const expectedEn = lang === 'en' ? url : '/en' + url;
+  if (!altHref('zh-CN').endsWith(expectedZh)) errors.push(`${tag} hreflang zh-CN 未指向中文对应页: ${altHref('zh-CN')}`);
+  if (!altHref('en').endsWith(expectedEn)) errors.push(`${tag} hreflang en 未指向英文对应页: ${altHref('en')}`);
+
+  if (!has(/data-ui="[^"]+"/)) errors.push(`${tag} 缺少客户端文案注入`);
+  if (!has(/id="tool-index"/)) errors.push(`${tag} 缺少搜索索引`);
   if (/>undefined</.test(html) || />\s*NaN\s*</.test(html)) errors.push(`${tag} 页面出现 undefined / NaN 文本（i18n 键可能缺失）`);
 
   if (isTool) {
@@ -65,35 +71,42 @@ for (const file of htmlFiles) {
     if (!html.includes('data-action="favorite"')) errors.push(`${tag} 缺少收藏按钮`);
     if (!html.includes('data-role="error"')) errors.push(`${tag} 缺少错误提示区`);
     if (!html.includes('data-tool="')) errors.push(`${tag} 缺少工具脚本标记`);
-    const canonical = /<link rel="canonical" href="([^"]+)"/.exec(html)?.[1] || '';
-    if (!canonical.endsWith(url)) errors.push(`${tag} canonical 与路径不符: ${canonical}`);
   }
   checked++;
 }
 
-// 必备页面与资源
-const required = ['index.html', 'robots.txt', 'sitemap.xml', '_headers', 'favicon.svg'];
+// 必备页面与资源（zh 在根目录，en 在 en/ 下）
+const required = ['index.html', 'robots.txt', 'sitemap.xml', '_headers', '_redirects', 'favicon.svg'];
 for (const lang of ['zh', 'en']) {
-  required.push(`${lang}/index.html`, `${lang}/tools/index.html`);
-  for (const t of tools) required.push(`${lang}/tools/${t.slug}/index.html`);
-  for (const c of activeCategories) required.push(`${lang}/category/${c.id}/index.html`);
-  for (const p of STATIC_PAGES) required.push(`${lang}/${p}/index.html`);
+  const pre = lang === 'en' ? 'en/' : '';
+  required.push(`${pre}index.html`, `${pre}tools/index.html`);
+  for (const t of tools) required.push(`${pre}tools/${t.slug}/index.html`);
+  for (const c of activeCategories) required.push(`${pre}category/${c.id}/index.html`);
+  for (const p of STATIC_PAGES) required.push(`${pre}${p}/index.html`);
 }
 for (const p of required) if (!fs.existsSync(path.join(DIST, p))) errors.push(`缺少产物: ${p}`);
 
 // sitemap / robots
 const sitemap = read('sitemap.xml');
 const sitemapUrls = (sitemap.match(/<loc>/g) || []).length;
-const expectedUrls = 1 + 2 * (1 + 1 + tools.length + activeCategories.length + STATIC_PAGES.length);
+const expectedUrls = 2 * (1 + 1 + tools.length + activeCategories.length + STATIC_PAGES.length);
 if (sitemapUrls !== expectedUrls) errors.push(`sitemap URL 数应为 ${expectedUrls}，实际 ${sitemapUrls}`);
+if (sitemap.includes('/zh/')) errors.push('sitemap 仍包含 /zh/ URL');
+const loc = (u) => `<loc>https://www.toolwild.com${u}</loc>`;
+if (!sitemap.includes(loc('/'))) errors.push('sitemap 缺少根路径中文首页');
+if (!sitemap.includes(loc('/en/'))) errors.push('sitemap 缺少 /en/ 英文首页');
 for (const t of tools) {
-  for (const lang of ['zh', 'en']) {
-    if (!sitemap.includes(`/${lang}/tools/${t.slug}/`)) errors.push(`sitemap 缺少 /${lang}/tools/${t.slug}/`);
-  }
+  if (!sitemap.includes(loc(`/tools/${t.slug}/`))) errors.push(`sitemap 缺少 /tools/${t.slug}/`);
+  if (!sitemap.includes(loc(`/en/tools/${t.slug}/`))) errors.push(`sitemap 缺少 /en/tools/${t.slug}/`);
 }
 if ((sitemap.match(/xhtml:link rel="alternate"/g) || []).length < expectedUrls * 3) errors.push('sitemap 缺少 hreflang 声明');
 const robots = read('robots.txt');
 if (!robots.includes('Sitemap:') || !robots.includes('Allow: /')) errors.push('robots.txt 内容不完整');
+
+/* 旧 /zh URL 必须有 301 兜底 */
+const redirects = read('_redirects');
+if (!/^\/zh\/\*\s+\/:splat\s+301$/m.test(redirects)) errors.push('_redirects 缺少 /zh/* → /:splat 301');
+if (!/^\/zh\s+\/\s+301$/m.test(redirects)) errors.push('_redirects 缺少 /zh → / 301');
 
 // 检查每个工具页引用的 JS chunk 存在
 const astroDir = path.join(DIST, '_astro');

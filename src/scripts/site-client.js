@@ -5,7 +5,8 @@ import { getFavorites, toggleFavorite, isFavorite, pushRecent, sortByUsage, getR
 
 const html = document.documentElement;
 const lang = html.dataset.lang || ((html.lang || '').startsWith('zh') ? 'zh' : 'en');
-const base = `/${lang}`;
+/* 默认语言 zh 已在根目录，en 才需要 /en 前缀 */
+const base = lang === 'en' ? '/en' : '';
 
 /* ---------- 深色模式 ---------- */
 function applyThemeIcon() {

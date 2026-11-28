@@ -1,0 +1,6 @@
+# 默认语言迁移：旧 /zh 路径 301 到根路径（保留权重，不停留中间页）
+/zh/*  /:splat  301
+/zh    /        301
+
+# www 优先（裸域已接入 Cloudflare Pages 时生效）
+https://toolwild.com/*  https://www.toolwild.com/:splat  301

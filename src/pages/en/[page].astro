@@ -1,0 +1,12 @@
+---
+/* 英文：静态内容页 */
+import StaticPage from '../../templates/StaticPage.astro';
+
+export function getStaticPaths() {
+  return ['about', 'contact', 'privacy', 'terms', 'suggest', 'changelog', 'data']
+    .map((page) => ({ params: { page }, props: { lang: 'en' } }));
+}
+
+const { lang } = Astro.props;
+---
+<StaticPage lang={lang} page={Astro.params.page} />
