@@ -38,6 +38,7 @@ jobs:
         run: npm run build
         env:
           SITE_URL: ${{ vars.SITE_URL }}
+          PUBLIC_GA4_MEASUREMENT_ID: ${{ vars.PUBLIC_GA4_MEASUREMENT_ID }}
 
       - name: Verify build output
         run: npm run verify
