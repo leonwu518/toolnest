@@ -74,7 +74,7 @@ for (const file of htmlFiles) {
 // 必备页面与资源
 const required = ['index.html', 'robots.txt', 'sitemap.xml', '_headers', 'favicon.svg'];
 for (const lang of ['zh', 'en']) {
-  required.push(`${lang}/index.html`);
+  required.push(`${lang}/index.html`, `${lang}/tools/index.html`);
   for (const t of tools) required.push(`${lang}/tools/${t.slug}/index.html`);
   for (const c of activeCategories) required.push(`${lang}/category/${c.id}/index.html`);
   for (const p of STATIC_PAGES) required.push(`${lang}/${p}/index.html`);
@@ -84,7 +84,7 @@ for (const p of required) if (!fs.existsSync(path.join(DIST, p))) errors.push(`�
 // sitemap / robots
 const sitemap = read('sitemap.xml');
 const sitemapUrls = (sitemap.match(/<loc>/g) || []).length;
-const expectedUrls = 1 + 2 * (1 + tools.length + activeCategories.length + STATIC_PAGES.length);
+const expectedUrls = 1 + 2 * (1 + 1 + tools.length + activeCategories.length + STATIC_PAGES.length);
 if (sitemapUrls !== expectedUrls) errors.push(`sitemap URL 数应为 ${expectedUrls}，实际 ${sitemapUrls}`);
 for (const t of tools) {
   for (const lang of ['zh', 'en']) {

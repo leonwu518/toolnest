@@ -1,5 +1,6 @@
 /* 工具脚本共享基础库：DOM、文案、复制下载、文件校验、图片与提示 */
 import { trackCopy, trackDownload } from './analytics.js';
+import { feedback, errorText } from './feedback.js';
 
 // 页面在 <html data-ui="..."> 中注入当前语言的全部界面文案
 export const ui = (() => {
@@ -31,18 +32,7 @@ export function escapeHtml(str) {
 
 /* ---------- Toast ---------- */
 export function toast(text, type = '') {
-  let host = document.getElementById('toast-host');
-  if (!host) {
-    host = document.createElement('div');
-    host.id = 'toast-host';
-    host.className = 'toast-host';
-    document.body.appendChild(host);
-  }
-  const el = document.createElement('div');
-  el.className = `toast ${type}`.trim();
-  el.textContent = text;
-  host.appendChild(el);
-  setTimeout(() => el.remove(), 2600);
+  feedback(text, { type: 'toast', tone: type });
 }
 
 /* ---------- 复制 / 下载 ---------- */
@@ -97,11 +87,17 @@ export function downloadDataUrl(dataUrl, filename) {
 }
 
 /* ---------- 结果 / 提示区 ---------- */
-export function showError(text) {
-  const el = role('error');
-  if (!el) { toast(text || msg('error'), 'error'); return; }
-  el.textContent = text;
-  el.hidden = false;
+export function showError(text, values = {}) {
+  feedback(text || msg('error'), { type: 'inline', values });
+}
+
+/** 把异常映射为统一的错误码文案，避免暴露异常栈或技术术语 */
+export function errorFromException(err) {
+  const s = String(err?.message || err || '').toLowerCase();
+  if (/encrypt|password|decrypt/.test(s)) return 'FILE_ENCRYPTED';
+  if (/corrupt|damaged|invalid|parse|unsupported|read failed/.test(s)) return 'FILE_CORRUPTED';
+  if (/memory|out of|quota|too large/.test(s)) return 'MEMORY_LIMIT';
+  return 'PROCESS_FAILED';
 }
 export function clearError() {
   const el = role('error');

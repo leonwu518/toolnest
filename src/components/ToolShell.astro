@@ -64,8 +64,19 @@ const jsonLdSafe = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
   </button>
 </div>
 
-<div class="tool-body">
+{['text-diff', 'csv-cleaner', 'excel-formula-helper'].includes(meta.slug) && (
+  <p class="mobile-tip"><Icon name="wrench" size={14} /> {dict.toolPage.mobileTip}</p>
+)}
+
+<div class="tool-body" data-role="tool-state" data-state="idle">
+  <p class="local-only-note"><Icon name="shield-check" size={14} /> {dict.errors?.localOnly || dict.toolPage.privacyNote}</p>
   <slot />
+</div>
+
+<div class="next-tools" data-role="next-tools" hidden>
+  <strong>{dict.toolPage.nextTitle}</strong>
+  <p>{dict.toolPage.nextHint}</p>
+  <div class="next-tools-row" data-role="next-tools-row"></div>
 </div>
 
 <div class="content-grid">

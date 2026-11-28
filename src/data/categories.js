@@ -6,7 +6,6 @@ export const categories = [
   { id: 'image', icon: 'image', order: 2, accent: 'violet' },
   { id: 'files', icon: 'file-stack', order: 3, accent: 'amber' },
   { id: 'calculators', icon: 'calculator', order: 4, accent: 'emerald' },
-  { id: 'ai', icon: 'sparkles', order: 5, accent: 'rose' },
   { id: 'developer', icon: 'code', order: 6, accent: 'cyan' },
   { id: 'productivity', icon: 'zap', order: 7, accent: 'indigo' },
   { id: 'business', icon: 'globe', order: 8, accent: 'orange' },

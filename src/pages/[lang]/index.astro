@@ -4,7 +4,7 @@ import Icon from '../../components/Icon.astro';
 import ToolCard from '../../components/ToolCard.astro';
 import SearchBox from '../../components/SearchBox.astro';
 import { getDict, getToolI18n, isLang } from '../../i18n/index.js';
-import { tools, popularTools, recommendedTools, newTools } from '../../data/tools.js';
+import { tools, popularTools } from '../../data/tools.js';
 import { activeCategories, categoryById } from '../../data/categories.js';
 import { langPath, categoryUrl, pageUrl } from '../../lib/site.js';
 
@@ -23,9 +23,15 @@ const cardData = (m) => ({
   catIcon: categoryById[m.category].icon,
   accent: categoryById[m.category].accent,
 });
-const popular = popularTools().map(cardData);
-const recommended = recommendedTools().map(cardData);
-const newest = newTools().map((m) => ({ ...cardData(m), badge: 'new', badgeLabel: dict.common.newBadge }));
+const newestList = [...tools].sort((a, b) => b.addedAt.localeCompare(a.addedAt)).slice(0, 3);
+const newestSlugs = new Set(newestList.map((m) => m.slug));
+const fallback = [...popularTools(), ...tools.filter((t) => t.recommended), ...tools]
+  .filter((t, i, arr) => arr.findIndex((x) => x.slug === t.slug) === i)
+  .filter((t) => !newestSlugs.has(t.slug)).slice(0, 8);
+const popular = fallback.map(cardData);
+const newest = newestList.map((m) => ({ ...cardData(m), badge: 'new', badgeLabel: dict.common.newBadge }));
+const toolsIndexUrl = langPath(lang, 'tools');
+const personalExclude = [...popular, ...newest].map((c) => c.meta.slug).join(',');
 const cats = activeCategories.map((c) => ({ ...c, ...dict.categories[c.id] }));
 ---
 <MainLayout lang={lang} title={dict.home.homeTitle} description={dict.siteDescription} path={path} active="home">
@@ -49,9 +55,9 @@ const cats = activeCategories.map((c) => ({ ...c, ...dict.categories[c.id] }));
   <section class="section" id="popular">
     <div class="section-head">
       <div><h2>{dict.home.popularTitle}</h2><p>{dict.home.popularDesc}</p></div>
-      <a class="btn btn-ghost btn-sm" href="#categories">{dict.common.allTools} <Icon name="arrow-right" size={14} /></a>
+      <a class="btn btn-ghost btn-sm" href={toolsIndexUrl}>{dict.common.allTools} <Icon name="arrow-right" size={14} /></a>
     </div>
-    <div class="tool-grid">
+    <div class="tool-grid" data-role="popular-grid">
       {popular.map((c) => <ToolCard lang={lang} {...c} />)}
     </div>
   </section>
@@ -80,14 +86,7 @@ const cats = activeCategories.map((c) => ({ ...c, ...dict.categories[c.id] }));
     </div>
   </section>
 
-  <section class="section">
-    <div class="section-head"><div><h2>{dict.home.recommendedTitle}</h2><p>{dict.home.recommendedDesc}</p></div></div>
-    <div class="tool-grid">
-      {recommended.map((c) => <ToolCard lang={lang} {...c} />)}
-    </div>
-  </section>
-
-  <section class="section">
+  <section class="section" data-exclude={personalExclude}>
     <div class="section-head">
       <div><h2>{dict.home.favoritesTitle} / {dict.home.recentTitle}</h2><p>{dict.toolPage.favoriteHint}</p></div>
       <a class="btn btn-ghost btn-sm" href={pageUrl(lang, 'data')}><Icon name="database" size={14} /> {dict.footer.links.data}</a>

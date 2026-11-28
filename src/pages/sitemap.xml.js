@@ -21,6 +21,7 @@ export function GET() {
 
   for (const lang of LANGS) {
     urls.push(entry(langPath(lang), { priority: '1.0', changefreq: 'weekly' }));
+    urls.push(entry(langPath(lang, 'tools'), { priority: '0.9', changefreq: 'weekly' }));
     for (const m of tools) urls.push(entry(toolUrl(lang, m.slug), { priority: '0.8', lastmod: m.addedAt }));
     for (const c of activeCategories) urls.push(entry(categoryUrl(lang, c.id), { priority: '0.6' }));
     for (const p of STATIC_PAGES) urls.push(entry(pageUrl(lang, p), { priority: '0.4', changefreq: 'yearly' }));

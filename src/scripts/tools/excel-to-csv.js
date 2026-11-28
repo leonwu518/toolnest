@@ -1,4 +1,4 @@
-import { role, on, msg, fmt, showError, clearError, setStatus, readAsArrayBuffer, downloadText } from '../utils.js';
+import { role, on, msg, fmt, showError, clearError, setStatus, readAsArrayBuffer, downloadText , errorFromException} from '../utils.js';
 import { trackToolUse } from '../analytics.js';
 import { bindFileInput } from '../file-utils.js';
 import { toCSV } from '../logic/files.js';
@@ -60,7 +60,7 @@ export default function init() {
         state.csv = '';
         preview();
         clearError();
-      } catch (err) { console.error(err); showError(msg('readError')); }
+      } catch (err) { console.warn(err); showError(errorFromException(err)); }
     },
   });
 

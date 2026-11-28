@@ -27,7 +27,7 @@ export default {
     short: '按行去除重复内容，可忽略大小写与空白',
     seoTitle: '在线文本去重工具 - 删除重复行 | ToolWild',
     seoDesc: '免费在线去除重复行工具：粘贴文本即可按行去重，支持忽略大小写、忽略首尾空白、移除空行与结果排序，并统计删除行数。浏览器本地处理，可一键复制或下载。',
-    keywords: ['文本去重', '删除重复行', '去重工具', 'remove duplicate lines'],
+    keywords: ['文本去重', '删除重复行', '去掉重复行', '去重工具', 'remove duplicate lines', 'dedupe lines'],
     howto: { steps: ['把需要处理的文本粘贴到输入框，每行一条记录。', '按需勾选「忽略大小写」「忽略首尾空白」「移除空行」或「结果排序」。', '点击「开始处理」，结果会出现在输出框，可复制或下载为 TXT 文件。'] },
     faqs: [
       { q: '勾选「忽略大小写」后保留哪一行？', a: '保留首次出现的那一行，并保留它原来的大小写与空白。后续被认为重复的行会被删除。' },
@@ -108,7 +108,7 @@ export default {
     short: '本地压缩 JPG / PNG / WEBP，实时查看体积变化',
     seoTitle: '在线图片压缩工具 - 不上传服务器 | ToolWild',
     seoDesc: '免费在线图片压缩工具：拖动质量滑块即可压缩 JPG / PNG / WEBP 图片，实时对比压缩前后体积并预览效果。使用浏览器 Canvas 本地处理，图片不上传，保护隐私。',
-    keywords: ['图片压缩', '压缩图片', '减小图片体积', 'image compressor'],
+    keywords: ['图片压缩', '压缩图片', '图片太大', '缩小体积', 'kb', '瘦身', '减小图片体积', 'image compressor', 'optimize image', 'reduce image size'],
     howto: { steps: ['点击选择或拖入一张 JPG / PNG / WEBP 图片（不超过 20MB）。', '拖动质量滑块，选择输出格式（建议照片用 JPEG 或 WEBP）。', '点击「压缩」查看体积对比与预览，确认后下载压缩后的图片。'] },
     faqs: [
       { q: '压缩后的图片会变模糊吗？', a: 'JPEG 与 WEBP 属于有损压缩，质量越低体积越小、细节损失越多。PNG 为无损格式，改变质量不会明显减小体积。建议从 80% 起步微调。' },
@@ -168,7 +168,7 @@ export default {
     short: '多个 PDF 按顺序合并成一个文件',
     seoTitle: '在线 PDF 合并工具 - 合并多个 PDF 文件 | ToolWild',
     seoDesc: '免费在线合并 PDF：一次选择多个 PDF，拖动或点击按钮调整顺序后合并为一个文件，显示总页数。使用 pdf-lib 在浏览器本地处理，文件不上传服务器。',
-    keywords: ['PDF 合并', '合并 PDF 文件', '多个 PDF 合成一个', 'merge pdf'],
+    keywords: ['PDF 合并', 'pdf合并', '合并 PDF 文件', '合并pdf', '多个 PDF 合成一个', 'merge pdf', 'combine pdf'],
     howto: { steps: ['点击「选择多个 PDF 文件」，可一次选择多个，也可分多次追加。', '在文件列表中用「上移 / 下移」调整合并顺序，或移除不需要的文件。', '点击「合并 PDF」，生成后自动下载合并结果。'] },
     faqs: [
       { q: '能合并加密或带密码的 PDF 吗？', a: '带密码保护的 PDF 无法在本地直接读取，请先解除密码再合并。工具不会尝试破解密码。' },
@@ -469,7 +469,7 @@ export default {
     short: '去空行、去重、列筛选与查找替换',
     seoTitle: '在线 CSV 数据清洗工具 - 去重、去空行、列筛选 | ToolWild',
     seoDesc: '免费在线 CSV 清洗工具：移除空行与重复行、去除首尾空白、保留或删除指定列、批量查找替换、按关键字过滤与按列排序，支持逗号/分号/制表符分隔，导出可带 UTF-8 BOM。',
-    keywords: ['CSV 清洗', 'CSV 去重', 'CSV 空行', 'csv cleaner', 'CSV 列筛选'],
+    keywords: ['CSV 清洗', 'CSV 去重', 'CSV 空行', 'csv cleaner', 'CSV 列筛选', 'clean csv', 'csv tidy'],
     howto: { steps: ['粘贴 CSV 文本，或点击上传区选择本地 .csv / .txt 文件；文件只在浏览器中读取。', '选择输入分隔符（默认自动识别），勾选需要的清洗项，按需填写列处理、查找替换、过滤与排序条件。', '点击「开始清洗」，右侧输出结果与统计；预览区显示前 8 行。', '点击「复制」或「下载 CSV」保存结果；需要 Excel 正确显示中文时勾选 UTF-8 BOM。'] },
     faqs: [
       { q: 'CSV 里的引号、逗号和换行会被正确处理吗？', a: '会。解析器遵循 RFC 4180：引号内的逗号与换行属于单元格内容，两个连续双引号表示一个引号字符，导出时会按需重新加引号。' },
@@ -534,4 +534,65 @@ export default {
       invalidRegex: '正则表达式无效，请检查语法', invalidStep: '存在未知的处理步骤', pleaseInput: '请先输入文本内容',
     },
   },
+  'cbm-calculator': {
+    name: 'CBM 体积计算器',
+    desc: '按长宽高计算单件与总体的立方米数（CBM），展示完整换算过程。',
+    short: '长宽高一键换算 CBM，附过程',
+    seoTitle: '在线 CBM 体积计算器 - 立方米换算 | ToolWild',
+    seoDesc: '免费在线 CBM 计算器：输入产品的长、宽、高（厘米）与数量，即时计算单件体积与总体积（立方米），显示完整计算过程，全部在浏览器本地完成。',
+    keywords: ['CBM', '体积计算', '立方米换算', 'cbm calculator', '装箱体积'],
+    howto: { steps: ['输入单件产品的长、宽、高，单位为厘米。', '填写件数，结果会实时更新。', '查看单件 CBM、总 CBM 与完整计算过程，便于核对报价。'] },
+    faqs: [
+      { q: 'CBM 是什么？', a: 'CBM 是 cubic meter（立方米）的缩写，1 CBM = 1 立方米 = 1,000,000 立方厘米。' },
+      { q: '结果包含包装吗？', a: '按你输入的长宽高计算。如果输入的是含包装后的外箱尺寸，结果即为含包装体积。' },
+      { q: '需要保留几位小数？', a: '结果保留 6 位小数并去掉多余零，实际报价时可按业务习惯自行取整。' },
+    ],
+    ui: {
+      lengthLabel: '长（cm）', widthLabel: '宽（cm）', heightLabel: '高（cm）', qtyLabel: '件数',
+      perLabel: '单件 CBM', totalLabel: '总 CBM', processLabel: '计算过程', runLabel: '计算',
+      hint: '公式：长 × 宽 × 高 ÷ 1,000,000 = CBM。结果仅供参考，请按实际包装尺寸填写。', invalidNumber: '请输入有效的数字',
+    },
+  },
+
+  'carton-quantity-calculator': {
+    name: '装箱数量计算器',
+    desc: '按体积估算容器可装产品数量，可设置损耗率，附计算过程。',
+    short: '按体积估算装箱数，含损耗率',
+    seoTitle: '在线装箱数量计算器 - 体积法估算装柜数 | ToolWild',
+    seoDesc: '免费在线装箱数量计算器：输入柜体与单件产品的长宽高，按体积法估算可装数量，可设置损耗率并显示计算过程。纯浏览器本地计算，不上传数据。',
+    keywords: ['装箱数量', '装柜计算', '装箱数', 'carton quantity calculator', '体积估算'],
+    howto: { steps: ['填写柜体的长、宽、高（厘米）与单件产品尺寸。', '按实际摆放损耗填写损耗率，默认为 10%。', '查看估算数量与计算过程；正式装柜前请结合实际摆放复核。'] },
+    faqs: [
+      { q: '为什么是估算值？', a: '本工具按体积相除计算，未考虑产品形状、堆叠限制、托盘间隙与重量限制，因此只能作为初步参考。' },
+      { q: '损耗率怎么填？', a: '普通纸箱货常按 5%–15% 预留空间；不规则或不可堆叠货物可设更高比例。' },
+      { q: '会保存我的尺寸数据吗？', a: '不会。所有输入只在当前页面内存中参与计算，不上传、不保存到浏览器存储。' },
+    ],
+    ui: {
+      containerTitle: '柜体尺寸（cm）', productTitle: '单件产品尺寸（cm）',
+      lengthLabel: '长', widthLabel: '宽', heightLabel: '高', lossLabel: '损耗率（%）',
+      resultLabel: '估算可装数量', processLabel: '计算过程', runLabel: '计算',
+      hint: '公式：柜体 CBM ÷ 单件 CBM × (1 − 损耗率)，向下取整。仅按体积估算，请结合实际摆放与载重复核。', invalidNumber: '请输入有效的数字',
+    },
+  },
+
+  'fob-quote-calculator': {
+    name: 'FOB 报价换算器',
+    desc: '由成本、国内费用、利润率与汇率计算 FOB 美元报价，附计算过程。',
+    short: '成本费用利润率与汇率，一键算 FOB',
+    seoTitle: '在线 FOB 报价计算器 - 成本汇率换算 FOB USD | ToolWild',
+    seoDesc: '免费在线 FOB 报价换算器：输入产品成本、国内费用、利润率与你填写的汇率，计算 FOB 美元报价并显示完整计算过程。汇率由用户输入，不请求任何接口。',
+    keywords: ['FOB 报价', 'FOB 计算', '外贸报价', 'fob calculator', '汇率换算'],
+    howto: { steps: ['填写产品成本与国内费用（人民币）。', '填写利润率与你确认的汇率（人民币兑美元）。', '查看 FOB 美元报价与完整计算过程，核对后再用于报价。'] },
+    faqs: [
+      { q: '汇率从哪里来？', a: '汇率完全由你手动填写，网站不请求任何汇率接口，也不保存该数值。请使用报价当日你认可的汇率。' },
+      { q: '计算结果可以直接用于合同吗？', a: '不可以。结果仅为快速估算，未包含海运费、保险、关税、退税与银行费用，请由业务人员复核后再报价。' },
+      { q: '会保存成本或汇率数据吗？', a: '不会。成本、费用、利润率与汇率只在当前页面计算，不上传、不写入 localStorage。' },
+    ],
+    ui: {
+      costLabel: '产品成本（CNY）', feesLabel: '国内费用（CNY）', marginLabel: '利润率（%）', rateLabel: '汇率（CNY / USD）',
+      resultLabel: 'FOB 报价（USD）', processLabel: '计算过程', runLabel: '计算', rateDateLabel: '汇率日期（自行填写）',
+      hint: '公式：(产品成本 + 国内费用) × (1 + 利润率) ÷ 汇率。汇率由你输入，不联网获取；结果仅供参考。', invalidNumber: '请输入有效的数字',
+    },
+  },
+
 };

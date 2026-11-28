@@ -17,6 +17,7 @@ const { lang, dict, path, active = '' } = Astro.props;
 
     <nav class="main-nav" id="main-nav" aria-label={dict.nav.more}>
       <a href={langPath(lang)} class:list={[active === 'home' && 'active']}>{dict.nav.home}</a>
+      <a href={langPath(lang, 'tools')} class:list={[active === 'allTools' && 'active']}>{dict.nav.allTools}</a>
       {activeCategories.map((c) => (
         <a href={categoryUrl(lang, c.id)} class:list={[active === c.id && 'active']}>{dict.nav[c.id]}</a>
       ))}

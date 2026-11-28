@@ -1,4 +1,4 @@
-import { role, on, msg, fmt, showError, clearError, setStatus, readAsArrayBuffer, downloadBlob, toast, MAX_PDF_BYTES } from '../utils.js';
+import { role, on, msg, fmt, showError, clearError, setStatus, readAsArrayBuffer, downloadBlob, toast, MAX_PDF_BYTES , errorFromException} from '../utils.js';
 import { trackToolUse } from '../analytics.js';
 import { bindFileInput, renderFileList, bindFileListActions, fileSize } from '../file-utils.js';
 
@@ -25,7 +25,7 @@ export default function init() {
           const bytes = await readAsArrayBuffer(file);
           const doc = await PDFDocument.load(bytes);
           items.push({ name: file.name, bytes, pages: doc.getPageCount() });
-        } catch (err) { console.error(err); showError(msg('readError')); }
+        } catch (err) { console.warn(err); showError(errorFromException(err)); }
       }
       render();
     },
@@ -58,7 +58,7 @@ export default function init() {
       setStatus(msg('success'));
       toast(msg('success'), 'success');
       trackToolUse('merge');
-    } catch (err) { console.error(err); showError(msg('readError')); }
+    } catch (err) { console.warn(err); showError(errorFromException(err)); }
     finally { run.disabled = false; render(); }
   });
 

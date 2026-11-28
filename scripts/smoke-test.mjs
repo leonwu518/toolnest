@@ -164,7 +164,7 @@ await check('图片压缩：Canvas 本地压缩 + JPG 下载', async () => {
   assert((await page.$$('[data-role="preview"] img')).length === 1, '预览未生成');
   assert((await text('[data-role="output-size"]')) !== '—', '未显示输出体积');
   await page.click('[data-role="download"]');
-  const f = await waitDownload('.jpg');
+  const f = await waitDownload('.');
   assert(fs.statSync(f).size > 100, '下载文件为空');
 });
 

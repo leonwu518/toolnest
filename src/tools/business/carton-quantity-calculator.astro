@@ -1,0 +1,31 @@
+---
+import Icon from '../../components/Icon.astro';
+const { tool, dict } = Astro.props;
+const ui = tool.ui;
+---
+<div class="tool-ui">
+  <h3 class="tool-section-title">{ui.containerTitle}</h3>
+  <div class="field-grid three">
+    <div class="field"><label>{ui.lengthLabel}<input class="input" type="number" step="any" min="0" data-role="c-l" placeholder="1200" /></label></div>
+    <div class="field"><label>{ui.widthLabel}<input class="input" type="number" step="any" min="0" data-role="c-w" placeholder="235" /></label></div>
+    <div class="field"><label>{ui.heightLabel}<input class="input" type="number" step="any" min="0" data-role="c-h" placeholder="239" /></label></div>
+  </div>
+  <h3 class="tool-section-title" style="margin-top:18px">{ui.productTitle}</h3>
+  <div class="field-grid three">
+    <div class="field"><label>{ui.lengthLabel}<input class="input" type="number" step="any" min="0" data-role="p-l" placeholder="60" /></label></div>
+    <div class="field"><label>{ui.widthLabel}<input class="input" type="number" step="any" min="0" data-role="p-w" placeholder="40" /></label></div>
+    <div class="field"><label>{ui.heightLabel}<input class="input" type="number" step="any" min="0" data-role="p-h" placeholder="30" /></label></div>
+  </div>
+  <div class="field" style="margin-top:14px"><label for="cq-loss">{ui.lossLabel}</label><input class="input" type="number" step="any" min="0" max="90" id="cq-loss" data-role="loss" value="10" /></div>
+  <div class="tool-actions">
+    <button type="button" class="btn btn-primary" data-role="run"><Icon name="calculator" size={16} /> {ui.runLabel}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {dict.actions.clear}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <h3 class="tool-section-title" style="margin-top:22px"><Icon name="calculator" /> {ui.resultLabel}</h3>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-label">{ui.resultLabel}</div><div class="stat-value" data-role="result">—</div></div>
+    <div class="stat-card" style="grid-column:span 2"><div class="stat-label"><Icon name="book-open" size={14} /> {ui.processLabel}</div><div class="stat-value" style="font-size:1.02rem;font-family:var(--mono)" data-role="formula">—</div></div>
+  </div>
+  <p class="field-hint" style="margin-top:10px">{ui.hint}</p>
+</div>

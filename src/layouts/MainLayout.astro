@@ -34,7 +34,7 @@ const toolMeta = tool ? tools.find((t) => t.slug === tool) : null;
 /* 只注入标量文案，排除页面正文/数组等内容，避免 HTML 体积膨胀 */
 const flatten = (d) => {
   const out = {};
-  for (const group of ['common', 'actions', 'theme', 'langSwitch', 'search', 'toolPage', 'categoryPage', 'dataPage']) {
+  for (const group of ['common', 'actions', 'theme', 'langSwitch', 'search', 'toolPage', 'categoryPage', 'dataPage', 'toolsIndex', 'errors']) {
     for (const [key, value] of Object.entries(d[group] || {})) {
       if (typeof value === 'string' || typeof value === 'number') out[key] = value;
     }
@@ -107,9 +107,14 @@ const siteLd = JSON.stringify({
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={absoluteUrl('/og-image.png')} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="ToolWild — Free Online Toolbox" />
   <meta property="og:locale" content={dict.ogLocale} />
   <meta property="og:locale:alternate" content={lang === 'zh' ? 'en_US' : 'zh_CN'} />
-  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content={absoluteUrl('/og-image.png')} />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="theme-color" content="#2563eb" />

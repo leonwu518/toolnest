@@ -1,4 +1,4 @@
-import { role, on, msg, formatBytes, showError, clearError, setStatus, downloadBlob, loadImage } from '../utils.js';
+import { role, on, msg, formatBytes, showError, clearError, setStatus, downloadBlob, loadImage , errorFromException} from '../utils.js';
 import { trackToolUse } from '../analytics.js';
 import { targetSize, extForFormat } from '../logic/files.js';
 import { bindFileDrop, renderToBlob, showPreview, showSizes, outputName } from '../image-utils.js';
@@ -18,7 +18,7 @@ export default function init() {
       role('run').disabled = false;
       role('download').disabled = true;
       clearError();
-    } catch { showError(msg('readError')); }
+    } catch { showError('FILE_CORRUPTED'); }
   } });
 
   const syncFromWidth = () => {
@@ -59,7 +59,7 @@ export default function init() {
       role('download').disabled = false;
       clearError(); setStatus('');
       trackToolUse('resize');
-    } catch (err) { console.error(err); showError(msg('readError')); }
+    } catch (err) { console.warn(err); showError(errorFromException(err)); }
     finally { run.disabled = false; }
   });
 

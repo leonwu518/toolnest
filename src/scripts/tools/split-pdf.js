@@ -1,4 +1,4 @@
-import { role, on, msg, fmt, showError, clearError, setStatus, readAsArrayBuffer, downloadBlob, toast, MAX_PDF_BYTES } from '../utils.js';
+import { role, on, msg, fmt, showError, clearError, setStatus, readAsArrayBuffer, downloadBlob, toast, MAX_PDF_BYTES , errorFromException} from '../utils.js';
 import { trackToolUse } from '../analytics.js';
 import { bindFileInput } from '../file-utils.js';
 import { parsePageRanges } from '../logic/files.js';
@@ -18,7 +18,7 @@ export default function init() {
         role('file-info').textContent = `${file.name} · ${fmt('pageCount', { n: state.pages })}`;
         role('run').disabled = false;
         clearError();
-      } catch (err) { console.error(err); showError(msg('readError')); }
+      } catch (err) { console.warn(err); showError(errorFromException(err)); }
     },
   });
 
@@ -60,7 +60,7 @@ export default function init() {
       setStatus(msg('success'));
       toast(msg('success'), 'success');
       trackToolUse('split');
-    } catch (err) { console.error(err); showError(msg('readError')); }
+    } catch (err) { console.warn(err); showError(errorFromException(err)); }
     finally { run.disabled = false; }
   });
 

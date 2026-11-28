@@ -27,7 +27,7 @@ export default {
     short: 'Remove repeated lines; ignore case or whitespace',
     seoTitle: 'Remove Duplicate Lines — Free Online Text Deduper | ToolWild',
     seoDesc: 'Free online tool to remove duplicate lines: paste text, deduplicate line by line, optionally ignore case, trim whitespace, drop empty lines and sort the output. Shows how many lines were removed. Copy or download the result.',
-    keywords: ['remove duplicate lines', 'deduplicate text', 'line deduplication', '文本去重'],
+    keywords: ['remove duplicate lines', '去掉重复行', 'deduplicate text', 'line deduplication', 'dedupe lines', '文本去重'],
     howto: { steps: ['Paste your text into the input box, one item per line.', 'Choose whether to ignore case, ignore leading/trailing whitespace, drop empty lines or sort the result.', 'Click Process. The result appears in the output box, ready to copy or download as TXT.'] },
     faqs: [
       { q: 'Which line is kept when case is ignored?', a: 'The first occurrence is kept, with its original capitalization and whitespace. Later lines considered duplicates are removed.' },
@@ -108,7 +108,7 @@ export default {
     short: 'Compress JPG / PNG / WEBP locally and compare sizes',
     seoTitle: 'Image Compressor — Reduce Image Size Online, No Upload | ToolWild',
     seoDesc: 'Free online image compressor: adjust quality and output format for JPG, PNG and WEBP, see the file size drop in real time and preview the result. Uses the browser Canvas API — images never leave your device.',
-    keywords: ['image compressor', 'compress image online', 'reduce image size', '图片压缩'],
+    keywords: ['image compressor', 'compress image online', '图片太大', 'optimize image', 'reduce image size', 'shrink image', 'kb', '图片压缩'],
     howto: { steps: ['Choose or drop a JPG, PNG or WEBP image (up to 20 MB).', 'Drag the quality slider and pick an output format (JPEG or WEBP is best for photos).', 'Click Compress to see the size comparison and preview, then download the result.'] },
     faqs: [
       { q: 'Will compression blur my image?', a: 'JPEG and WEBP are lossy: lower quality means a smaller file but more detail loss. PNG is lossless, so changing quality barely affects its size. Start around 80% and adjust from there.' },
@@ -168,7 +168,7 @@ export default {
     short: 'Combine multiple PDFs in your chosen order',
     seoTitle: 'Merge PDF Files Online — Free, No Upload | ToolWild',
     seoDesc: 'Free online PDF merger: select multiple PDFs, reorder them and combine them into one file, with a total page count. Powered by pdf-lib in your browser — files are never uploaded.',
-    keywords: ['merge pdf', 'combine pdf files', 'join pdf online', 'PDF 合并'],
+    keywords: ['merge pdf', 'pdf合并', 'combine pdf files', 'join pdf online', '合并pdf', 'PDF 合并'],
     howto: { steps: ['Click "Choose PDF files" to select several files, or add more in several rounds.', 'Reorder the list with Move up / Move down, or remove files you do not need.', 'Click "Merge PDF" — the combined file downloads automatically.'] },
     faqs: [
       { q: 'Can I merge encrypted or password-protected PDFs?', a: 'Password-protected PDFs cannot be read locally. Remove the password first. The tool never attempts to bypass PDF passwords.' },
@@ -534,4 +534,65 @@ export default {
       invalidRegex: 'Invalid regular expression — please check the syntax', invalidStep: 'An unknown processing step was found', pleaseInput: 'Please enter some text',
     },
   },
+  'cbm-calculator': {
+    name: 'CBM Calculator',
+    desc: 'Calculate cubic meters from length, width and height, with the full working shown.',
+    short: 'Convert dimensions to CBM with full working',
+    seoTitle: 'Online CBM Calculator - Cubic Meter Converter | ToolWild',
+    seoDesc: 'Free online CBM calculator: enter length, width and height in centimeters plus quantity to get per-unit and total volume in cubic meters, with full working shown. Runs locally in your browser.',
+    keywords: ['CBM calculator', 'cubic meter', 'volume calculator', '体积计算', '装箱体积'],
+    howto: { steps: ['Enter the length, width and height of one unit in centimeters.', 'Add the quantity; results update as you type.', 'Check the per-unit CBM, total CBM and full working before quoting.'] },
+    faqs: [
+      { q: 'What is CBM?', a: 'CBM stands for cubic meter. 1 CBM = 1 cubic meter = 1,000,000 cubic centimeters.' },
+      { q: 'Does the result include packaging?', a: 'It uses the dimensions you enter. Enter carton dimensions to include packaging.' },
+      { q: 'How many decimals are kept?', a: 'Up to 6 decimals with trailing zeros removed. Round as needed for your quotation.' },
+    ],
+    ui: {
+      lengthLabel: 'Length (cm)', widthLabel: 'Width (cm)', heightLabel: 'Height (cm)', qtyLabel: 'Quantity',
+      perLabel: 'CBM per unit', totalLabel: 'Total CBM', processLabel: 'Working', runLabel: 'Calculate',
+      hint: 'Formula: length × width × height ÷ 1,000,000 = CBM. For reference only — use actual packed dimensions.', invalidNumber: 'Please enter a valid number',
+    },
+  },
+
+  'carton-quantity-calculator': {
+    name: 'Carton Quantity Calculator',
+    desc: 'Estimate how many units fit by volume, with an adjustable allowance and full working.',
+    short: 'Estimate packing quantity with allowance',
+    seoTitle: 'Online Carton Quantity Calculator - Volume-based Estimate | ToolWild',
+    seoDesc: 'Free online carton quantity calculator: enter container and product dimensions in centimeters, set an allowance, and see an estimated packing quantity with full working. All calculations stay in your browser.',
+    keywords: ['carton quantity', 'packing calculator', 'container loading', '装箱数量', '体积估算'],
+    howto: { steps: ['Enter container length, width and height in centimeters, then unit dimensions.', 'Set an allowance for wasted space (default 10%).', 'Review the estimate and working before planning shipment.'] },
+    faqs: [
+      { q: 'Why is it only an estimate?', a: 'This tool divides volumes and ignores shape, stacking limits, pallet gaps and weight limits. Treat it as a rough guide.' },
+      { q: 'What allowance should I use?', a: 'Cartons often use 5%–15%. Use a higher value for irregular or non-stackable goods.' },
+      { q: 'Are my dimensions saved?', a: 'No. Inputs stay in page memory for calculation only — nothing is uploaded or stored.' },
+    ],
+    ui: {
+      containerTitle: 'Container size (cm)', productTitle: 'Unit size (cm)',
+      lengthLabel: 'Length', widthLabel: 'Width', heightLabel: 'Height', lossLabel: 'Allowance (%)',
+      resultLabel: 'Estimated quantity', processLabel: 'Working', runLabel: 'Calculate',
+      hint: 'Formula: container CBM ÷ unit CBM × (1 − allowance), rounded down. Verify against real packing and weight limits.', invalidNumber: 'Please enter a valid number',
+    },
+  },
+
+  'fob-quote-calculator': {
+    name: 'FOB Quote Calculator',
+    desc: 'Convert cost, local fees, margin and your exchange rate into an FOB USD quote, with full working.',
+    short: 'Cost, fees, margin and your rate to FOB',
+    seoTitle: 'Online FOB Calculator - Cost to FOB USD | ToolWild',
+    seoDesc: 'Free online FOB quote calculator: enter product cost, local fees, margin and your own CNY/USD exchange rate to get an FOB USD quote with full working. No exchange-rate API or network request.',
+    keywords: ['FOB calculator', 'FOB quote', 'export pricing', '外贸报价', '汇率换算'],
+    howto: { steps: ['Enter product cost and local fees in CNY.', 'Add your margin and the exchange rate you confirm.', 'Review the FOB USD quote and full working before using it in a quotation.'] },
+    faqs: [
+      { q: 'Where does the exchange rate come from?', a: 'You enter it manually. The site never requests an exchange-rate API and never stores the rate.' },
+      { q: 'Can I use the result in a contract?', a: 'No. It excludes freight, insurance, duties, tax rebates and bank charges. Have your sales team verify it first.' },
+      { q: 'Are my costs or rate saved?', a: 'No. Cost, fees, margin and rate stay in page memory — nothing is uploaded or written to localStorage.' },
+    ],
+    ui: {
+      costLabel: 'Product cost (CNY)', feesLabel: 'Local fees (CNY)', marginLabel: 'Margin (%)', rateLabel: 'Exchange rate (CNY / USD)',
+      resultLabel: 'FOB quote (USD)', processLabel: 'Working', runLabel: 'Calculate', rateDateLabel: 'Rate date (enter yourself)',
+      hint: 'Formula: (product cost + local fees) × (1 + margin) ÷ rate. The rate is entered by you, not fetched online. For reference only.', invalidNumber: 'Please enter a valid number',
+    },
+  },
+
 };

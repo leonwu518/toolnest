@@ -1,5 +1,6 @@
 import { role, $$, on, msg, bindCommonActions, copyText } from '../utils.js';
 import { trackToolUse } from '../analytics.js';
+import { feedback } from '../feedback.js';
 
 export default function init() {
   const input = role('input');
@@ -26,6 +27,7 @@ export default function init() {
 
   function render() {
     current = compute(input.value);
+    if (current.lines > 5000) feedback('INPUT_TOO_LARGE', { type: 'banner', values: { n: 5000 } });
     if (input.value.trim()) trackToolUse('count');
     $$('[data-stat]').forEach((card) => {
       const el = card.querySelector('[data-role="stat-value"]');

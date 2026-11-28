@@ -104,6 +104,10 @@ const label = dict.footer.links[page] || info.title;
         </div>
       </div>
       <div class="data-panel">
+        <h2>{info.technicalTitle}</h2>
+        {info.technicalBody.map((para) => <p>{para}</p>)}
+      </div>
+      <div class="data-panel">
         <h2>{info.storedTitle}</h2>
         <ul>{info.storedItems.map((i) => <li>{i}</li>)}</ul>
         <h2 style="margin-top:18px">{info.neverTitle}</h2>

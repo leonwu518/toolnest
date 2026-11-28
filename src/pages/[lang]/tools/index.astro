@@ -1,0 +1,177 @@
+---
+import MainLayout from '../../../layouts/MainLayout.astro';
+import Icon from '../../../components/Icon.astro';
+import ToolCard from '../../../components/ToolCard.astro';
+import SearchBox from '../../../components/SearchBox.astro';
+import Breadcrumb from '../../../components/Breadcrumb.astro';
+import { getDict, getToolI18n, isLang } from '../../../i18n/index.js';
+import { tools } from '../../../data/tools.js';
+import { activeCategories, categoryById } from '../../../data/categories.js';
+import { absoluteUrl, langPath, categoryUrl, toolUrl, SITE } from '../../../lib/site.js';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'zh' } }, { params: { lang: 'en' } }];
+}
+
+const { lang } = Astro.params;
+if (!isLang(lang)) return Astro.redirect('/');
+const dict = getDict(lang);
+const info = dict.toolsIndex;
+const path = langPath(lang, 'tools');
+const cards = tools.map((m) => ({
+  meta: m,
+  t: getToolI18n(lang, m.slug),
+  catName: dict.categories[m.category].name,
+  catIcon: categoryById[m.category].icon,
+  accent: categoryById[m.category].accent,
+  categoryId: m.category,
+  addedAt: m.addedAt,
+  popularity: m.popular ? 1 : 0,
+}));
+
+const itemListLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      name: 'ToolWild',
+      url: SITE,
+      inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
+    },
+    {
+      '@type': 'ItemList',
+      name: info.h1,
+      numberOfItems: tools.length,
+      itemListElement: tools.map((m, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: getToolI18n(lang, m.slug).name,
+        url: absoluteUrl(toolUrl(lang, m.slug)),
+      })),
+    },
+  ],
+};
+const itemListSafe = JSON.stringify(itemListLd).replace(/</g, '\\u003c');
+const catList = activeCategories.map((c) => ({ ...c, ...dict.categories[c.id] }));
+---
+
+<MainLayout lang={lang} title={info.title} description={info.desc} path={path} active="allTools">
+  <Breadcrumb dict={dict} items={[
+    { label: dict.toolPage.breadcrumbHome, href: langPath(lang) },
+    { label: info.h1 },
+  ]} />
+
+  <div style="padding:24px 0 10px;max-width:860px">
+    <h1>{info.h1}</h1>
+    <p class="lead muted" style="margin:10px 0 18px">{info.lead}</p>
+    <SearchBox dict={dict} />
+  </div>
+
+  <div class="tools-toolbar" data-role="tools-toolbar">
+    <div class="filter-row" role="group" aria-label={info.categoryAll}>
+      <button type="button" class="chip active" data-filter-category="all">{info.categoryAll}</button>
+      {catList.map((c) => (
+        <button type="button" class="chip" data-filter-category={c.id}>{c.name}</button>
+      ))}
+    </div>
+    <div class="sort-row" role="group" aria-label={info.sortPopular}>
+      <button type="button" class="chip active" data-sort="popular">{info.sortPopular}</button>
+      <button type="button" class="chip" data-sort="newest">{info.sortNewest}</button>
+    </div>
+  </div>
+
+  <p class="muted" data-role="tools-count" style="margin:18px 0 12px;font-size:.9rem">{info.resultCount.replace('{n}', String(tools.length))}</p>
+
+  <div class="tool-grid" data-role="tools-grid">
+    {cards.map((c) => <ToolCard lang={lang} {...c} />)}
+  </div>
+
+  <div class="empty-state" data-role="tools-empty" hidden>
+    <h2>{info.emptyTitle}</h2>
+    <p>{info.emptyHint}</p>
+    <div class="filter-row" style="margin-top:14px">
+      {catList.map((c) => (
+        <a class="chip" href={categoryUrl(lang, c.id)}>{c.name}</a>
+      ))}
+    </div>
+  </div>
+
+  <script type="application/ld+json" set:html={itemListSafe}></script>
+</MainLayout>
+
+<style>
+  :global([data-role="search-results"]) { display: none !important; }
+  .tools-toolbar { display:flex; flex-wrap:wrap; gap:14px 20px; align-items:center; justify-content:space-between; margin-top:6px; }
+  .filter-row, .sort-row { display:flex; flex-wrap:wrap; gap:8px; }
+  .chip { display:inline-flex; align-items:center; padding:7px 13px; border:1px solid var(--border); border-radius:999px; background:var(--surface); color:var(--text); font-size:.86rem; cursor:pointer; text-decoration:none; }
+  .chip:hover { border-color:var(--primary); }
+  .chip.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+  .empty-state { padding:38px 18px; text-align:center; border:1px dashed var(--border); border-radius:14px; background:var(--surface); }
+</style>
+
+<script>
+  import { $, $$, on } from '../../../scripts/utils.js';
+  import { getCounts } from '../../../scripts/storage.js';
+
+  const grid = $('[data-role="tools-grid"]');
+  const count = $('[data-role="tools-count"]');
+  const empty = $('[data-role="tools-empty"]');
+  if (grid) {
+    const cards = Array.from(grid.querySelectorAll('.tool-card[data-slug]'));
+    const indexText = $('#tool-index')?.textContent || '[]';
+    let index = [];
+    try { index = JSON.parse(indexText); } catch { index = []; }
+    const bySlug = Object.fromEntries(index.map((t) => [t.s, t]));
+    const lang = document.documentElement.dataset.lang || 'zh';
+    const tpl = count?.textContent || '';
+    let category = 'all';
+    let query = '';
+
+    const apply = () => {
+      const counts = getCounts();
+      let shown = 0;
+      cards.forEach((card) => {
+        const slug = card.dataset.slug || '';
+        const t = bySlug[slug];
+        const l = t ? (lang === 'zh' ? t.zh : t.en) : null;
+        const hay = [l?.n, l?.d, l?.k, t?.zh?.k, t?.en?.k, slug].filter(Boolean).join(' ').toLowerCase();
+        const okCat = category === 'all' || card.dataset.category === category;
+        const okQuery = !query || hay.includes(query);
+        card.hidden = !(okCat && okQuery);
+        if (!card.hidden) shown++;
+      });
+      if (count) count.textContent = tpl.replace(/\{n\}/g, String(shown)).replace(/\d+ 个工具|\d+ tools/, String(shown));
+      if (empty) empty.hidden = shown > 0;
+    };
+
+    const sortBy = (mode) => {
+      const counts = getCounts();
+      const sorted = [...cards].sort((a, b) => {
+        if (mode === 'newest') return String(b.dataset.added || '').localeCompare(String(a.dataset.added || ''));
+        const ca = (counts[a.dataset.slug || ''] || 0) + Number(a.dataset.popularity || 0);
+        const cb = (counts[b.dataset.slug || ''] || 0) + Number(b.dataset.popularity || 0);
+        if (cb !== ca) return cb - ca;
+        return String(b.dataset.added || '').localeCompare(String(a.dataset.added || ''));
+      });
+      sorted.forEach((card) => grid.appendChild(card));
+    };
+
+    $$('[data-filter-category]').forEach((btn) => on(btn, 'click', () => {
+      category = btn.dataset.filterCategory || 'all';
+      $$('[data-filter-category]').forEach((b) => b.classList.toggle('active', b === btn));
+      apply();
+    }));
+    $$('[data-sort]').forEach((btn) => on(btn, 'click', () => {
+      $$('[data-sort]').forEach((b) => b.classList.toggle('active', b === btn));
+      sortBy(btn.dataset.sort || 'popular');
+    }));
+    const input = $('[data-role="site-search"]');
+    if (input) on(input, 'input', () => { query = input.value.trim().toLowerCase(); apply(); });
+    try {
+      const q = new URL(location.href).searchParams.get('q');
+      if (q && input) { input.value = q; query = q.trim().toLowerCase(); }
+    } catch { /* ignore */ }
+    sortBy('popular');
+    apply();
+  }
+</script>

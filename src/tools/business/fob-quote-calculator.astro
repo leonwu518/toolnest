@@ -1,0 +1,27 @@
+---
+import Icon from '../../components/Icon.astro';
+const { tool, dict } = Astro.props;
+const ui = tool.ui;
+---
+<div class="tool-ui">
+  <div class="field-grid two">
+    <div class="field"><label for="fob-cost">{ui.costLabel}</label><input class="input" type="number" step="any" min="0" id="fob-cost" data-role="cost" placeholder="80" /></div>
+    <div class="field"><label for="fob-fees">{ui.feesLabel}</label><input class="input" type="number" step="any" min="0" id="fob-fees" data-role="fees" placeholder="5" /></div>
+  </div>
+  <div class="field-grid two" style="margin-top:14px">
+    <div class="field"><label for="fob-margin">{ui.marginLabel}</label><input class="input" type="number" step="any" min="0" id="fob-margin" data-role="margin" value="15" /></div>
+    <div class="field"><label for="fob-rate">{ui.rateLabel}</label><input class="input" type="number" step="any" min="0.0001" id="fob-rate" data-role="rate" placeholder="7.2" /></div>
+  </div>
+  <div class="field" style="margin-top:14px"><label for="fob-date">{ui.rateDateLabel}</label><input class="input" type="date" id="fob-date" data-role="rate-date" /></div>
+  <div class="tool-actions">
+    <button type="button" class="btn btn-primary" data-role="run"><Icon name="calculator" size={16} /> {ui.runLabel}</button>
+    <button type="button" class="btn btn-ghost" data-role="clear"><Icon name="eraser" size={16} /> {dict.actions.clear}</button>
+  </div>
+  <div class="alert alert-error" data-role="error" hidden></div>
+  <h3 class="tool-section-title" style="margin-top:22px"><Icon name="calculator" /> {ui.resultLabel}</h3>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-label">{ui.resultLabel}</div><div class="stat-value" data-role="result">—</div></div>
+    <div class="stat-card" style="grid-column:span 2"><div class="stat-label"><Icon name="book-open" size={14} /> {ui.processLabel}</div><div class="stat-value" style="font-size:1.02rem;font-family:var(--mono)" data-role="formula">—</div></div>
+  </div>
+  <p class="field-hint" style="margin-top:10px">{ui.hint}</p>
+</div>

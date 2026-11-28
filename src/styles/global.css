@@ -248,6 +248,9 @@ html[data-theme="dark"] [data-action="theme-toggle"] [data-icon="moon"] { displa
 .search-result-item strong { display: block; font-size: .9rem; font-weight: 650; }
 .search-result-item small { display: block; color: var(--text-muted); font-size: .78rem; line-height: 1.4; }
 .search-empty { padding: 22px 12px; text-align: center; color: var(--text-soft); font-size: .9rem; }
+.search-fallback-row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 6px; }
+.search-fallback-row a { padding: 4px 9px; border: 1px solid var(--border); border-radius: 999px; font-size: .78rem; color: var(--text); text-decoration: none; }
+.search-fallback-row a:hover { border-color: var(--primary); color: var(--primary); }
 
 /* ---------- 工具卡片 ---------- */
 .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
@@ -523,3 +526,28 @@ html[data-theme="dark"] .tool-icon.accent-orange { background: #2e1d10; color: #
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+/* ---------- 统一反馈组件 ---------- */
+.feedback-inline { margin: 12px 0; padding: 10px 13px; border: 1px solid var(--danger); border-radius: var(--radius-sm); background: color-mix(in srgb, var(--danger) 8%, transparent); color: var(--danger); font-size: .9rem; }
+.feedback-banner { margin: 12px 0; padding: 11px 14px; border: 1px solid #d97706; border-radius: var(--radius-sm); background: color-mix(in srgb, #f59e0b 12%, transparent); color: #92400e; font-size: .9rem; }
+:root[data-theme="dark"] .feedback-banner { color: #fbbf24; }
+.feedback-overlay { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; background: rgba(15,23,42,.55); backdrop-filter: blur(2px); }
+.feedback-overlay[hidden], .feedback-inline[hidden], .feedback-banner[hidden], .empty-state[hidden] { display: none; }
+.feedback-overlay-box { max-width: 420px; width: calc(100% - 40px); padding: 26px; border-radius: 16px; background: var(--bg-elevated); box-shadow: var(--shadow-lg); text-align: center; }
+.feedback-overlay-box p { margin: 0 0 16px; color: var(--text); font-size: .95rem; }
+.feedback-overlay-box .btn { margin: 0 5px; }
+.local-only-note { margin: 0 0 14px; padding: 9px 12px; border-radius: var(--radius-sm); background: var(--bg-subtle); color: var(--text-muted); font-size: .82rem; }
+.feedback-debug { position: fixed; right: 12px; bottom: 12px; z-index: 95; max-width: 380px; padding: 14px; border: 2px dashed var(--primary); border-radius: 12px; background: var(--bg-elevated); box-shadow: var(--shadow-lg); font-size: .8rem; }
+.feedback-debug p { margin: 6px 0 10px; color: var(--text-muted); }
+.feedback-debug .chip { margin: 3px; font-size: .72rem; }
+.feedback-debug-row { margin-top: 8px; border-top: 1px solid var(--border); padding-top: 8px; }
+.search-fallback-row { margin-top: 4px; }
+
+/* ---------- 工具串联「接着用」 ---------- */
+.next-tools { margin: 18px 0 6px; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-subtle); }
+.next-tools[hidden] { display: none; }
+.next-tools p { margin: 4px 0 10px; color: var(--text-muted); font-size: .84rem; }
+.next-tools-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.mobile-tip { display: none; margin: 0 0 12px; padding: 9px 12px; border-radius: var(--radius-sm); background: color-mix(in srgb, #f59e0b 12%, transparent); color: #92400e; font-size: .84rem; }
+:root[data-theme="dark"] .mobile-tip { color: #fbbf24; }
+@media (max-width: 767px) { .mobile-tip { display: flex; align-items: center; gap: 8px; } }

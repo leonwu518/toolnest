@@ -1,9 +1,9 @@
 ---
 import Icon from './Icon.astro';
 import { toolUrl } from '../lib/site.js';
-const { lang, meta, t, catName, catIcon = 'layers', accent = 'blue', badge = '', badgeLabel = '' } = Astro.props;
+const { lang, meta, t, catName, catIcon = 'layers', accent = 'blue', badge = '', badgeLabel = '', categoryId = '', addedAt = '', popularity = 0 } = Astro.props;
 ---
-<a class="tool-card" href={toolUrl(lang, meta.slug)}>
+<a class="tool-card" data-slug={meta.slug} data-category={categoryId || undefined} data-added={addedAt || undefined} data-popularity={popularity || undefined} href={toolUrl(lang, meta.slug)}>
   <div class="tool-card-top">
     <span class:list={['tool-icon', `accent-${accent}`]}><Icon name={meta.icon} size={21} /></span>
     {badge && <span class:list={['badge', `badge-${badge}`]}>{badgeLabel}</span>}

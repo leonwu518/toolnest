@@ -55,7 +55,15 @@ const iconSvg = (t) => `<svg viewBox="0 0 24 24" width="18" height="18" fill="no
 /* ---------- 搜索 ---------- */
 function renderSearchResults(host, list) {
   if (!list.length) {
-    host.innerHTML = `<div class="search-empty"><strong>${escapeHtml(msg('noResult'))}</strong><div>${escapeHtml(msg('noResultHint'))}</div></div>`;
+    const cats = [...new Set(index.map((t) => t.c))].slice(0, 6);
+    const popular = sortByUsage(index.map((t) => t.s)).slice(0, 4);
+    host.innerHTML = `<div class="search-empty">
+      <strong>${escapeHtml(msg('noResult'))}</strong>
+      <div>${escapeHtml(msg('noResultHint'))}</div>
+      <div style="margin-top:10px"><small>${escapeHtml(msg('emptyCategories', 'Categories'))}</small><div class="search-fallback-row">${cats.map((c) => `<a href="${base}/category/${escapeHtml(c)}/">${escapeHtml((lang === 'zh' ? index.find((t) => t.c === c)?.zh.c : index.find((t) => t.c === c)?.en.c) || c)}</a>`).join('')}</div></div>
+      <div style="margin-top:10px"><small>${escapeHtml(msg('emptyPopular', 'Popular tools'))}</small><div class="search-fallback-row">${popular.map((s) => `<a href="${toolUrl(s)}">${escapeHtml(lang === 'zh' ? bySlug[s]?.zh.n : bySlug[s]?.en.n)}</a>`).join('')}</div></div>
+      <div style="margin-top:12px"><a class="btn btn-outline btn-sm" href="${base}/tools/">${escapeHtml(msg('allTools', 'All tools'))}</a></div>
+    </div>`;
   } else {
     host.innerHTML = `<div class="search-result-group">${escapeHtml(msg('resultsCount', 'Results').replace('{n}', String(list.length)))}</div>` +
       list.slice(0, 8).map((t) => {
@@ -144,18 +152,33 @@ function cardHtml(t) {
     <div class="tool-card-foot"><span class="cat">${escapeHtml(l.c || '')}</span><span class="arrow">→</span></div>
   </a>`;
 }
+/* 首页「大家都在用」：按本机使用次数重排服务端兜底卡片，无网络请求 */
+function sortPopular() {
+  const host = $('[data-role="popular-grid"]');
+  if (!host) return;
+  const cards = Array.from(host.querySelectorAll('.tool-card[data-slug]'));
+  const order = sortByUsage(cards.map((c) => c.dataset.slug));
+  order.forEach((slug) => {
+    const card = cards.find((c) => c.dataset.slug === slug);
+    if (card) host.appendChild(card);
+  });
+}
+sortPopular();
+
 function renderPersonal() {
   const favHost = $('[data-role="favorites-grid"]');
   const recentHost = $('[data-role="recent-grid"]');
   const favEmpty = $('[data-role="favorites-empty"]');
   const recentEmpty = $('[data-role="recent-empty"]');
+  const section = favHost?.closest('[data-exclude]') || recentHost?.closest('[data-exclude]');
+  const excluded = new Set(String(section?.dataset.exclude || '').split(',').filter(Boolean));
   if (favHost) {
-    const favs = sortByUsage(getFavorites()).filter((s) => bySlug[s]).slice(0, 8);
+    const favs = sortByUsage(getFavorites()).filter((s) => bySlug[s] && !excluded.has(s)).slice(0, 8);
     favHost.innerHTML = favs.map((s) => cardHtml(bySlug[s])).join('');
     if (favEmpty) favEmpty.hidden = favs.length > 0;
   }
   if (recentHost) {
-    const recent = getRecent().filter((s) => bySlug[s]).slice(0, 8);
+    const recent = getRecent().filter((s) => bySlug[s] && !excluded.has(s)).slice(0, 8);
     recentHost.innerHTML = recent.map((s) => cardHtml(bySlug[s])).join('');
     if (recentEmpty) recentEmpty.hidden = recent.length > 0;
   }

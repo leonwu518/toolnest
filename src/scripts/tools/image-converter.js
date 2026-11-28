@@ -1,4 +1,4 @@
-import { role, on, msg, formatBytes, showError, clearError, setStatus, downloadBlob } from '../utils.js';
+import { role, on, msg, formatBytes, showError, clearError, setStatus, downloadBlob , errorFromException} from '../utils.js';
 import { trackToolUse } from '../analytics.js';
 import { bindFileDrop, renderToBlob, showPreview, showSizes, outputName, qualityLabel } from '../image-utils.js';
 
@@ -37,7 +37,7 @@ export default function init() {
       role('download').disabled = false;
       clearError(); setStatus('');
       trackToolUse('convert');
-    } catch (err) { console.error(err); showError(msg('readError')); }
+    } catch (err) { console.warn(err); showError(errorFromException(err)); }
     finally { run.disabled = false; }
   });
 

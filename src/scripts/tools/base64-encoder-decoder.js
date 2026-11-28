@@ -46,7 +46,7 @@ export default function init() {
         role('download').disabled = true;
         role('status').textContent = `${msg('dataUrlLabel')} · ${formatBytes(url.length)}`;
         trackToolUse('encode-file');
-      }).catch(() => showError(msg('readError')));
+      }).catch(() => showError('FILE_CORRUPTED'));
       return;
     }
     if (!input.value) { showError(msg('emptyHint')); return; }

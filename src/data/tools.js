@@ -38,6 +38,11 @@ export const tools = [
   { slug: 'excel-formula-helper',   category: 'productivity', icon: 'function-square', popular: false, recommended: false, isNew: true,  addedAt: '2026-11-27' },
   { slug: 'csv-cleaner',            category: 'productivity', icon: 'list-checks',    popular: false, recommended: false, isNew: true,  addedAt: '2026-11-27' },
   { slug: 'batch-text-processor',   category: 'productivity', icon: 'layers',         popular: false, recommended: false, isNew: true,  addedAt: '2026-11-27' },
+
+  // ---------- G. 外贸工厂 ----------
+  { slug: 'cbm-calculator',          category: 'business',     icon: 'calculator',    popular: false, recommended: false, isNew: true,  addedAt: '2026-11-28' },
+  { slug: 'carton-quantity-calculator', category: 'business',  icon: 'layers',        popular: false, recommended: false, isNew: true,  addedAt: '2026-11-28' },
+  { slug: 'fob-quote-calculator',    category: 'business',     icon: 'globe',         popular: false, recommended: false, isNew: true,  addedAt: '2026-11-28' },
 ];
 
 export const toolBySlug = Object.fromEntries(tools.map((t) => [t.slug, t]));
@@ -59,7 +64,6 @@ export function relatedTools(slug, limit = 6) {
 
 // 第二阶段储备工具（仅用于分类页展示路线图，不生成页面、不伪装成可用工具）
 export const roadmap = {
-  business: ['fob-quote-calculator', 'trade-profit-calculator', 'moq-quote-calculator', 'cbm-calculator', 'carton-quantity-calculator', 'gross-net-weight-calculator', 'product-cost-calculator', 'lead-time-calculator'],
-  ai: ['email-polisher', 'product-title-generator', 'selling-points-generator', 'seo-keyword-generator', 'prompt-generator'],
+  business: ['trade-profit-calculator', 'moq-quote-calculator', 'gross-net-weight-calculator', 'product-cost-calculator', 'lead-time-calculator'],
   // productivity 三个工具（Excel 公式助手 / CSV 数据清洗 / 批量文本处理）已上线，从路线图移除
 };

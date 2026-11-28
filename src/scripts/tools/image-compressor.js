@@ -1,4 +1,5 @@
-import { role, on, msg, formatBytes, showError, clearError, setStatus, downloadBlob } from '../utils.js';
+import { role, on, msg, formatBytes, showError, clearError, setStatus, downloadBlob , errorFromException} from '../utils.js';
+import { feedback } from '../feedback.js';
 import { trackToolUse } from '../analytics.js';
 import { bindFileDrop, renderToBlob, showPreview, showSizes, outputName, qualityLabel } from '../image-utils.js';
 
@@ -24,17 +25,19 @@ export default function init() {
       const fmt = role('format').value;
       const quality = Number(role('quality').value);
       const r = await renderToBlob(state.file, { fmt, quality });
-      state.blob = r.blob;
-      state.fmt = fmt;
-      showSizes({ original: state.file.size, output: r.blob.size, dimension: `${r.width} × ${r.height}` });
+      const larger = r.blob.size > state.file.size;
+      state.blob = larger ? state.file : r.blob;
+      state.fmt = larger ? (state.file.name.split('.').pop() || 'png').toLowerCase() : fmt;
+      if (larger) feedback('RESULT_LARGER', { type: 'banner' });
+      showSizes({ original: state.file.size, output: state.blob.size, dimension: `${r.width} × ${r.height}` });
       showPreview(role('preview'), r.blob);
       role('download').disabled = false;
       clearError();
       setStatus('');
       trackToolUse('compress');
     } catch (err) {
-      console.error(err);
-      showError(msg('readError'));
+      console.warn(err);
+      showError(errorFromException(err));
     } finally { run.disabled = false; }
   });
 

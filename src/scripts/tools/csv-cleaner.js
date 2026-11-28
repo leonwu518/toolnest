@@ -116,7 +116,7 @@ export default function init() {
     try {
       input.value = await readAsText(file);
       process();
-    } catch { showError(msg('readError')); }
+    } catch { showError('FILE_CORRUPTED'); }
     e.target.value = '';
   });
 
