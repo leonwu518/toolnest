@@ -186,6 +186,7 @@ CSP 允许 `'unsafe-inline'` 脚本，仅用于 `<head>` 中防止主题闪烁�
 | `www` 仍显示注册商停放页 | CNAME 尚未生效或填成了完整域名（`www.toolwild.com`）；`Name` 只需填 `www` |
 | canonical 指向别的域名 | 设置了不同的 `SITE_URL` 或设置后未重新构建；生产环境变量统一为 `https://www.toolwild.com` |
 | 根域直接 CNAME 到 Pages 不生效 | Cloudflare 要求 apex 域先加入 Cloudflare zone 并改 NS；根域改用 URL Forwarding 或走方案 B |
+| `git push` 返回 502 | 智能 HTTP 通道间歇故障（GitHub API 正常）。显式传令牌即可：`git -c http.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$(gh auth token)" | base64 -w0)" push origin main`；或稍后重试 |
 | 构建报错 `Node version` | 在环境变量中设 `NODE_VERSION=22`，本机需 Node ≥ 20.3 |
 | 直接打开 `dist/zh/tools/x/index.html` 样式丢失 | 静态站点需通过 HTTP 访问（资源为根路径 `/_astro/...`），用 `npm run preview` 或部署后访问 |
 | PDF / Excel 工具首次点击稍慢 | 对应库按需动态加载（gzip 约 180 KB），仅首次加载，之后浏览器缓存 |
