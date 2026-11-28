@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* GA4 埋点验证：用真实浏览器加载预览站，检查 dataLayer 中 config 与自定义事件
- * 前置：PUBLIC_GA4_MEASUREMENT_ID=G-TEST123456 npm run build 已完成，预览服务运行于 4321
+ * 前置：PUBLIC_GA4_MEASUREMENT_ID=<你的ID> npm run build 已完成，预览服务运行于 4321
  */
 import puppeteer from 'puppeteer-core';
 import { execSync } from 'node:child_process';
@@ -13,6 +13,7 @@ const findChrome = () => {
 };
 
 const BASE = 'http://127.0.0.1:4321';
+const ID = process.env.PUBLIC_GA4_MEASUREMENT_ID || 'G-TEST123456';
 const results = [];
 const check = (name, ok, detail = '') => { results.push({ name, ok, detail }); console.log(`${ok ? '✓' : '✗'} ${name}${detail ? ' — ' + detail : ''}`); };
 
@@ -42,7 +43,7 @@ try {
   /* 1. 工具页：config 注入 + tool_use + copy_result */
   await page.goto(`${BASE}/zh/tools/unit-converter/`, { waitUntil: 'networkidle0' });
   const config1 = (await gtagCalls()).filter((c) => c.t === 'config');
-  check('gtag config 已注入', config1.length === 1 && config1[0].id === 'G-TEST123456', JSON.stringify(config1));
+  check('gtag config 已注入', config1.length === 1 && config1[0].id === ID, JSON.stringify(config1));
   const pv = (await gtagCalls()).filter((c) => c.t === 'js').length;
   check('gtag.js 仅加载一次', pv === 1, `js 调用 ${pv} 次`);
 
