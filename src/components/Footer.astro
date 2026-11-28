@@ -1,9 +1,9 @@
 ---
 import Icon from './Icon.astro';
-import { categories } from '../data/categories.js';
+import { activeCategories } from '../data/categories.js';
 import { langPath, categoryUrl, pageUrl } from '../lib/site.js';
 const { lang, dict } = Astro.props;
-const year = 2025;
+const year = new Date().getFullYear();
 ---
 <footer class="site-footer">
   <div class="container footer-grid">
@@ -17,7 +17,7 @@ const year = 2025;
     </div>
     <div class="footer-col">
       <h4>{dict.footer.productTitle}</h4>
-      {categories.map((c) => <a href={categoryUrl(lang, c.id)}>{dict.categories[c.id].name}</a>)}
+      {activeCategories.map((c) => <a href={categoryUrl(lang, c.id)}>{dict.categories[c.id].name}</a>)}
     </div>
     <div class="footer-col">
       <h4>{dict.footer.companyTitle}</h4>
@@ -31,6 +31,7 @@ const year = 2025;
       <a href={pageUrl(lang, 'privacy')}>{dict.footer.links.privacy}</a>
       <a href={pageUrl(lang, 'terms')}>{dict.footer.links.terms}</a>
       <a href={pageUrl(lang, 'data')}>{dict.footer.links.data}</a>
+      <a href="/sitemap.xml">Sitemap</a>
     </div>
   </div>
   <div class="container footer-bottom">

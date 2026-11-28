@@ -89,10 +89,11 @@ export default {
   },
 
   home: {
-    heroBadge: 'Free · No sign-up · Files stay on your device',
-    heroTitle: 'One toolbox for',
-    heroTitleHighlight: 'everyday work',
-    heroDesc: '23 fully working online tools for text, images, PDFs, calculations, development and productivity. Every conversion and calculation happens inside your browser — nothing is uploaded, nothing is stored.',
+    homeTitle: 'ToolWild · Free Online Toolbox for Everyday Work',
+    heroBadge: 'Files never uploaded · No sign-up · Free to use',
+    heroTitle: 'Text, images, PDFs, calculators —',
+    heroTitleHighlight: 'ready when you are',
+    heroDesc: '{TOOL_COUNT} free online tools that run entirely in your browser. No uploads, no accounts, no data retained — just open the page and get work done.',
     statTools: 'free online tools',
     statLocal: 'local processing, privacy first',
     statFree: 'no account required',
@@ -119,7 +120,7 @@ export default {
       { icon: 'layers', title: 'Built to grow', desc: 'A modular architecture that keeps growing, with favorites and recent tools stored in your own browser.' },
     ],
     aboutTitle: 'About ToolWild',
-    aboutBody: 'ToolWild is a free online toolbox for users in China and around the world. We think everyday utilities should be simple, fast and trustworthy: no registration, no file uploads and no hidden limits. The first release ships 20 high-frequency tools, with trade, AI-assist and office automation tools to follow.',
+    aboutBody: 'ToolWild is a free online toolbox for users in China and around the world. We think everyday utilities should be simple, fast and trustworthy: no registration, no file uploads and no hidden limits. The first release ships {TOOL_COUNT} high-frequency tools, with trade, AI-assist and office automation tools to follow.',
     footerCtaTitle: 'Need a tool that is not here yet?',
     footerCtaDesc: 'Tell us what you need and we will prioritize it.',
     footerCtaButton: 'Suggest a tool',
@@ -135,7 +136,7 @@ export default {
     localNote: 'Processed locally · No uploads',
     backToCategory: 'Back to category',
     toolsInCategory: 'More tools in this category',
-    favoriteHint: 'Favorites are stored in this browser and shown in "My favorites" on the home page',
+    favoriteHint: 'Favorites and recent tools stay in this browser only — never uploaded and never synced across devices; find them under "My favorites" on the home page',
   },
 
   categoryPage: {
@@ -197,7 +198,7 @@ export default {
         { h: 'What we do', p: ['ToolWild offers free, ready-to-use online tools for text processing, image editing, PDF and file conversion, calculations, development helpers and office productivity. Every tool has its own page, its own URL and a complete Chinese and English interface.', 'We do not ship decorative buttons: every released tool is functionally tested, with real input, processing, results, copying and downloading.'] },
         { h: 'Privacy is the default', p: ['Tools that handle files — image compression, PDF merging, Excel to CSV — do all the work client-side with browser JavaScript. Files never reach a server. The site is statically hosted, has no account system and collects no personal data.', 'Favorites and recently used tools also live only in your own browser localStorage, and can be exported or wiped at any time.'] },
         { h: 'Technology', p: ['The site is statically generated with Astro 5 and built with plain HTML, CSS and JavaScript, so pages load fast and are fully indexable. PDFs are handled by pdf-lib, spreadsheets by SheetJS and QR codes by qrcode — each loaded only when needed.', 'It deploys to static hosts such as Cloudflare Pages: no servers to buy and no paid APIs.'] },
-        { h: 'What is next', p: ['Phase one ships 20 high-frequency tools. Phase two covers factory and trade calculators (FOB quotes, CBM volume, carton quantities), AI-assisted writing tools and office automation. The modular architecture scales to several hundred tools.'] },
+        { h: 'What is next', p: ['Phase one ships {TOOL_COUNT} high-frequency tools. Phase two covers factory and trade calculators (FOB quotes, CBM volume, carton quantities), AI-assisted writing tools and office automation. The modular architecture scales to several hundred tools.'] },
       ],
     },
     contact: {
@@ -286,7 +287,7 @@ export default {
     legalTitle: 'Legal',
     builtWith: 'Built with Astro 5 and vanilla JavaScript · Statically hosted',
     copyright: '© 2025 ToolWild. All rights reserved.',
-    privacyShort: 'All tools run locally in your browser. Files are never uploaded.',
+    privacyShort: 'Tools run locally, files are never uploaded, and favorites stay on this device. Anonymous Google Analytics is used — see Privacy Policy.',
     links: {
       about: 'About Us', contact: 'Contact Us', privacy: 'Privacy Policy', terms: 'Terms of Use',
       suggest: 'Suggest a Tool', changelog: 'Changelog', data: 'Local Data & Privacy',

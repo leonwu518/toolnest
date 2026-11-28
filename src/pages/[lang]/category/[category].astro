@@ -5,12 +5,12 @@ import ToolCard from '../../../components/ToolCard.astro';
 import Breadcrumb from '../../../components/Breadcrumb.astro';
 import SearchBox from '../../../components/SearchBox.astro';
 import { getDict, getToolI18n, isLang } from '../../../i18n/index.js';
-import { categories, categoryById } from '../../../data/categories.js';
+import { activeCategories, categoryById } from '../../../data/categories.js';
 import { toolsByCategory, roadmap } from '../../../data/tools.js';
 import { langPath, categoryUrl } from '../../../lib/site.js';
 
 export function getStaticPaths() {
-  return ['zh', 'en'].flatMap((lang) => categories.map((c) => ({ params: { lang, category: c.id } })));
+  return ['zh', 'en'].flatMap((lang) => activeCategories.map((c) => ({ params: { lang, category: c.id } })));
 }
 
 const { lang, category } = Astro.params;
@@ -87,7 +87,7 @@ const plannedNames = dict.roadmap[category] || [];
   <section class="section-sm">
     <div class="section-head"><div><h2>{dict.home.categoriesTitle}</h2></div></div>
     <div class="category-grid">
-      {categories.filter((c) => c.id !== category).map((c) => (
+      {activeCategories.filter((c) => c.id !== category).map((c) => (
         <a class="category-card" href={categoryUrl(lang, c.id)}>
           <span class:list={['tool-icon', `accent-${c.accent}`]}><Icon name={c.icon} size={20} /></span>
           <span><h3>{dict.categories[c.id].name}</h3><p>{dict.categories[c.id].desc}</p></span>

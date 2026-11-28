@@ -5,7 +5,7 @@ import ToolCard from '../../components/ToolCard.astro';
 import SearchBox from '../../components/SearchBox.astro';
 import { getDict, getToolI18n, isLang } from '../../i18n/index.js';
 import { tools, popularTools, recommendedTools, newTools } from '../../data/tools.js';
-import { categories, categoryById } from '../../data/categories.js';
+import { activeCategories, categoryById } from '../../data/categories.js';
 import { langPath, categoryUrl, pageUrl } from '../../lib/site.js';
 
 export function getStaticPaths() {
@@ -26,9 +26,9 @@ const cardData = (m) => ({
 const popular = popularTools().map(cardData);
 const recommended = recommendedTools().map(cardData);
 const newest = newTools().map((m) => ({ ...cardData(m), badge: 'new', badgeLabel: dict.common.newBadge }));
-const cats = categories.map((c) => ({ ...c, ...dict.categories[c.id] }));
+const cats = activeCategories.map((c) => ({ ...c, ...dict.categories[c.id] }));
 ---
-<MainLayout lang={lang} title={`ToolWild · ${dict.tagline} | ${lang === 'zh' ? '免费在线工具平台' : 'Free Online Tools'}`} description={dict.siteDescription} path={path} active="home">
+<MainLayout lang={lang} title={dict.home.homeTitle} description={dict.siteDescription} path={path} active="home">
 
   <section class="hero">
     <span class="hero-badge"><Icon name="sparkles" size={14} /> {dict.home.heroBadge}</span>
@@ -36,7 +36,7 @@ const cats = categories.map((c) => ({ ...c, ...dict.categories[c.id] }));
     <p class="hero-desc">{dict.home.heroDesc}</p>
     <SearchBox dict={dict} />
     <div class="hero-stats">
-      <span class="hero-stat"><Icon name="wrench" /> 20 {dict.home.statTools}</span>
+      <span class="hero-stat"><Icon name="wrench" /> {tools.length} {dict.home.statTools}</span>
       <span class="hero-stat"><Icon name="shield-check" /> {dict.home.statLocal}</span>
       <span class="hero-stat"><Icon name="zap" /> {dict.home.statFree}</span>
     </div>

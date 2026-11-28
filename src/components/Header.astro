@@ -2,7 +2,7 @@
 import Icon from './Icon.astro';
 import LanguageSwitch from './LanguageSwitch.astro';
 import ThemeToggle from './ThemeToggle.astro';
-import { categories } from '../data/categories.js';
+import { activeCategories } from '../data/categories.js';
 import { langPath, categoryUrl, pageUrl } from '../lib/site.js';
 
 const { lang, dict, path, active = '' } = Astro.props;
@@ -17,7 +17,7 @@ const { lang, dict, path, active = '' } = Astro.props;
 
     <nav class="main-nav" id="main-nav" aria-label={dict.nav.more}>
       <a href={langPath(lang)} class:list={[active === 'home' && 'active']}>{dict.nav.home}</a>
-      {categories.map((c) => (
+      {activeCategories.map((c) => (
         <a href={categoryUrl(lang, c.id)} class:list={[active === c.id && 'active']}>{dict.nav[c.id]}</a>
       ))}
       <a class:list={['only-mobile', active === 'about' && 'active']} href={pageUrl(lang, 'about')}>{dict.footer.links.about}</a>

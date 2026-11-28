@@ -1,5 +1,5 @@
 import { tools } from '../data/tools.js';
-import { categories } from '../data/categories.js';
+import { activeCategories } from '../data/categories.js';
 import { LANGS, DEFAULT_LANG, langPath, toolUrl, categoryUrl, pageUrl, absoluteUrl, switchLangPath } from '../lib/site.js';
 
 export const prerender = true;
@@ -8,7 +8,7 @@ const STATIC_PAGES = ['about', 'contact', 'privacy', 'terms', 'suggest', 'change
 const TODAY = new Date().toISOString().slice(0, 10);
 
 function alternates(path) {
-  return LANGS.map((l) => `<xhtml:link rel="alternate" hreflang="${l}" href="${absoluteUrl(switchLangPath(path, l))}" />`).join('')
+  return LANGS.map((l) => `<xhtml:link rel="alternate" hreflang="${l === 'zh' ? 'zh-CN' : l}" href="${absoluteUrl(switchLangPath(path, l))}" />`).join('')
     + `<xhtml:link rel="alternate" hreflang="x-default" href="${absoluteUrl(switchLangPath(path, DEFAULT_LANG))}" />`;
 }
 
@@ -22,7 +22,7 @@ export function GET() {
   for (const lang of LANGS) {
     urls.push(entry(langPath(lang), { priority: '1.0', changefreq: 'weekly' }));
     for (const m of tools) urls.push(entry(toolUrl(lang, m.slug), { priority: '0.8', lastmod: m.addedAt }));
-    for (const c of categories) urls.push(entry(categoryUrl(lang, c.id), { priority: '0.6' }));
+    for (const c of activeCategories) urls.push(entry(categoryUrl(lang, c.id), { priority: '0.6' }));
     for (const p of STATIC_PAGES) urls.push(entry(pageUrl(lang, p), { priority: '0.4', changefreq: 'yearly' }));
   }
 

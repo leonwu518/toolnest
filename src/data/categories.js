@@ -1,3 +1,5 @@
+import { tools } from './tools.js';
+
 // 一级分类定义。新增分类只需在此追加一条，并在 i18n 中补充 categories.<id> 文案。
 export const categories = [
   { id: 'text', icon: 'type', order: 1, accent: 'blue' },
@@ -12,3 +14,7 @@ export const categories = [
 
 export const categoryIds = categories.map((c) => c.id);
 export const categoryById = Object.fromEntries(categories.map((c) => [c.id, c]));
+
+/** 已上线的分类：至少有一个工具。导航、首页与 sitemap 只展示这些，规划中分类不产生空页面。 */
+export const activeCategories = categories.filter((c) => tools.some((t) => t.category === c.id));
+export const activeCategoryIds = activeCategories.map((c) => c.id);

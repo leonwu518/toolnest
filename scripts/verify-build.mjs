@@ -15,7 +15,7 @@ if (!fs.existsSync(DIST)) {
 }
 
 const { tools } = await import('../src/data/tools.js');
-const { categories } = await import('../src/data/categories.js');
+const { activeCategories } = await import('../src/data/categories.js');
 const STATIC_PAGES = ['about', 'contact', 'privacy', 'terms', 'suggest', 'changelog', 'data'];
 
 const htmlFiles = [];
@@ -41,7 +41,7 @@ for (const file of htmlFiles) {
   if (!isRoot && !has(/<meta name="description" content="[^"]{20,}"/)) errors.push(`${tag} 缺少有效 description`);
   if (!has(/<link rel="canonical" href="https?:\/\/[^"]+"/)) errors.push(`${tag} 缺少 canonical`);
   if (!isRoot) {
-    for (const l of ['zh', 'en', 'x-default']) {
+    for (const l of ['zh-CN', 'en', 'x-default']) {
       if (!has(new RegExp(`hreflang="${l}"`))) errors.push(`${tag} 缺少 hreflang=${l}`);
     }
   }
@@ -76,7 +76,7 @@ const required = ['index.html', 'robots.txt', 'sitemap.xml', '_headers', 'favico
 for (const lang of ['zh', 'en']) {
   required.push(`${lang}/index.html`);
   for (const t of tools) required.push(`${lang}/tools/${t.slug}/index.html`);
-  for (const c of categories) required.push(`${lang}/category/${c.id}/index.html`);
+  for (const c of activeCategories) required.push(`${lang}/category/${c.id}/index.html`);
   for (const p of STATIC_PAGES) required.push(`${lang}/${p}/index.html`);
 }
 for (const p of required) if (!fs.existsSync(path.join(DIST, p))) errors.push(`缺少产物: ${p}`);
@@ -84,7 +84,7 @@ for (const p of required) if (!fs.existsSync(path.join(DIST, p))) errors.push(`�
 // sitemap / robots
 const sitemap = read('sitemap.xml');
 const sitemapUrls = (sitemap.match(/<loc>/g) || []).length;
-const expectedUrls = 1 + 2 * (1 + tools.length + categories.length + STATIC_PAGES.length);
+const expectedUrls = 1 + 2 * (1 + tools.length + activeCategories.length + STATIC_PAGES.length);
 if (sitemapUrls !== expectedUrls) errors.push(`sitemap URL 数应为 ${expectedUrls}，实际 ${sitemapUrls}`);
 for (const t of tools) {
   for (const lang of ['zh', 'en']) {

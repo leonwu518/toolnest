@@ -1,16 +1,18 @@
 ---
 import { seoLinks, SITE, absoluteUrl } from '../lib/site.js';
+import { tools } from '../data/tools.js';
 const canonical = absoluteUrl('/');
+const toolCount = tools.length;
 ---
 <!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ToolWild · A Smart Toolbox for Everyday Work</title>
+  <title>ToolWild · Free Online Toolbox / 免费在线工具箱</title>
   <meta name="description" content="ToolWild — 免费在线工具平台：文本、图片、PDF、计算、开发与效率工具，全部在浏览器本地处理。Free online tools, processed locally in your browser." />
   <link rel="canonical" href={canonical} />
-  <link rel="alternate" hreflang="zh" href={absoluteUrl('/zh/')} />
+  <link rel="alternate" hreflang="zh-CN" href={absoluteUrl('/zh/')} />
   <link rel="alternate" hreflang="en" href={absoluteUrl('/en/')} />
   <link rel="alternate" hreflang="x-default" href={absoluteUrl('/zh/')} />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -48,10 +50,10 @@ const canonical = absoluteUrl('/');
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z"/></svg>
     </div>
     <h1>ToolWild</h1>
-    <p class="tag">A Smart Toolbox for Everyday Work · 日常工作的智能工具箱</p>
+    <p class="tag">Free Online Toolbox for Everyday Work · 日常工作的免费在线工具箱</p>
     <div class="langs">
-      <a href="/zh/" hreflang="zh-CN"><span>简体中文<small>中文界面 · 23 个免费在线工具</small></span><span aria-hidden="true">→</span></a>
-      <a href="/en/" hreflang="en"><span>English<small>English interface · 23 free online tools</small></span><span aria-hidden="true">→</span></a>
+      <a href="/zh/" hreflang="zh-CN"><span>简体中文<small>中文界面 · {toolCount} 个免费在线工具</small></span><span aria-hidden="true">→</span></a>
+      <a href="/en/" hreflang="en"><span>English<small>English interface · {toolCount} free online tools</small></span><span aria-hidden="true">→</span></a>
     </div>
     <p class="note">Your language preference is saved locally in this browser. Add <code>?noauto</code> to this URL to disable automatic redirect.<br />语言偏好仅保存在本机浏览器，加 <code>?noauto</code> 可关闭自动跳转。</p>
   </div>

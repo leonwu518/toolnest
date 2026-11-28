@@ -33,7 +33,7 @@ export function seoLinks(lang, path) {
   return {
     canonical: absoluteUrl(path),
     alternates: [
-      { lang: 'zh', href: absoluteUrl(switchLangPath(path, 'zh')) },
+      { lang: 'zh-CN', href: absoluteUrl(switchLangPath(path, 'zh')) },
       { lang: 'en', href: absoluteUrl(switchLangPath(path, 'en')) },
       { lang: 'x-default', href: absoluteUrl(switchLangPath(path, DEFAULT_LANG)) },
     ],

@@ -1,8 +1,18 @@
 import zh from './zh.js';
 import en from './en.js';
+import { tools } from '../data/tools.js';
 import { LANGS, DEFAULT_LANG } from '../lib/site.js';
 
-export const dictionaries = { zh, en };
+/** 构建时把文案中的 {TOOL_COUNT} 替换为 tools.js 中实际工具数量，新增工具无需手改文案 */
+const TOOL_COUNT = tools.length;
+const fillCount = (value) => {
+  if (typeof value === 'string') return value.replaceAll('{TOOL_COUNT}', String(TOOL_COUNT));
+  if (Array.isArray(value)) return value.map(fillCount);
+  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, fillCount(v)]));
+  return value;
+};
+
+export const dictionaries = { zh: fillCount(zh), en: fillCount(en) };
 
 export function isLang(v) {
   return LANGS.includes(v);

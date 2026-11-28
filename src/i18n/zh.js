@@ -89,10 +89,11 @@ export default {
   },
 
   home: {
-    heroBadge: '免费 · 无需注册 · 文件不上传',
-    heroTitle: '一个工具箱，',
-    heroTitleHighlight: '搞定日常工作',
-    heroDesc: '23 个真实可用的在线工具，覆盖文本处理、图片编辑、PDF 文件、计算换算、开发辅助与效率办公。所有计算与文件处理都在你的浏览器里完成，不上传、不留痕。',
+    homeTitle: 'ToolWild · 日常工作的免费在线工具箱',
+    heroBadge: '文件不上传 · 无需注册 · 完全免费',
+    heroTitle: '文本、图片、PDF、计算，',
+    heroTitleHighlight: '打开就能用',
+    heroDesc: '{TOOL_COUNT} 个免费在线工具，全部在浏览器本地运行：文件不上传、无需注册、不留痕。覆盖文本处理、图片编辑、PDF 文件、计算换算、开发辅助与效率办公。',
     statTools: '免费在线工具',
     statLocal: '本地处理，保护隐私',
     statFree: '无需注册即可使用',
@@ -119,7 +120,7 @@ export default {
       { icon: 'layers', title: '持续扩展', desc: '模块化架构，工具持续增加，收藏与最近使用记录保存在你自己的浏览器中。' },
     ],
     aboutTitle: '关于 ToolWild',
-    aboutBody: 'ToolWild 是一个面向中国及全球用户的免费在线工具平台。我们相信常用的小工具应该简单、快速、可信赖：不要求注册、不把文件传到服务器、不设置隐形的使用限制。第一阶段上线 20 个高频工具，后续会逐步增加外贸工厂、AI 辅助与办公自动化工具。',
+    aboutBody: 'ToolWild 是一个面向中国及全球用户的免费在线工具平台。我们相信常用的小工具应该简单、快速、可信赖：不要求注册、不把文件传到服务器、不设置隐形的使用限制。第一阶段上线 {TOOL_COUNT} 个高频工具，后续会逐步增加外贸工厂、AI 辅助与办公自动化工具。',
     footerCtaTitle: '需要一个还没上线的工具？',
     footerCtaDesc: '告诉我们你的需求，我们会优先安排开发。',
     footerCtaButton: '建议一个工具',
@@ -135,7 +136,7 @@ export default {
     localNote: '浏览器本地处理 · 不上传文件',
     backToCategory: '返回该分类',
     toolsInCategory: '该分类下的其他工具',
-    favoriteHint: '收藏会保存在本机浏览器，可在首页「我的收藏」中查看',
+    favoriteHint: '收藏与最近使用仅保存在本机浏览器，不会上传服务器，也不跨设备同步；可在首页「我的收藏」中查看',
   },
 
   categoryPage: {
@@ -197,7 +198,7 @@ export default {
         { h: '我们做什么', p: ['ToolWild 提供免费、即开即用的在线工具，覆盖文本处理、图片编辑、PDF 与文件转换、计算换算、开发辅助和效率办公。每个工具都有独立页面、独立网址和完整的中英文界面。', '我们不做「只有界面没有功能」的摆设：所有已上线工具都经过实际功能测试，输入、处理、结果、复制与下载都是真实可用的。'] },
         { h: '隐私是默认设置', p: ['图片压缩、PDF 合并、Excel 转 CSV 等涉及文件的工具，全部使用浏览器端 JavaScript 在本地完成，文件不会上传到服务器。网站静态托管，无用户账号体系，不收集个人隐私信息。', '收藏与最近使用记录也只保存在你自己浏览器的 localStorage 中，并且可以随时导出备份或一键清除。'] },
         { h: '技术选择', p: ['网站使用 Astro 5 静态生成，配合原生 HTML、CSS 与 JavaScript，静态页面首屏快、可被搜索引擎完整索引。PDF 处理使用 pdf-lib，表格解析使用 SheetJS，二维码使用 qrcode，全部按需加载。', '部署在 Cloudflare Pages 等静态托管平台，无需购买服务器，也不需要任何付费 API。'] },
-        { h: '后续规划', p: ['第一阶段上线 20 个高频工具。第二阶段规划外贸工厂工具（FOB 报价、CBM 体积、装箱数量等）、AI 辅助工具与办公自动化工具。工具以模块化方式持续增加，架构支持扩展到数百个工具。'] },
+        { h: '后续规划', p: ['第一阶段上线 {TOOL_COUNT} 个高频工具。第二阶段规划外贸工厂工具（FOB 报价、CBM 体积、装箱数量等）、AI 辅助工具与办公自动化工具。工具以模块化方式持续增加，架构支持扩展到数百个工具。'] },
       ],
     },
     contact: {
@@ -286,7 +287,7 @@ export default {
     legalTitle: '条款',
     builtWith: '基于 Astro 5 与原生 JavaScript 构建 · 静态托管',
     copyright: '© 2025 ToolWild. 保留所有权利。',
-    privacyShort: '所有工具在浏览器本地运行，文件不会上传服务器。',
+    privacyShort: '工具在浏览器本地运行，文件不上传；收藏与主题仅存本机、不跨设备同步。使用 Google Analytics 匿名统计，详见隐私政策。',
     links: {
       about: '关于我们', contact: '联系我们', privacy: '隐私政策', terms: '使用条款',
       suggest: '建议工具', changelog: '更新日志', data: '本地数据与隐私',

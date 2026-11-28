@@ -74,6 +74,11 @@ const siteLd = JSON.stringify({
   description: dict.siteDescription,
   inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
   publisher: { '@type': 'Organization', name: 'ToolWild', url: SITE },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: { '@type': 'EntryPoint', urlTemplate: `${absoluteUrl(langPath(lang))}?q={search_term_string}` },
+    'query-input': 'required name=search_term_string',
+  },
 }).replace(/</g, '\\u003c');
 ---
 <!doctype html>

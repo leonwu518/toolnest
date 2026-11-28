@@ -96,7 +96,7 @@ console.log('\n=== ToolWild 浏览器冒烟测试 ===');
 /* ---------- 站点级 ---------- */
 await check('首页 / 搜索 / 语言切换 / 深色模式', async () => {
   await go('/zh/');
-  assert((await text('h1')).includes('搞定日常工作'), '首页 H1 不正确');
+  assert((await text('h1')).includes('打开就能用'), '首页 H1 不正确');
   await setVal('[data-role="site-search"]', '压缩');
   await sleep(150);
   assert((await page.$$('a.search-result-item')).length > 0, '搜索无结果');

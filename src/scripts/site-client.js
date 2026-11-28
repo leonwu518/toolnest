@@ -103,6 +103,11 @@ $$('[data-role="site-search"]').forEach((input) => {
   }, true);
   on(clearBtn, 'click', () => { input.value = ''; host.hidden = true; host.innerHTML = ''; clearBtn.classList.remove('show'); input.focus(); });
   on(document, 'click', (e) => { if (!wrap.contains(e.target)) host.hidden = true; });
+  /* 支持 WebSite SearchAction：?q=关键词 预填并展示结果 */
+  try {
+    const initialQuery = new URL(location.href).searchParams.get('q');
+    if (initialQuery) { input.value = initialQuery; doSearch(); }
+  } catch (e) { /* 忽略无效 URL */ }
 });
 
 /* ---------- 工具页：收藏按钮 + 最近使用 ---------- */
