@@ -1,9 +1,9 @@
 {
-  "name": "toolnest",
+  "name": "toolwild",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "ToolNest - A Smart Toolbox for Everyday Work. Free online tools, processed locally in your browser.",
+  "description": "ToolWild - A Smart Toolbox for Everyday Work. Free online tools, processed locally in your browser.",
   "scripts": {
     "dev": "astro dev --host 0.0.0.0",
     "build": "astro build",

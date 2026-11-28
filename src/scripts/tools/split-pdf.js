@@ -43,7 +43,7 @@ export default function init() {
         const out = await PDFDocument.create();
         const pages = await out.copyPages(src, parsed.pages.map((p) => p - 1));
         pages.forEach((p) => out.addPage(p));
-        downloadBlob(new Blob([await out.save()], { type: 'application/pdf' }), 'toolnest-split.pdf');
+        downloadBlob(new Blob([await out.save()], { type: 'application/pdf' }), 'toolwild-split.pdf');
       } else {
         const mod = await import('jszip');
         const JSZip = mod.default || mod;
@@ -54,7 +54,7 @@ export default function init() {
           out.addPage(page);
           zip.file(`page-${String(i + 1).padStart(3, '0')}.pdf`, await out.save());
         }
-        downloadBlob(await zip.generateAsync({ type: 'blob' }), 'toolnest-split-pages.zip');
+        downloadBlob(await zip.generateAsync({ type: 'blob' }), 'toolwild-split-pages.zip');
       }
       clearError();
       setStatus(msg('success'));

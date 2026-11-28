@@ -8,14 +8,14 @@ export function runTool() {
   if (!slug) return;
   const loader = loaders[`./tools/${slug}.js`];
   if (!loader) {
-    console.error(`[ToolNest] 未找到工具脚本: ${slug}`);
+    console.error(`[ToolWild] 未找到工具脚本: ${slug}`);
     showError(msg('readError'));
     return;
   }
   loader()
     .then((mod) => { if (typeof mod.default === 'function') mod.default(); })
     .catch((err) => {
-      console.error(`[ToolNest] 工具 ${slug} 初始化失败`, err);
+      console.error(`[ToolWild] 工具 ${slug} 初始化失败`, err);
       showError(msg('readError'));
     });
 }

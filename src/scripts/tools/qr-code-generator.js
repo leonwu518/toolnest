@@ -47,11 +47,11 @@ export default function init() {
   on(role('download-png'), 'click', async () => {
     if (!state.canvas) return;
     const blob = await canvasToBlob(state.canvas, 'image/png');
-    downloadBlob(blob, 'toolnest-qrcode.png');
+    downloadBlob(blob, 'toolwild-qrcode.png');
   });
   on(role('download-svg'), 'click', () => {
     if (!state.svg) return;
-    downloadText(state.svg, 'toolnest-qrcode.svg', 'image/svg+xml;charset=utf-8');
+    downloadText(state.svg, 'toolwild-qrcode.svg', 'image/svg+xml;charset=utf-8');
   });
   on(role('clear'), 'click', () => {
     role('input').value = '';

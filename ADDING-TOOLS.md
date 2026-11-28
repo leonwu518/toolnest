@@ -1,6 +1,6 @@
 # 新增工具操作指南
 
-ToolNest 的架构支持扩展到 100–500 个工具：**新增一个工具不需要新建页面文件**，动态路由会自动生成中英文两个页面、sitemap、hreflang 与内链。
+ToolWild 的架构支持扩展到 100–500 个工具：**新增一个工具不需要新建页面文件**，动态路由会自动生成中英文两个页面、sitemap、hreflang 与内链。
 
 只需 4 个步骤 + 1 次自检。
 
@@ -38,7 +38,7 @@ ToolNest 的架构支持扩展到 100–500 个工具：**新增一个工具不�
   name: 'CSV 数据清洗',
   desc: '清理 CSV 中的空行、重复行与多余空白。',
   short: '清理 CSV 空行、重复行与空白',
-  seoTitle: '在线 CSV 数据清洗工具 | ToolNest',
+  seoTitle: '在线 CSV 数据清洗工具 | ToolWild',
   seoDesc: '免费在线 CSV 清洗：移除空行、重复行、首尾空白……（自然描述，不要堆砌关键词）',
   keywords: ['CSV 清洗', 'csv cleaner'],
   howto: { steps: ['第一步…', '第二步…', '第三步…'] },

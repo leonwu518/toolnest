@@ -146,7 +146,7 @@ const label = dict.footer.links[page] || info.title;
       const message = role('fb-message')?.value.trim() || '';
       if (!name || !message) { toast(required, 'error'); return; }
       const kind = form.dataset.kind === 'suggest' ? 'Tool suggestion' : 'Feedback';
-      const subject = `[ToolNest ${kind}] ${topic || name}`;
+      const subject = `[ToolWild ${kind}] ${topic || name}`;
       const body = [`Name: ${name}`, `Email: ${email || '-'}`, '', message].join('\n');
       window.location.href = `mailto:hello@toolwild.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     });
@@ -166,7 +166,7 @@ const label = dict.footer.links[page] || info.title;
   refresh();
 
   on(role('data-export'), 'click', () => {
-    downloadText(JSON.stringify(exportBackup(), null, 2), 'toolnest-backup.json', 'application/json');
+    downloadText(JSON.stringify(exportBackup(), null, 2), 'toolwild-backup.json', 'application/json');
     toast(dm.msgExport || 'Exported', 'success');
   });
 

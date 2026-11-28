@@ -84,7 +84,7 @@ test('URL 编解码：中文与特殊字符', () => {
 });
 
 test('Base64：中文与 emoji 往返', () => {
-  const text = '你好 ToolNest 🚀\n第二行';
+  const text = '你好 ToolWild 🚀\n第二行';
   assert.equal(base64Decode(base64Encode(text)), text);
   assert.equal(base64Decode(base64Encode('')), '');
   assert.throws(() => base64Decode('not-valid-base64!!!'));

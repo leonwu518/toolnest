@@ -28,7 +28,7 @@ const recommended = recommendedTools().map(cardData);
 const newest = newTools().map((m) => ({ ...cardData(m), badge: 'new', badgeLabel: dict.common.newBadge }));
 const cats = categories.map((c) => ({ ...c, ...dict.categories[c.id] }));
 ---
-<MainLayout lang={lang} title={`ToolNest · ${dict.tagline} | ${lang === 'zh' ? '免费在线工具平台' : 'Free Online Tools'}`} description={dict.siteDescription} path={path} active="home">
+<MainLayout lang={lang} title={`ToolWild · ${dict.tagline} | ${lang === 'zh' ? '免费在线工具平台' : 'Free Online Tools'}`} description={dict.siteDescription} path={path} active="home">
 
   <section class="hero">
     <span class="hero-badge"><Icon name="sparkles" size={14} /> {dict.home.heroBadge}</span>

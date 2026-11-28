@@ -89,7 +89,7 @@ export default function init() {
   on(role('download'), 'click', () => {
     if (!state.blob) return;
     const ext = (state.mime.split('/')[1] || 'bin').replace(/[^a-z0-9]/gi, '').slice(0, 8) || 'bin';
-    downloadBlob(state.blob, `toolnest-decoded.${ext}`);
+    downloadBlob(state.blob, `toolwild-decoded.${ext}`);
   });
   on(role('clear'), 'click', () => {
     input.value = ''; output.value = '';

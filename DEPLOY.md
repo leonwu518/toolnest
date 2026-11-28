@@ -1,4 +1,4 @@
-# ToolNest 部署说明（Cloudflare Pages）
+# ToolWild 部署说明（Cloudflare Pages）
 
 **正式域名：`https://www.toolwild.com`**
 
@@ -6,7 +6,7 @@
 
 > ## ⚠️ 重要更正（2026-11-28 实测）
 >
-> **`toolnest.pages.dev` 不是本项目的站点，而是第三方已占用的 React 应用**（页面加载 `/static/js/main.c8078379.js`、`manifest.json`，标题 `ToolNest`，与本项目 Astro 产物无关）。该子域是 Cloudflare Pages 的全局命名空间，先到先得。
+> **`toolnest.pages.dev` 不是本项目的站点，而是第三方已占用的 React 应用**（页面加载 `/static/js/main.c8078379.js`、`manifest.json`，标题 `ToolWild`，与本项目 Astro 产物无关）。该子域是 Cloudflare Pages 的全局命名空间，先到先得。
 >
 > **绝对不要把 `www.toolwild.com` 的 CNAME 指向 `toolnest.pages.dev`**，否则域名会打开别人的网站。
 >
@@ -179,7 +179,7 @@ CSP 允许 `'unsafe-inline'` 脚本，仅用于 `<head>` 中防止主题闪烁�
 
 | 现象 | 原因与处理 |
 |---|---|
-| 打开域名看到别人的 `ToolNest` React 网站 | CNAME 误填成 `toolnest.pages.dev`（第三方已占用）。改成自己项目的 `<项目名>.pages.dev`，并确认 Pages 后台自定义域已绑定 |
+| 打开域名看到别人的 `ToolWild` React 网站 | CNAME 误填成 `toolnest.pages.dev`（第三方已占用）。改成自己项目的 `<项目名>.pages.dev`，并确认 Pages 后台自定义域已绑定 |
 | `www.toolwild.com` 返回 `522` | 只手动加了 CNAME、没有先在 Pages 后台 **Custom domains** 发起绑定；先在后台关联域名再改 DNS |
 | `*.pages.dev` 打不开或内容不对 | 项目尚未部署或部署到了别的项目名；按第三节重新部署，并核对后台显示的默认域名 |
 | 自定义域长期停在 `Pending` / 证书未签发 | 检查 CNAME 是否生效、是否存在限制 CA 的 CAA 记录；Spaceship 的停放 A 记录不影响 `www` |
@@ -196,7 +196,7 @@ CSP 允许 `'unsafe-inline'` 脚本，仅用于 `<head>` 中防止主题闪烁�
 
 ## 附录：本地冒烟测试的素材
 
-`npm run smoke` 会用 Chromium 真实上传文件。若 `/tmp/toolnest-fixtures` 不存在，可先生成：
+`npm run smoke` 会用 Chromium 真实上传文件。若 `/tmp/toolwild-fixtures` 不存在，可先生成：
 
 ```bash
 python3 - <<'PY'
@@ -204,13 +204,13 @@ from PIL import Image, ImageDraw
 from reportlab.pdfgen import canvas
 from openpyxl import Workbook
 import os
-d='/tmp/toolnest-fixtures'; os.makedirs(d, exist_ok=True)
+d='/tmp/toolwild-fixtures'; os.makedirs(d, exist_ok=True)
 img=Image.new('RGB',(800,600),(37,99,235)); ImageDraw.Draw(img).rectangle([100,100,700,500], fill='white')
 img.save(d+'/test.png'); img.save(d+'/test.jpg'); img.save(d+'/test.webp')
 for name,pages in [('a.pdf',2),('b.pdf',3)]:
     c=canvas.Canvas(d+'/'+name)
     for i in range(pages): c.drawString(72,720,f'{name} page {i+1}'); c.showPage()
     c.save()
-wb=Workbook(); ws=wb.active; ws.append(['name','qty']); ws.append(['apple',10]); ws.append(['中文',20]); wb.save(d+'/test.xlsx')
+wb=Workbook(); ws=wb.active; ws.append(['name','qty']); ws.append(['a','b']); ws.append(['中文',20]); wb.save(d+'/test.xlsx')
 PY
 ```

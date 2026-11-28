@@ -58,7 +58,7 @@ export default function init() {
     getCopyText: () => output.value,
     getDownload: () => downloadText(
       `${output.value}\n\n${msg('descriptionLabel')}: ${desc.textContent}\n${msg('trialResult')}: ${trialResult.textContent}\n`,
-      'toolnest-formula.txt'),
+      'toolwild-formula.txt'),
     onClear: () => {
       typeSel.value = FORMULAS[0].id;
       trialBox.value = DEFAULT_TRIAL;

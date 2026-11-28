@@ -10,8 +10,8 @@ import path from 'node:path';
 
 const PORT = 4322;
 const DIST = path.resolve('dist');
-const FIXTURES = '/tmp/toolnest-fixtures';
-const DOWNLOADS = '/tmp/toolnest-downloads';
+const FIXTURES = '/tmp/toolwild-fixtures';
+const DOWNLOADS = '/tmp/toolwild-downloads';
 const BASE = `http://127.0.0.1:${PORT}`;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const MIME = {
@@ -91,7 +91,7 @@ async function upload(sel, ...files) {
   await sleep(400);
 }
 
-console.log('\n=== ToolNest 浏览器冒烟测试 ===');
+console.log('\n=== ToolWild 浏览器冒烟测试 ===');
 
 /* ---------- 站点级 ---------- */
 await check('首页 / 搜索 / 语言切换 / 深色模式', async () => {
@@ -103,7 +103,7 @@ await check('首页 / 搜索 / 语言切换 / 深色模式', async () => {
   const enHref = await page.$eval('[data-lang-link="en"]', (a) => a.getAttribute('href'));
   assert(enHref === '/en/', `语言切换链接错误: ${enHref}`);
   await page.click('[data-action="theme-toggle"]');
-  assert((await page.evaluate(() => localStorage.getItem('toolnest.theme'))) === 'dark', '主题未保存');
+  assert((await page.evaluate(() => localStorage.getItem('toolwild.theme'))) === 'dark', '主题未保存');
   assert((await page.evaluate(() => document.documentElement.dataset.theme)) === 'dark', '主题未应用');
   await page.click('[data-action="theme-toggle"]');
 });
@@ -430,8 +430,8 @@ await check('新增工具的英文页面与语言路由', async () => {
 await check('收藏与最近使用：localStorage 写入', async () => {
   await go('/zh/tools/word-counter/');
   await page.click('[data-action="favorite"]');
-  const fav = await page.evaluate(() => JSON.parse(localStorage.getItem('toolnest.favorites') || '[]'));
-  const recent = await page.evaluate(() => JSON.parse(localStorage.getItem('toolnest.recent') || '[]'));
+  const fav = await page.evaluate(() => JSON.parse(localStorage.getItem('toolwild.favorites') || '[]'));
+  const recent = await page.evaluate(() => JSON.parse(localStorage.getItem('toolwild.recent') || '[]'));
   assert(fav.includes('word-counter'), '收藏未保存');
   assert(recent[0] === 'word-counter', '最近使用未记录');
 });
@@ -443,15 +443,15 @@ await check('本地数据页：备份导出与清除', async () => {
   await page.click('[data-role="data-export"]');
   const f = await waitDownload('backup.json');
   const backup = JSON.parse(fs.readFileSync(f, 'utf8'));
-  assert(backup.app === 'ToolNest', '备份格式错误');
+  assert(backup.app === 'ToolWild', '备份格式错误');
   await page.click('[data-role="data-clear"]');
   await sleep(200);
-  assert((await page.evaluate(() => localStorage.getItem('toolnest.favorites'))) === null, '清除未生效');
+  assert((await page.evaluate(() => localStorage.getItem('toolwild.favorites'))) === null, '清除未生效');
   // 用刚导出的备份恢复
   const imp = await page.$('[data-role="data-import"]');
   await imp.uploadFile(f);
   await sleep(250);
-  const restored = await page.evaluate(() => JSON.parse(localStorage.getItem('toolnest.favorites') || '[]'));
+  const restored = await page.evaluate(() => JSON.parse(localStorage.getItem('toolwild.favorites') || '[]'));
   assert(restored.includes('word-counter'), '备份恢复失败');
 });
 

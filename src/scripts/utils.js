@@ -215,7 +215,7 @@ export function canvasToBlob(canvas, type = 'image/png', quality) {
 }
 
 export function safeFileName(name) {
-  return String(name || 'toolnest').replace(/[^\w.\-\u4e00-\u9fa5]+/g, '_').slice(0, 80);
+  return String(name || 'toolwild').replace(/[^\w.\-\u4e00-\u9fa5]+/g, '_').slice(0, 80);
 }
 
 export const MAX_IMAGE_BYTES = 20 * 1024 * 1024;

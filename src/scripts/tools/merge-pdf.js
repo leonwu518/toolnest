@@ -53,7 +53,7 @@ export default function init() {
         pages.forEach((p) => merged.addPage(p));
       }
       const bytes = await merged.save();
-      downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'toolnest-merged.pdf');
+      downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'toolwild-merged.pdf');
       clearError();
       setStatus(msg('success'));
       toast(msg('success'), 'success');

@@ -69,11 +69,11 @@ const indexJson = JSON.stringify(searchIndex).replace(/</g, '\\u003c');
 const siteLd = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'ToolNest',
+  name: 'ToolWild',
   url: SITE,
   description: dict.siteDescription,
   inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
-  publisher: { '@type': 'Organization', name: 'ToolNest', url: SITE },
+  publisher: { '@type': 'Organization', name: 'ToolWild', url: SITE },
 }).replace(/</g, '\\u003c');
 ---
 <!doctype html>
@@ -83,7 +83,7 @@ const siteLd = JSON.stringify({
   <script is:inline>
     (function () {
       try {
-        var t = localStorage.getItem('toolnest.theme');
+        var t = localStorage.getItem('toolwild.theme');
         if (t !== 'dark' && t !== 'light') {
           t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
@@ -98,7 +98,7 @@ const siteLd = JSON.stringify({
   {links.alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)}
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="ToolNest" />
+  <meta property="og:site_name" content="ToolWild" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />

@@ -1,10 +1,10 @@
 /* 本地数据层：只保存工具标识与偏好，绝不保存任何文件内容或用户输入的文本 */
 const K = {
-  favorites: 'toolnest.favorites',
-  recent: 'toolnest.recent',
-  counts: 'toolnest.counts',
-  theme: 'toolnest.theme',
-  lang: 'toolnest.lang',
+  favorites: 'toolwild.favorites',
+  recent: 'toolwild.recent',
+  counts: 'toolwild.counts',
+  theme: 'toolwild.theme',
+  lang: 'toolwild.lang',
 };
 const LIMIT_RECENT = 12;
 
@@ -79,7 +79,7 @@ export function setLang(lang) { try { localStorage.setItem(K.lang, lang); } catc
 /* ---------- 备份 / 恢复 / 清除 ---------- */
 export function exportBackup() {
   return {
-    app: 'ToolNest',
+    app: 'ToolWild',
     version: 1,
     exportedAt: new Date().toISOString(),
     data: {
@@ -92,7 +92,7 @@ export function exportBackup() {
   };
 }
 export function importBackup(obj) {
-  if (!obj || obj.app !== 'ToolNest' || !obj.data || typeof obj.data !== 'object') return false;
+  if (!obj || obj.app !== 'ToolWild' || !obj.data || typeof obj.data !== 'object') return false;
   const d = obj.data;
   if (Array.isArray(d.favorites)) write(K.favorites, d.favorites.filter((x) => typeof x === 'string'));
   if (Array.isArray(d.recent)) write(K.recent, d.recent.filter((x) => typeof x === 'string').slice(0, LIMIT_RECENT));

@@ -62,7 +62,7 @@ export default function init() {
         const page = pdf.addPage([pageW, pageH]);
         page.drawImage(embedded, { x: (pageW - w) / 2, y: (pageH - h) / 2, width: w, height: h });
       }
-      downloadBlob(new Blob([await pdf.save()], { type: 'application/pdf' }), 'toolnest-images.pdf');
+      downloadBlob(new Blob([await pdf.save()], { type: 'application/pdf' }), 'toolwild-images.pdf');
       clearError(); setStatus(msg('success')); toast(msg('success'), 'success');
       trackToolUse('images-to-pdf');
     } catch (err) { console.error(err); showError(msg('readError')); }

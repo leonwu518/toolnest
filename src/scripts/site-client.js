@@ -124,7 +124,7 @@ if (currentTool) {
       const active = toggleFavorite(currentTool);
       toast(active ? msg('favoriteAdded') : msg('favoriteRemoved'), active ? 'success' : '');
       sync();
-      window.dispatchEvent(new CustomEvent('toolnest:favorites'));
+      window.dispatchEvent(new CustomEvent('toolwild:favorites'));
     });
   });
 }
@@ -156,4 +156,4 @@ function renderPersonal() {
   }
 }
 renderPersonal();
-window.addEventListener('toolnest:favorites', renderPersonal);
+window.addEventListener('toolwild:favorites', renderPersonal);
