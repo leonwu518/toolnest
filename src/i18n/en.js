@@ -236,6 +236,33 @@ export default {
     statusLang: 'Language',
   },
 
+  feedback: {
+    title: 'Feedback | ToolWild',
+    desc: 'Send ToolWild a suggestion, bug report or other feedback. It is only used to reply and improve.',
+    h1: 'Feedback',
+    lead: 'Tell us about your idea or the problem you ran into. Your message goes to our inbox and is never published.',
+    typeLabel: 'Feedback type',
+    typeSuggest: 'Suggest a tool',
+    typeBug: 'Bug report',
+    typeOther: 'Other',
+    messageLabel: 'Your message',
+    messagePlaceholder: 'Describe your idea or the problem. For bugs, include your browser version and steps to reproduce.',
+    contactLabel: 'Contact (optional)',
+    contactPlaceholder: 'Email or QQ, so we can reply',
+    submit: 'Send feedback',
+    submitDisabled: 'Form not configured',
+    note: 'We will not publish your feedback; contact details are only used to reply. No files are uploaded — this form only collects the text you type.',
+    success: 'Thanks — we got it!',
+    successHint: 'We will get back to you when we can.',
+    emptyMessage: 'Please write your feedback before submitting',
+    notConfigured: 'The feedback form is not configured yet — please use the email in the footer for now.',
+    fromLabel: 'Source tool',
+    toolButton: 'Found a problem or have an idea? Send feedback',
+    reportAction: 'Report',
+    onlineFeedback: 'Online feedback',
+    emailLabel: 'Email',
+  },
+
   pages: {
     about: {
       title: 'About Us | ToolWild',
@@ -244,7 +271,7 @@ export default {
       lead: 'A Smart Toolbox for Everyday Work.',
       sections: [
         { h: 'What we do', p: ['ToolWild offers free, ready-to-use online tools for text processing, image editing, PDF and file conversion, calculations, development helpers and office productivity. Every tool has its own page, its own URL and a complete Chinese and English interface.', 'We do not ship decorative buttons: every released tool is functionally tested, with real input, processing, results, copying and downloading.'] },
-        { h: 'Privacy is the default', p: ['Tools that handle files — image compression, PDF merging, Excel to CSV — do all the work client-side with browser JavaScript. Files never reach a server. The site is statically hosted, has no account system and collects no personal data.', 'Favorites and recently used tools also live only in your own browser localStorage, and can be exported or wiped at any time.'] },
+        { h: 'Privacy is the default', p: ['Tools that handle files — image compression, PDF merging, Excel to CSV — do all the work client-side with browser JavaScript. Files never reach a server. The site is statically hosted and has no account system; we do not collect or store your files or browsing data on a server, and we only receive content you send us when you choose to give feedback.', 'Favorites and recently used tools also live only in your own browser localStorage, and can be exported or wiped at any time.'] },
         { h: 'Technology', p: ['The site is statically generated with Astro 5 and built with plain HTML, CSS and JavaScript, so pages load fast and are fully indexable. PDFs are handled by pdf-lib, spreadsheets by SheetJS and QR codes by qrcode — each loaded only when needed.', 'It deploys to static hosts such as Cloudflare Pages: no servers to buy and no paid APIs.'] },
         { h: 'What is next', p: ['Phase one ships {TOOL_COUNT} high-frequency tools. Phase two covers factory and trade calculators (FOB quotes, CBM volume, carton quantities), with office automation tools to follow. The modular architecture scales to several hundred tools.'] },
       ],
@@ -270,12 +297,13 @@ export default {
     },
     privacy: {
       title: 'Privacy Policy | ToolWild',
-      desc: 'ToolWild privacy policy: tools run locally in your browser, with no file uploads, no personal data collection and no tracking cookies.',
+      desc: 'ToolWild privacy policy: tools run locally in your browser with no file uploads; we only receive content you send when you contact us, and use no tracking cookies.',
       h1: 'Privacy Policy',
       lead: 'Last updated: March 2025. This policy explains how ToolWild handles — and does not handle — your data.',
       sections: [
-        { h: 'The short version', p: ['ToolWild is a purely static website: no accounts, no backend database, no file upload endpoint. Text you type and files you choose are read and processed by JavaScript inside the current browser tab and never leave your device.'] },
+        { h: 'The short version', p: ['ToolWild is a purely static website: no accounts, no backend database, no file upload endpoint. Text you type and files you choose are read and processed by JavaScript inside the current browser tab and never leave your device. We only receive your message and contact details when you contact us through the feedback form or email.'] },
         { h: 'Local processing', p: ['Images, PDFs and spreadsheets are read through the browser File API and processed locally with pdf-lib, SheetJS and Canvas. Downloads are generated by the browser too. We cannot see or store these files.'] },
+        { h: 'Feedback you choose to send', p: ['When you contact us through the feedback form or hello [at] toolwild [dot] com, we receive what you wrote and the contact details you provided (if any). We use that information only to reply to you and improve ToolWild — never to publish it, serve advertising, or connect it to anything you processed in a tool. Please do not include sensitive information or files in your feedback: we offer no file-upload channel for messages.'] },
         { h: 'Browser storage', p: ['For convenience we keep the following in localStorage: favorite tools, names of recently used tools, usage counts, dark mode and language preference. None of it contains file contents, all of it stays on your device, and it can be exported or cleared on the "Local Data & Privacy" page.'] },
         { h: 'Cookies and analytics', p: ['We do not use login cookies, advertising cookies or cross-site tracking cookies. We use Google Analytics 4 to collect anonymized usage statistics (page views, which tool was used, tool category and interface language). We do not collect personal information such as names or emails, and we never send the text or files you enter into tools to Google. IP addresses are anonymized by Google Analytics. To opt out, you can install the "Google Analytics opt-out" browser add-on or disable JavaScript. Our hosting provider (Cloudflare Pages) may record basic access logs as part of running the service; see their privacy policy for details.'] },
         { h: 'Third-party resources', p: ['The only third-party script is the Google Analytics measurement component (googletagmanager.com), loaded on the production site only. Open-source libraries used by the tools are bundled into our own static assets at build time and make no requests to third parties.'] },

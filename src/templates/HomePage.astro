@@ -118,7 +118,7 @@ const cats = activeCategories.map((c) => ({ ...c, ...dict.categories[c.id] }));
   <section class="section-sm">
     <div class="cta-band">
       <div><h2>{dict.home.footerCtaTitle}</h2><p>{dict.home.footerCtaDesc}</p></div>
-      <a class="btn btn-primary btn-lg" href={pageUrl(lang, 'suggest')}><Icon name="lightbulb" size={17} /> {dict.home.footerCtaButton}</a>
+      <a class="btn btn-primary btn-lg" href={`${langPath(lang, 'feedback')}?type=suggest`}><Icon name="lightbulb" size={17} /> {dict.home.footerCtaButton}</a>
     </div>
   </section>
 </MainLayout>

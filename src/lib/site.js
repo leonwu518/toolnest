@@ -6,6 +6,11 @@ export const SITE = (typeof import.meta !== 'undefined' && import.meta.env && im
 export const LANGS = ['zh', 'en'];
 export const DEFAULT_LANG = 'zh';
 
+/* 反馈表单端点：由 Cloudflare Pages / 本地 .env 的 PUBLIC_FORMSPREE_ENDPOINT 注入。
+ * 未完成 Formspree 配置时保留占位端点，页面会停用提交并提示改用邮件，避免静默失败。 */
+export const FORMSPREE_ENDPOINT = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT || 'https://formspree.io/f/xxxxxxxx';
+export const FORMSPREE_CONFIGURED = !/formspree\.io\/f\/x{8}/.test(FORMSPREE_ENDPOINT);
+
 /** 生成带尾斜杠的语言路由：默认语言 zh 走根目录，en 走 /en/
  * langPath('zh', 'tools/word-counter') -> /tools/word-counter/
  * langPath('en', 'tools/word-counter') -> /en/tools/word-counter/

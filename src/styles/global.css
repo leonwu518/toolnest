@@ -497,6 +497,10 @@ html[data-theme="dark"] .tool-icon.accent-orange { background: #2e1d10; color: #
 .footer-col h4 { font-size: .82rem; text-transform: uppercase; letter-spacing: .07em; color: var(--text-muted); margin-bottom: 12px; }
 .footer-col a { display: block; color: var(--text-soft); font-size: .86rem; padding: 4px 0; }
 .footer-col a:hover { color: var(--blue); }
+.footer-contact { margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
+.footer-contact a { font-size:.78rem; color:var(--text-muted); }
+.feedback-btn { display:inline-flex; align-items:center; gap:8px; margin-top:16px; padding:10px 16px; border:1px dashed var(--primary); border-radius:999px; color:var(--primary); font-size:.88rem; text-decoration:none; }
+.feedback-btn:hover { background:var(--surface); }
 .footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 18px 0 26px; border-top: 1px solid var(--border); font-size: .8rem; color: var(--text-muted); }
 
 /* ---------- Toast ---------- */

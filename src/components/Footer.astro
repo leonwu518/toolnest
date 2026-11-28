@@ -4,6 +4,8 @@ import { activeCategories } from '../data/categories.js';
 import { langPath, categoryUrl, pageUrl } from '../lib/site.js';
 const { lang, dict } = Astro.props;
 const year = new Date().getFullYear();
+const feedbackUrl = langPath(lang, 'feedback');
+const suggestUrl = `${feedbackUrl}?type=suggest`;
 ---
 <footer class="site-footer">
   <div class="container footer-grid">
@@ -22,9 +24,15 @@ const year = new Date().getFullYear();
     <div class="footer-col">
       <h4>{dict.footer.companyTitle}</h4>
       <a href={pageUrl(lang, 'about')}>{dict.footer.links.about}</a>
-      <a href={pageUrl(lang, 'contact')}>{dict.footer.links.contact}</a>
-      <a href={pageUrl(lang, 'suggest')}>{dict.footer.links.suggest}</a>
+      <a href={feedbackUrl}>{dict.footer.links.contact}</a>
+      <a href={suggestUrl}>{dict.footer.links.suggest}</a>
       <a href={pageUrl(lang, 'changelog')}>{dict.footer.links.changelog}</a>
+      <div class="footer-contact">
+        {/* 邮箱以混淆文本呈现，真实 mailto 仅由脚本为真实访客拼接，降低被爬风险 */}
+        <a id="mailLink" href={feedbackUrl} title={dict.feedback.emailLabel}
+          data-user="hello" data-domain="toolwild.com">hello [at] toolwild [dot] com</a>
+        <a href={feedbackUrl}>{dict.feedback.onlineFeedback}</a>
+      </div>
     </div>
     <div class="footer-col">
       <h4>{dict.footer.legalTitle}</h4>
@@ -39,3 +47,11 @@ const year = new Date().getFullYear();
     <span>{dict.footer.builtWith}</span>
   </div>
 </footer>
+
+<script>
+  /* 渐进增强：地址片段放在 data 属性中，由脚本在运行时拼接，构建产物里没有明文邮箱 */
+  const el = document.getElementById('mailLink');
+  if (el) {
+    el.href = 'mailto:' + el.dataset.user + String.fromCharCode(64) + el.dataset.domain;
+  }
+</script>

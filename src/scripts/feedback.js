@@ -15,6 +15,18 @@ const text = (key, fallback) => {
   return fallback || key;
 };
 
+/** 反馈入口：自动带上来源工具与类型，落点随语言切换 */
+const feedbackUrl = (type = '') => {
+  const lang = document.documentElement.dataset.lang || 'zh';
+  const slug = document.documentElement.dataset.tool || '';
+  const base = lang === 'en' ? '/en/feedback/' : '/feedback/';
+  const params = new URLSearchParams();
+  if (slug) params.set('from', slug);
+  if (type) params.set('type', type);
+  const qs = params.toString();
+  return base + (qs ? `?${qs}` : '');
+};
+
 /** 把错误码或文案转成用户可读文字，支持 {n} / {format} 占位符 */
 export function errorText(code, values = {}) {
   let out = text(code, ERROR_CODES.includes(code) ? code : code);
@@ -74,7 +86,20 @@ export function feedback(message, { type = 'inline', values = {}, actions = [], 
     return el;
   }
   const el = hostFor(type === 'banner' ? 'feedback-banner' : 'error', `feedback-${type} ${tone}`.trim());
-  el.textContent = content;
+  el.innerHTML = '';
+  const msg = document.createElement('span');
+  msg.textContent = content;
+  el.appendChild(msg);
+  /* inline / banner 也支持动作按钮（例如错误态直达反馈表单） */
+  actions.forEach((a) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'btn btn-outline btn-sm';
+    b.style.marginLeft = '10px';
+    b.textContent = a.label;
+    b.onclick = () => { el.hidden = true; a.onClick?.(); };
+    el.appendChild(b);
+  });
   el.hidden = false;
   return el;
 }
@@ -131,7 +156,11 @@ export function installErrorBoundary() {
   const report = () => {
     feedback('PROCESS_FAILED', {
       type: 'banner',
-      actions: [{ label: text('retry', 'Retry'), onClick: () => location.reload() }],
+      actions: [
+        { label: text('retry', 'Retry'), onClick: () => location.reload() },
+        /* 报错态的「反馈」带来源工具与类型，表单会自动回填 */
+        { label: text('reportAction', 'Report'), onClick: () => { location.href = feedbackUrl('bug'); } },
+      ],
     });
   };
   window.addEventListener('error', (e) => {

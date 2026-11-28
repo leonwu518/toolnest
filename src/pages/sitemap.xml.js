@@ -4,7 +4,7 @@ import { LANGS, langPath, toolUrl, categoryUrl, pageUrl, absoluteUrl, switchLang
 
 export const prerender = true;
 
-const STATIC_PAGES = ['about', 'contact', 'privacy', 'terms', 'suggest', 'changelog', 'data'];
+const STATIC_PAGES = ['about', 'contact', 'privacy', 'terms', 'suggest', 'changelog', 'data', 'feedback'];
 const TODAY = new Date().toISOString().slice(0, 10);
 
 /* 每个 URL 都给出 zh-CN / en / x-default 三条 hreflang，中英互指同一页面 */

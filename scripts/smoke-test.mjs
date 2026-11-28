@@ -500,6 +500,85 @@ await check('移动端交互：三个新工具可正常操作', async () => {
   await page.setViewport({ width: 1280, height: 900 });
 });
 
+/* ---------- H. 反馈系统 ---------- */
+await check('反馈页：字段 / honeypot / 混淆邮箱 / SEO', async () => {
+  await go('/feedback/');
+  assert((await text('h1')).includes('反馈'), '反馈页 H1 错误');
+  assert((await page.$$('form[data-role="feedback-form"]')).length === 1, '缺少反馈表单');
+  assert((await page.$$('[name="_gotcha"]')).length === 1, '缺少 honeypot');
+  assert(await page.$eval('[name="_gotcha"]', (e) => getComputedStyle(e).display === 'none'), 'honeypot 对真实用户可见');
+  const action = await page.$eval('form[data-role="feedback-form"]', (f) => f.getAttribute('action'));
+  assert(action.startsWith('https://formspree.io/f/'), `表单 action 错误: ${action}`);
+  /* 取原始 HTML（不经 JS 执行），对应「查看源代码」的验收口径 */
+  const source = await (await fetch(BASE + '/feedback/')).text();
+  assert(!source.includes('hello@toolwild.com'), '页面源码出现明文邮箱');
+  assert(source.includes('hello [at] toolwild [dot] com'), '页脚混淆邮箱缺失');
+  const canonical = await page.$eval('link[rel="canonical"]', (a) => a.getAttribute('href'));
+  assert(canonical.endsWith('/feedback/'), 'canonical 错误');
+  const zhHref = await page.$eval('[data-lang-link="zh"]', (a) => a.getAttribute('href'));
+  assert(zhHref === '/feedback/', `语言切换错误: ${zhHref}`);
+});
+
+await check('反馈页：空内容校验与 ?type / ?from 回填', async () => {
+  await go('/feedback/?type=suggest&from=word-counter');
+  const sel = await page.$eval('[data-role="feedback-type"]', (e) => e.value);
+  assert(sel === 'suggest', `类型回填错误: ${sel}`);
+  const from = await page.$eval('[data-role="feedback-from"]', (e) => e.value);
+  assert(from === 'word-counter', '来源工具回填错误');
+  const subj = await page.$eval('[data-role="feedback-subject"]', (e) => e.value);
+  assert(subj.includes('字数统计') || subj.includes('word-counter'), '主题未带来源');
+  assert((await page.$eval('[data-role="feedback-submit"]', (b) => b.disabled)) === true, '空内容时提交按钮未禁用');
+  const inline = await page.$eval('[data-role="error"]', (e) => !e.hidden && e.textContent.trim().length > 0);
+  assert(inline, '空内容缺少前端校验提示');
+  await setVal('[data-role="feedback-message"]', '测试反馈');
+  await sleep(150);
+  assert((await page.$eval('[data-role="feedback-submit"]', (b) => !b.disabled)) === true, '填写内容后提交按钮未启用');
+});
+
+await check('英文反馈页与成功回跳', async () => {
+  await go('/en/feedback/?ok=1');
+  assert((await text('h1')).includes('Feedback'), '英文反馈页 H1 错误');
+  assert((await page.$eval('[data-role="feedback-success"]', (e) => !e.hidden)), '?ok=1 未显示成功提示');
+  const enHref = await page.$eval('[data-lang-link="en"]', (a) => a.getAttribute('href'));
+  assert(enHref === '/en/feedback/', `语言切换错误: ${enHref}`);
+});
+
+await check('反馈入口：工具页 / 首页 / 页脚 / 报错态', async () => {
+  await go('/tools/word-counter/');
+  const btn = await page.$eval('[data-role="tool-feedback"]', (a) => a.getAttribute('href'));
+  assert(btn === '/feedback/?from=word-counter', `工具页反馈按钮错误: ${btn}`);
+  const mailto = await page.$eval('#mailLink', (a) => a.getAttribute('href'));
+  assert(mailto === 'mailto:hello@toolwild.com', `邮箱还原错误: ${mailto}`);
+  await go('/');
+  const cta = await page.$eval('a.btn-primary.btn-lg[href*="feedback"]', (a) => a.getAttribute('href'));
+  assert(cta.includes('/feedback/?type=suggest'), '首页建议入口未指向表单');
+  const foot = await page.$$eval('footer a[href*="feedback"]', (as) => as.map((a) => a.getAttribute('href')));
+  assert(foot.includes('/feedback/?type=suggest'), '页脚建议工具入口未指向表单');
+  await go('/tools/word-counter/');
+  await page.evaluate(() => window.dispatchEvent(new ErrorEvent('error', { message: 'smoke-test' })));
+  await sleep(200);
+  const labels = await page.$$eval('[data-role="feedback-banner"] button', (bs) => bs.map((b) => b.textContent.trim()));
+  assert(labels.includes('反馈'), `报错态缺少反馈动作: ${labels.join(',')}`);
+  await Promise.all([
+    page.waitForNavigation({ waitUntil: 'networkidle2' }),
+    page.evaluate(() => {
+      const b = Array.from(document.querySelectorAll('[data-role="feedback-banner"] button')).find((x) => x.textContent.trim() === '反馈');
+      b.click();
+    }),
+  ]);
+  assert(page.url().includes('/feedback/?from=word-counter&type=bug'), `报错反馈跳转错误: ${page.url()}`);
+});
+
+await check('隐私政策：反馈说明与口径一致', async () => {
+  await go('/privacy/');
+  const body = await page.evaluate(() => document.body.innerText);
+  assert(body.includes('你主动提交的反馈'), '隐私政策缺少反馈说明');
+  assert(!body.includes('完全不收集任何信息'), '隐私政策仍有绝对化表述');
+  await go('/en/privacy/');
+  const enBody = await page.evaluate(() => document.body.innerText);
+  assert(enBody.includes('Feedback you choose to send'), '英文隐私政策缺少反馈说明');
+});
+
 await browser.close();
 server.close();
 

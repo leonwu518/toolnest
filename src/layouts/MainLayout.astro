@@ -34,7 +34,7 @@ const toolMeta = tool ? tools.find((t) => t.slug === tool) : null;
 /* 只注入标量文案，排除页面正文/数组等内容，避免 HTML 体积膨胀 */
 const flatten = (d) => {
   const out = {};
-  for (const group of ['common', 'actions', 'theme', 'langSwitch', 'search', 'toolPage', 'categoryPage', 'dataPage', 'toolsIndex', 'errors']) {
+  for (const group of ['common', 'actions', 'theme', 'langSwitch', 'search', 'toolPage', 'categoryPage', 'dataPage', 'toolsIndex', 'errors', 'feedback']) {
     for (const [key, value] of Object.entries(d[group] || {})) {
       if (typeof value === 'string' || typeof value === 'number') out[key] = value;
     }

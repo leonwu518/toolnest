@@ -16,7 +16,7 @@ if (!fs.existsSync(DIST)) {
 
 const { tools } = await import('../src/data/tools.js');
 const { activeCategories } = await import('../src/data/categories.js');
-const STATIC_PAGES = ['about', 'contact', 'privacy', 'terms', 'suggest', 'changelog', 'data'];
+const STATIC_PAGES = ['about', 'contact', 'privacy', 'terms', 'suggest', 'changelog', 'data', 'feedback'];
 
 const htmlFiles = [];
 (function walk(dir) {
@@ -75,6 +75,28 @@ for (const file of htmlFiles) {
   checked++;
 }
 
+/* 反馈系统静态校验：混淆邮箱 / honeypot / 工具页入口 */
+const allPages = htmlFiles.map((f) => ({ file: f, html: read(f) }));
+for (const { file, html } of allPages) {
+  if (/hello@toolwild\.com/i.test(html)) errors.push(`${file} 出现明文邮箱 hello@toolwild.com`);
+  if (!html.includes('id="mailLink"')) errors.push(`${file} 页脚缺少混淆邮箱入口`);
+  if (!html.includes('hello [at] toolwild [dot] com')) errors.push(`${file} 页脚缺少混淆邮箱文本`);
+  const u = '/' + file;
+  if (/\/tools\/[^/]+\/index\.html$/.test(u)) {
+    if (!html.includes('data-role="tool-feedback"')) errors.push(`${file} 工具页缺少反馈按钮`);
+    if (!html.includes('/feedback/?from=')) errors.push(`${file} 工具页反馈按钮缺少 from 参数`);
+  }
+}
+for (const p of ['feedback/index.html', 'en/feedback/index.html']) {
+  if (!fs.existsSync(path.join(DIST, p))) { errors.push(`缺少产物: ${p}`); continue; }
+  const html = read(p);
+  for (const field of ['_gotcha', '_subject', '_next', 'message', 'contact']) {
+    if (!html.includes(`name="${field}"`)) errors.push(`${p} 表单缺少字段 ${field}`);
+  }
+  if (!/method="POST"/.test(html)) errors.push(`${p} 表单不是 POST 提交`);
+  if (!html.includes('data-role="feedback-form"')) errors.push(`${p} 缺少反馈表单`);
+}
+
 // 必备页面与资源（zh 在根目录，en 在 en/ 下）
 const required = ['index.html', 'robots.txt', 'sitemap.xml', '_headers', '_redirects', 'favicon.svg'];
 for (const lang of ['zh', 'en']) {
@@ -95,6 +117,8 @@ if (sitemap.includes('/zh/')) errors.push('sitemap 仍包含 /zh/ URL');
 const loc = (u) => `<loc>https://www.toolwild.com${u}</loc>`;
 if (!sitemap.includes(loc('/'))) errors.push('sitemap 缺少根路径中文首页');
 if (!sitemap.includes(loc('/en/'))) errors.push('sitemap 缺少 /en/ 英文首页');
+if (!sitemap.includes(loc('/feedback/'))) errors.push('sitemap 缺少 /feedback/');
+if (!sitemap.includes(loc('/en/feedback/'))) errors.push('sitemap 缺少 /en/feedback/');
 for (const t of tools) {
   if (!sitemap.includes(loc(`/tools/${t.slug}/`))) errors.push(`sitemap 缺少 /tools/${t.slug}/`);
   if (!sitemap.includes(loc(`/en/tools/${t.slug}/`))) errors.push(`sitemap 缺少 /en/tools/${t.slug}/`);

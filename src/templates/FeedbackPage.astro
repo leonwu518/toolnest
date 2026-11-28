@@ -1,0 +1,173 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Icon from '../components/Icon.astro';
+import { getDict } from '../i18n/index.js';
+import { langPath, absoluteUrl, FORMSPREE_ENDPOINT, FORMSPREE_CONFIGURED } from '../lib/site.js';
+
+/* 共享反馈页模板：语言由路由包装器通过 props 传入（zh 根路径 / en 下 /en/） */
+const { lang } = Astro.props;
+const dict = getDict(lang);
+const f = dict.feedback;
+const path = langPath(lang, 'feedback');
+const nextUrl = `${absoluteUrl(path)}?ok=1`;
+const subject = lang === 'zh' ? 'ToolWild 反馈' : 'ToolWild Feedback';
+const options = [
+  { value: 'suggest', label: f.typeSuggest },
+  { value: 'bug', label: f.typeBug },
+  { value: 'other', label: f.typeOther },
+];
+---
+<MainLayout lang={lang} title={f.title} description={f.desc} path={path} active="feedback">
+  <Breadcrumb dict={dict} items={[
+    { label: dict.toolPage.breadcrumbHome, href: langPath(lang) },
+    { label: f.h1 },
+  ]} />
+
+  <div class="feedback-page" data-role="feedback-page"
+    data-configured={String(FORMSPREE_CONFIGURED)}
+    data-msg-empty={f.emptyMessage}
+    data-msg-not-configured={f.notConfigured}
+    data-msg-success={f.success}
+    data-subject={subject}
+    data-type-suggest={f.typeSuggest}
+    data-type-bug={f.typeBug}
+    data-type-other={f.typeOther}>
+    <div style="padding:24px 0 8px;max-width:760px">
+      <h1>{f.h1}</h1>
+      <p class="lead muted" style="margin:10px 0 0">{f.lead}</p>
+    </div>
+
+    <div class="success-card" data-role="feedback-success" hidden>
+      <Icon name="shield-check" size={22} />
+      <div>
+        <strong>{f.success}</strong>
+        <p class="muted" style="margin:6px 0 0">{f.successHint}</p>
+      </div>
+    </div>
+
+    <div class="form-card" data-role="feedback-form-card">
+      <form id="feedback-form" data-role="feedback-form" action={FORMSPREE_ENDPOINT} method="POST">
+        <input type="hidden" name="_subject" value={subject} data-role="feedback-subject" />
+        <input type="hidden" name="_next" value={nextUrl} />
+        <input type="hidden" name="lang" value={lang} />
+        <input type="hidden" name="from" value="" data-role="feedback-from" />
+
+        <div class="field" style="margin-bottom:14px">
+          <label for="fb-type">{f.typeLabel}</label>
+          <select class="input" id="fb-type" name="type" data-role="feedback-type">
+            {options.map((o) => <option value={o.value}>{o.label}</option>)}
+          </select>
+        </div>
+
+        <div class="field" style="margin-bottom:14px">
+          <label for="fb-message">{f.messageLabel}</label>
+          <textarea class="textarea plain" id="fb-message" name="message" data-role="feedback-message"
+            required maxlength="2000" style="min-height:170px" placeholder={f.messagePlaceholder}></textarea>
+          <p class="field-hint" style="margin-top:6px"><span data-role="feedback-count">0</span> / 2000</p>
+        </div>
+
+        <div class="field" style="margin-bottom:14px">
+          <label for="fb-contact">{f.contactLabel}</label>
+          <input class="input" id="fb-contact" name="contact" type="text" maxlength="120" placeholder={f.contactPlaceholder} />
+        </div>
+
+        {/* Formspree honeypot：真实用户不可见，机器人填写后会被丢弃 */}
+        <input name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+        <div class="btn-row">
+          <button type="submit" class="btn btn-primary" data-role="feedback-submit">
+            <Icon name="mail" size={16} /> {f.submit}
+          </button>
+        </div>
+        <p class="field-hint" style="margin-top:14px">{f.note}</p>
+      </form>
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  .success-card { display:flex; gap:12px; align-items:flex-start; margin:24px 0; padding:18px 20px; border:1px solid var(--primary); border-radius:var(--radius-sm); background:var(--surface); }
+  .success-card[hidden] { display:none; }
+</style>
+
+<script>
+  import { $, role, on } from '../scripts/utils.js';
+  import { feedback, clearFeedback } from '../scripts/feedback.js';
+
+  const page = $('[data-role="feedback-page"]');
+  if (page) {
+    const form = $('[data-role="feedback-form"]');
+    const message = role('feedback-message');
+    const submit = role('feedback-submit');
+    const count = $('[data-role="feedback-count"]');
+    const typeSelect = role('feedback-type');
+    const fromInput = role('feedback-from');
+    const subjectInput = role('feedback-subject');
+    const success = $('[data-role="feedback-success"]');
+    const card = $('[data-role="feedback-form-card"]');
+    const d = page.dataset;
+
+    /* 成功回跳：Formspree 的 _next 会把用户带回 ?ok=1 */
+    if (new URL(location.href).searchParams.get('ok') === '1') {
+      if (success) success.hidden = false;
+      if (card) card.hidden = true;
+    }
+
+    /* ?type= 回填：兼容稳定键值与中英文标签 */
+    const typeMap = {
+      suggest: 'suggest', bug: 'bug', other: 'other',
+      [d.typeSuggest]: 'suggest', [d.typeBug]: 'bug', [d.typeOther]: 'other',
+      '建议工具': 'suggest', '报错反馈': 'bug', '其他': 'other',
+      'Suggest a tool': 'suggest', 'Bug report': 'bug', 'Other': 'other',
+    };
+    const params = new URL(location.href).searchParams;
+    const wanted = typeMap[params.get('type') || ''] || '';
+    if (wanted && typeSelect) typeSelect.value = wanted;
+
+    /* ?from= 回填来源工具，让反馈自带上下文 */
+    const from = (params.get('from') || '').slice(0, 80);
+    if (from) {
+      if (fromInput) fromInput.value = from;
+      let index = [];
+      try { index = JSON.parse($('#tool-index')?.textContent || '[]'); } catch { index = []; }
+      const t = index.find((x) => x.s === from);
+      const lang = document.documentElement.dataset.lang || 'zh';
+      const name = t ? (lang === 'zh' ? t.zh.n : t.en.n) : from;
+      if (subjectInput) subjectInput.value = `${d.subject} ｜ ${name}`;
+    }
+    if (typeSelect) {
+      const syncSubject = () => {
+        if (!subjectInput || fromInput?.value) return;
+        const label = typeSelect.value === 'suggest' ? d.typeSuggest : typeSelect.value === 'bug' ? d.typeBug : d.typeOther;
+        subjectInput.value = `${d.subject} ｜ ${label}`;
+      };
+      on(typeSelect, 'change', syncSubject);
+      syncSubject();
+    }
+
+    const configured = d.configured === 'true';
+    const validate = () => {
+      const value = (message?.value || '').trim();
+      if (count) count.textContent = String((message?.value || '').length);
+      if (submit) submit.disabled = !configured || value.length === 0;
+      if (!configured) {
+        feedback(d.msgNotConfigured, { type: 'inline' });
+        return;
+      }
+      if (!value) feedback(d.msgEmpty, { type: 'inline' });
+      else clearFeedback('inline');
+    };
+    on(message, 'input', validate);
+    on(message, 'change', validate);
+    validate();
+
+    /* 双保险：空内容不提交（浏览器 required 之外再拦一次） */
+    on(form, 'submit', (e) => {
+      if (!configured || !(message?.value || '').trim()) {
+        e.preventDefault();
+        validate();
+      }
+    });
+  }
+</script>

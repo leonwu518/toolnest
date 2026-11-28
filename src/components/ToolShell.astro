@@ -79,6 +79,11 @@ const jsonLdSafe = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
   <div class="next-tools-row" data-role="next-tools-row"></div>
 </div>
 
+{/* 反馈入口：带 from 参数，表单可自动回填来源工具 */}
+<a class="feedback-btn" data-role="tool-feedback" href={`${langPath(lang, 'feedback')}?from=${encodeURIComponent(meta.slug)}`}>
+  <Icon name="mail" size={15} /> {dict.feedback.toolButton}
+</a>
+
 <div class="content-grid">
   <div>
     <section class="info-block">
