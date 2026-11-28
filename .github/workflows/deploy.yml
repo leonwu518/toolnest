@@ -4,6 +4,8 @@
 #   CLOUDFLARE_API_TOKEN (Secret)  —— 含 Cloudflare Pages: Edit 权限的 API Token
 #   CLOUDFLARE_ACCOUNT_ID (Secret) —— Cloudflare Account ID
 #   SITE_URL (Variable)            —— 正式域名，例如 https://www.toolwild.com
+#   PUBLIC_GA4_MEASUREMENT_ID (Variable)      —— GA4 测量 ID，例如 G-TJQF7VHE1L
+#   PUBLIC_FORMSPREE_ENDPOINT (Variable)      —— 反馈表单端点，例如 https://formspree.io/f/xjywdebl
 #   CLOUDFLARE_PROJECT_NAME (Variable, 可选) —— Pages 项目名，默认 toolwild
 #                                             注意：toolnest.pages.dev 已被第三方站点占用，不要使用项目名 toolnest
 # 未配置上述两个 Secrets 时，工作流仍完成依赖安装、单元测试、构建与产物校验，仅跳过部署步骤（整体标记成功）。
@@ -39,6 +41,7 @@ jobs:
         env:
           SITE_URL: ${{ vars.SITE_URL }}
           PUBLIC_GA4_MEASUREMENT_ID: ${{ vars.PUBLIC_GA4_MEASUREMENT_ID }}
+          PUBLIC_FORMSPREE_ENDPOINT: ${{ vars.PUBLIC_FORMSPREE_ENDPOINT }}
 
       - name: Verify build output
         run: npm run verify
