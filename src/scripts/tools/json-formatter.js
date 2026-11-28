@@ -1,5 +1,6 @@
 import { role, $, on, msg, bindCommonActions, downloadText, showError, clearError, setStatus, formatBytes } from '../utils.js';
 import { formatJSON } from '../logic/text.js';
+import { trackToolUse } from '../analytics.js';
 
 export default function init() {
   const input = role('input'), output = role('output'), dl = role('download');
@@ -25,6 +26,7 @@ export default function init() {
     dl.disabled = false;
     if (mode === 'validate' && success) { success.hidden = false; success.textContent = msg('validMsg'); }
     setStatus(formatBytes(new Blob([result.output]).size));
+    trackToolUse(mode);
   }
 
   [['format', 'format'], ['minify', 'minify'], ['validate', 'validate']].forEach(([action, mode]) => {

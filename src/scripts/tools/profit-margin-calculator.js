@@ -1,5 +1,6 @@
 import { role, on, msg, showError, clearError, formatNumber } from '../utils.js';
 import { profitMargin } from '../logic/calc.js';
+import { trackToolUse } from '../analytics.js';
 
 export default function init() {
   const keys = ['cost', 'price', 'quantity', 'extra'];
@@ -20,6 +21,7 @@ export default function init() {
     set('revenue', r.revenue);
     set('total-cost', r.totalCost);
     role('status').textContent = r.profit < 0 ? msg('lossNote') : msg('note');
+    trackToolUse('calculate');
   }
 
   keys.forEach((k) => on(role(k), 'input', compute));

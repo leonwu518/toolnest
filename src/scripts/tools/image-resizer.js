@@ -1,4 +1,5 @@
 import { role, on, msg, formatBytes, showError, clearError, setStatus, downloadBlob, loadImage } from '../utils.js';
+import { trackToolUse } from '../analytics.js';
 import { targetSize, extForFormat } from '../logic/files.js';
 import { bindFileDrop, renderToBlob, showPreview, showSizes, outputName } from '../image-utils.js';
 
@@ -57,6 +58,7 @@ export default function init() {
       showPreview(role('preview'), r.blob);
       role('download').disabled = false;
       clearError(); setStatus('');
+      trackToolUse('resize');
     } catch (err) { console.error(err); showError(msg('readError')); }
     finally { run.disabled = false; }
   });

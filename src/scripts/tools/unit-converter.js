@@ -1,5 +1,6 @@
 import { role, on, msg, showError, clearError, formatNumber } from '../utils.js';
 import { unitGroups, unitGroupById, convertUnit } from '../logic/units.js';
+import { trackToolUse } from '../analytics.js';
 
 export default function init() {
   const lang = document.documentElement.dataset.lang === 'en' ? 'en' : 'zh';
@@ -64,6 +65,7 @@ export default function init() {
     formulaEl.textContent = `1 ${label(from?.label)} = ${fmt(one)} ${label(to?.label)}`;
 
     renderAllUnits(group, value);
+    trackToolUse(`${groupSel.value}:${fromSel.value}-to-${toSel.value}`);
   }
 
   /** 同类全单位面板：一次输入，类别下所有单位同时换算；点击卡片切换目标单位 */

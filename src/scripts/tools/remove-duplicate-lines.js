@@ -1,5 +1,6 @@
 import { role, $$, on, msg, fmt, bindCommonActions, downloadText, showError, clearError, setStatus } from '../utils.js';
 import { dedupeLines } from '../logic/text.js';
+import { trackToolUse } from '../analytics.js';
 
 export default function init() {
   const input = role('input'), output = role('output'), dl = role('download');
@@ -13,6 +14,7 @@ export default function init() {
     const r = dedupeLines(input.value, options());
     output.value = r.lines.join('\n');
     dl.disabled = false;
+    trackToolUse('dedupe');
     setStatus(`${fmt('removedCount', { n: r.removed })} · ${fmt('originalCount', { n: r.original })} · ${fmt('uniqueCount', { n: r.lines.length })}`);
   }
 

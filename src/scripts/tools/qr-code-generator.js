@@ -1,4 +1,5 @@
 import { role, on, msg, showError, clearError, setStatus, downloadBlob, downloadText, canvasToBlob } from '../utils.js';
+import { trackToolUse } from '../analytics.js';
 
 export default function init() {
   const state = { canvas: null, svg: '' };
@@ -35,6 +36,7 @@ export default function init() {
       role('download-svg').disabled = false;
       clearError();
       setStatus('');
+      trackToolUse('generate');
     } catch (err) {
       console.error(err);
       showError(msg('tooLong'));

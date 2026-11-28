@@ -3,6 +3,7 @@ import {
   downloadText, validateFile, readAsText, MAX_FILE_BYTES, debounce,
 } from '../utils.js';
 import { parseCSV, stringifyCSV, cleanCSV, DELIMITER_MAP } from '../logic/csv.js';
+import { trackToolUse } from '../analytics.js';
 
 export default function init() {
   const input = role('input'), output = role('output'), dl = role('download'), preview = role('preview');
@@ -94,6 +95,7 @@ export default function init() {
     renderPreview(cleaned.rows);
     setStatus(`${msg('statOutput')} ${s.outputRows} · ${msg('statRemoved')} ${s.originalRows - s.outputRows}`);
     dl.disabled = false;
+    trackToolUse('clean');
   }
 
   const auto = debounce(() => { if (input.value.trim()) process(); }, 260);

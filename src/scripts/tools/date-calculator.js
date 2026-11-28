@@ -1,5 +1,6 @@
 import { role, $$, on, msg, showError, clearError, formatNumber } from '../utils.js';
 import { dateDiff, addDays } from '../logic/date.js';
+import { trackToolUse } from '../analytics.js';
 
 export default function init() {
   const lang = document.documentElement.dataset.lang === 'en' ? 'en' : 'zh';
@@ -40,6 +41,7 @@ export default function init() {
       role('weekday').textContent = new Intl.DateTimeFormat(lang === 'zh' ? 'zh-CN' : 'en-US', { weekday: 'long', timeZone: 'UTC' }).format(date);
       role('status').textContent = '';
     }
+    trackToolUse(mode() === 'diff' ? 'date-diff' : 'add-days');
   }
 
   $$('[data-role="mode"]').forEach((el) => on(el, 'change', setMode));

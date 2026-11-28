@@ -1,5 +1,6 @@
 import { role, $$, on, msg, showError, clearError, formatNumber } from '../utils.js';
 import { percentage } from '../logic/calc.js';
+import { trackToolUse } from '../analytics.js';
 
 export default function init() {
   const currentMode = () => Number(document.querySelector('[data-role="mode"]:checked')?.value || 1);
@@ -37,6 +38,7 @@ export default function init() {
       4: `((${b} − ${x}) ÷ |${x}|) × 100% = ${v}%`,
     };
     role('formula').textContent = formulas[mode];
+    trackToolUse(`mode-${mode}`);
   }
 
   $$('[data-role="mode"]').forEach((el) => on(el, 'change', setMode));

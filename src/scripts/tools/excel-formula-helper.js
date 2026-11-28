@@ -1,4 +1,5 @@
 import { role, $$, on, msg, showError, clearError, setStatus, bindCommonActions, downloadText } from '../utils.js';
+import { trackToolUse } from '../analytics.js';
 import { FORMULAS, formulaById, buildFormula, evaluateFormula, trialValues } from '../logic/excel-formula.js';
 
 export default function init() {
@@ -39,6 +40,7 @@ export default function init() {
     output.value = built.formula;
     desc.textContent = descs[typeSel.value] || '';
     dl.disabled = false;
+    trackToolUse('build');
     const values = trialValues(trialBox.value);
     if (!values.length) trialResult.textContent = msg('noTrial');
     else {

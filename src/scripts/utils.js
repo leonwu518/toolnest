@@ -1,4 +1,5 @@
 /* 工具脚本共享基础库：DOM、文案、复制下载、文件校验、图片与提示 */
+import { trackCopy, trackDownload } from './analytics.js';
 
 // 页面在 <html data-ui="..."> 中注入当前语言的全部界面文案
 export const ui = (() => {
@@ -61,6 +62,7 @@ export async function copyText(text) {
       if (!ok) throw new Error('execCommand failed');
     }
     toast(msg('copied'), 'success');
+    trackCopy();
     return true;
   } catch {
     toast(msg('copyFailed'), 'error');
@@ -76,6 +78,7 @@ export function downloadBlob(blob, filename) {
   document.body.appendChild(a);
   a.click();
   a.remove();
+  trackDownload();
   setTimeout(() => URL.revokeObjectURL(url), 30000);
 }
 
@@ -90,6 +93,7 @@ export function downloadDataUrl(dataUrl, filename) {
   document.body.appendChild(a);
   a.click();
   a.remove();
+  trackDownload();
 }
 
 /* ---------- 结果 / 提示区 ---------- */

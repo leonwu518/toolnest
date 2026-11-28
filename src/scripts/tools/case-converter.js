@@ -1,5 +1,6 @@
 import { role, $$, on, msg, bindCommonActions, downloadText, showError, clearError } from '../utils.js';
 import { convertCase } from '../logic/text.js';
+import { trackToolUse } from '../analytics.js';
 
 export default function init() {
   const input = role('input'), output = role('output'), dl = role('download');
@@ -10,6 +11,7 @@ export default function init() {
     clearError();
     output.value = convertCase(input.value, btn.dataset.case);
     dl.disabled = false;
+    trackToolUse(`convert-${btn.dataset.case}`);
     buttons.forEach((b) => b.classList.toggle('btn-primary', b === btn));
     buttons.forEach((b) => b.classList.toggle('btn-outline', b !== btn));
   }));

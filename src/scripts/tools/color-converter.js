@@ -1,5 +1,6 @@
 import { role, on, msg, showError, clearError, copyText } from '../utils.js';
 import { parseColor, rgbToHex, rgbToHsl, formatRgb, formatHsl, adjustLightness, complementary } from '../logic/color.js';
+import { trackToolUse } from '../analytics.js';
 
 const DEFAULT = { r: 37, g: 99, b: 235 };
 
@@ -19,6 +20,7 @@ export default function init() {
     preview.style.color = light > 0.6 ? '#0f172a' : '#ffffff';
     preview.textContent = hex;
     renderSwatches(rgb);
+    trackToolUse('convert');
   }
 
   function renderSwatches(rgb) {

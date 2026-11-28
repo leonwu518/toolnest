@@ -1,4 +1,5 @@
 import { role, on, msg, showError, clearError, setStatus, readAsArrayBuffer, downloadBlob, loadImage, canvasToBlob, toast } from '../utils.js';
+import { trackToolUse } from '../analytics.js';
 import { bindFileInput, renderFileList, bindFileListActions, fileSize } from '../file-utils.js';
 
 export default function init() {
@@ -63,6 +64,7 @@ export default function init() {
       }
       downloadBlob(new Blob([await pdf.save()], { type: 'application/pdf' }), 'toolnest-images.pdf');
       clearError(); setStatus(msg('success')); toast(msg('success'), 'success');
+      trackToolUse('images-to-pdf');
     } catch (err) { console.error(err); showError(msg('readError')); }
     finally { run.disabled = false; render(); }
   });

@@ -1,4 +1,5 @@
 import { role, $$, on, msg, bindCommonActions, copyText } from '../utils.js';
+import { trackToolUse } from '../analytics.js';
 
 export default function init() {
   const input = role('input');
@@ -25,6 +26,7 @@ export default function init() {
 
   function render() {
     current = compute(input.value);
+    if (input.value.trim()) trackToolUse('count');
     $$('[data-stat]').forEach((card) => {
       const el = card.querySelector('[data-role="stat-value"]');
       if (el) el.textContent = String(current[card.dataset.stat] ?? 0);

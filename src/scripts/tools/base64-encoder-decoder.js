@@ -1,5 +1,6 @@
 import { role, on, msg, showError, clearError, readAsDataURL, downloadBlob, formatBytes } from '../utils.js';
 import { base64Encode, base64Decode } from '../logic/encoding.js';
+import { trackToolUse } from '../analytics.js';
 
 export default function init() {
   const input = role('input'), output = role('output');
@@ -44,6 +45,7 @@ export default function init() {
         output.value = url;
         role('download').disabled = true;
         role('status').textContent = `${msg('dataUrlLabel')} · ${formatBytes(url.length)}`;
+        trackToolUse('encode-file');
       }).catch(() => showError(msg('readError')));
       return;
     }
@@ -51,6 +53,7 @@ export default function init() {
     output.value = base64Encode(input.value);
     role('download').disabled = true;
     role('status').textContent = msg('utf8Label');
+    trackToolUse('encode-text');
   }
 
   function decode() {
@@ -69,6 +72,7 @@ export default function init() {
         role('download').disabled = true;
         role('status').textContent = msg('utf8Label');
       }
+      trackToolUse(mode() === 'file' ? 'decode-file' : 'decode-text');
     } catch {
       output.value = '';
       role('download').disabled = true;

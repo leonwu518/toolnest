@@ -1,5 +1,6 @@
 import { role, $$, on, msg, fmt, showError, clearError, setStatus } from '../utils.js';
 import { diffLines } from '../logic/text.js';
+import { trackToolUse } from '../analytics.js';
 
 export default function init() {
   const a = role('input-a'), b = role('input-b'), host = role('diff-output');
@@ -40,6 +41,7 @@ export default function init() {
     host.replaceChildren(view);
     const identical = rows.every((r) => r.type === 'same');
     setStatus(identical ? msg('identical') : fmt('diffStats', { a: counts.added, r: counts.removed, u: counts.same }));
+    if (a.value.trim() || b.value.trim()) trackToolUse('compare');
   }
 
   on(role('run'), 'click', render);

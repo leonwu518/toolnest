@@ -1,4 +1,5 @@
 import { role, on, msg, fmt, showError, clearError, setStatus, readAsArrayBuffer, downloadBlob, toast, MAX_PDF_BYTES } from '../utils.js';
+import { trackToolUse } from '../analytics.js';
 import { bindFileInput } from '../file-utils.js';
 import { parsePageRanges } from '../logic/files.js';
 
@@ -58,6 +59,7 @@ export default function init() {
       clearError();
       setStatus(msg('success'));
       toast(msg('success'), 'success');
+      trackToolUse('split');
     } catch (err) { console.error(err); showError(msg('readError')); }
     finally { run.disabled = false; }
   });

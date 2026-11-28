@@ -1,5 +1,6 @@
 import { role, on, msg, showError, clearError, bindCommonActions } from '../utils.js';
 import { urlEncode, urlDecode } from '../logic/encoding.js';
+import { trackToolUse } from '../analytics.js';
 
 export default function init() {
   const input = role('input'), output = role('output');
@@ -15,7 +16,9 @@ export default function init() {
     } catch {
       output.value = '';
       showError(msg('decodeError'));
+      return;
     }
+    trackToolUse(action);
   }
 
   on(document.querySelector('[data-action="encode"]'), 'click', () => run('encode'));

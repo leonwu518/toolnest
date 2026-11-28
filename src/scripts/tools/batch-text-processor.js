@@ -2,6 +2,7 @@ import {
   role, on, msg, showError, clearError, setStatus, bindCommonActions, downloadText, debounce,
 } from '../utils.js';
 import { STEP_DEFS, defaultStepOptions, applySteps, splitLines } from '../logic/batch-text.js';
+import { trackToolUse } from '../analytics.js';
 
 export default function init() {
   const input = role('input'), output = role('output'), dl = role('download');
@@ -111,6 +112,7 @@ export default function init() {
     role('stat-steps').textContent = String(r.stats.stepCount);
     setStatus(`${msg('statOutput')} ${r.stats.output} · ${msg('stepCount')} ${r.stats.stepCount}`);
     dl.disabled = false;
+    trackToolUse('apply-steps');
   }
 
   on(role('add-step'), 'click', () => {

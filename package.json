@@ -12,7 +12,8 @@
     "verify": "node scripts/verify-build.mjs",
     "check:project": "node scripts/check-project.mjs",
     "gen:icons": "node scripts/gen-icons.mjs",
-    "smoke": "node scripts/smoke-test.mjs"
+    "smoke": "node scripts/smoke-test.mjs",
+    "verify:analytics": "node scripts/verify-analytics.mjs"
   },
   "dependencies": {
     "astro": "^5.13.0",

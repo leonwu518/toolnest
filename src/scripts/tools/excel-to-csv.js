@@ -1,4 +1,5 @@
 import { role, on, msg, fmt, showError, clearError, setStatus, readAsArrayBuffer, downloadText } from '../utils.js';
+import { trackToolUse } from '../analytics.js';
 import { bindFileInput } from '../file-utils.js';
 import { toCSV } from '../logic/files.js';
 
@@ -75,6 +76,7 @@ export default function init() {
     const cols = data.reduce((max, row) => Math.max(max, row.length), 0);
     setStatus(`${fmt('rowCount', { n: data.length })} · ${fmt('columnCount', { n: cols })}`);
     clearError();
+    trackToolUse('convert');
   });
 
   on(role('download'), 'click', () => {

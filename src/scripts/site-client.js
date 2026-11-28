@@ -1,5 +1,6 @@
 /* 全站客户端交互：主题、菜单、语言偏好、搜索、收藏、最近使用、首页个人区块 */
 import { $, $$, on, escapeHtml, msg, toast } from './utils.js';
+import { trackSearchTool } from './analytics.js';
 import { getFavorites, toggleFavorite, isFavorite, pushRecent, sortByUsage, getRecent, setLang, setTheme } from './storage.js';
 
 const html = document.documentElement;
@@ -59,7 +60,7 @@ function renderSearchResults(host, list) {
     host.innerHTML = `<div class="search-result-group">${escapeHtml(msg('resultsCount', 'Results').replace('{n}', String(list.length)))}</div>` +
       list.slice(0, 8).map((t) => {
         const l = lang === 'zh' ? t.zh : t.en;
-        return `<a class="search-result-item" href="${toolUrl(t.s)}">
+        return `<a class="search-result-item" href="${toolUrl(t.s)}" data-search-slug="${escapeHtml(t.s)}">
           <span class="sr-icon">${iconSvg(t)}</span>
           <span><strong>${escapeHtml(l.n)}</strong><small>${escapeHtml(l.d)}</small></span>
         </a>`;
@@ -89,9 +90,17 @@ $$('[data-role="site-search"]').forEach((input) => {
     if (e.key === 'Escape') { host.hidden = true; input.blur(); }
     if (e.key === 'Enter') {
       const first = host.querySelector('a.search-result-item');
-      if (first) window.location.href = first.href;
+      if (first) {
+        trackSearchTool(first.dataset.searchSlug || '');
+        window.location.href = first.href;
+      }
     }
   });
+  /* 用户点击搜索结果进入工具：先发事件（不阻止默认跳转） */
+  on(document, 'click', (e) => {
+    const item = e.target.closest && e.target.closest('a.search-result-item');
+    if (item && input.value.trim()) trackSearchTool(item.dataset.searchSlug || '');
+  }, true);
   on(clearBtn, 'click', () => { input.value = ''; host.hidden = true; host.innerHTML = ''; clearBtn.classList.remove('show'); input.focus(); });
   on(document, 'click', (e) => { if (!wrap.contains(e.target)) host.hidden = true; });
 });
