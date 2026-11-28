@@ -32,7 +32,22 @@ step "1/7 验证 Token"
 curl -sS "${HDR[@]}" "$API/user/tokens/verify" | jget > /dev/null && echo "Token 有效"
 
 step "2/7 获取 Account ID"
-ACCOUNT_ID=$(curl -sS "${HDR[@]}" "$API/accounts" | jget | python3 -c "import sys,json;print(json.load(sys.stdin)[0]['id'])")
+ACCOUNT_ID=$(curl -sS "${HDR[@]}" "$API/accounts" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+r = d.get('result') or []
+print(r[0]['id'] if r else '')
+") || true
+if [ -z "${ACCOUNT_ID:-}" ]; then
+  ACCOUNT_ID=$(curl -sS "${HDR[@]}" "$API/zones?name=$APEX" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+r = d.get('result') or []
+print(r[0]['account']['id'] if r else '')
+")
+  echo "账号列表为空，已从 zone 反查 Account ID"
+fi
+export CLOUDFLARE_ACCOUNT_ID="$ACCOUNT_ID"
 echo "Account: $ACCOUNT_ID"
 
 step "3/7 确认 Pages 项目 $PROJECT"
@@ -41,8 +56,11 @@ if [ "$STATUS" = "404" ]; then
   curl -sS "${HDR[@]}" -X POST "$API/accounts/$ACCOUNT_ID/pages/projects" \
     -d "{\"name\":\"$PROJECT\",\"production_branch\":\"main\"}" | jget > /dev/null
   echo "已创建项目 $PROJECT"
-else
+elif [ "$STATUS" = "200" ]; then
   echo "项目已存在（跳过创建）"
+else
+  echo "无法访问 Pages 项目（HTTP $STATUS）。Token 缺少 Account -> Cloudflare Pages -> Edit 权限，请编辑 Token 补权限后重跑。" >&2
+  exit 1
 fi
 
 step "4/7 部署 dist/ 到 Pages"
